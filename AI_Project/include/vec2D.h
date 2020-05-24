@@ -12,7 +12,22 @@ public: // constructors
   vec2(vec2 const& other) = default;
   vec2(vec2&& other) noexcept = default;
 
-public:
+public:// operators
+  /**
+  * @brief The default copy assignment operator.
+  * @bug no known bugs.
+  * @param[in] other : A vector that going to be copied.
+  */
+  vec2&
+  operator=(vec2 const& other) = default;
+
+  /**
+  * @brief The default move assignment operator.
+  * @bug no known bugs.
+  * @param[in] other : A vector that going to be moved.
+  */
+  vec2&
+  operator=(vec2 && other) noexcept = default;
 
   /**
   * @brief the same as the 'add' function.
@@ -25,7 +40,7 @@ public:
   * @brief the same as the 'addToSelf' function.
   * @param[in] other : the vector that going to be added to the current vector.
   */
-  void
+  vec2&
   operator+=(vec2 const& other);
 
   /**
@@ -39,10 +54,11 @@ public:
   * @brief the same as the 'subtractFromSelf' function.
   * @param[in] other : the vector that going to be added to the current vector.
   */
-  void
+  vec2&
   operator-=(vec2 const& other);
 
-public:
+
+public:// member functions
 
   /**
   * @returns the sum of the current vector and the input vector.
@@ -65,7 +81,7 @@ public:
   * @bug no known bugs.
   * @param[in] other : the vector that going to be added.
   */
-  void
+  vec2&
   addToSelf(vec2 const& other);
 
   /**
@@ -74,7 +90,7 @@ public:
   * @param[in] x : the x value being added to the current vector.
   * @param[in] y : the y value being added to the current vector.
   */
-  void
+  vec2&
   addToSelf(float const& x, float const& y);
 
   /**
@@ -98,7 +114,7 @@ public:
   * @bug no known bugs.
   * @param[in] other : The vector thats going to be subtracted from the current one.
   */
-  void
+  vec2&
   subtractFromSelf(vec2 const& other);
 
   /**
@@ -107,11 +123,18 @@ public:
   * @param[in] x : The x value being subtracted from the current vector.
   * @param[in] y : The y value being subtracted from the current vector.
   */
-  void
+  vec2&
   subtractFromSelf(float const& x, float const& y);
 
-public:
+public://variables
+  /**
+  * @brief Represent the 'x' component of the vector
+  */
   float x;
+
+  /**
+  * @brief Represent the 'y' component of the vector
+  */
   float y;
 };
 
