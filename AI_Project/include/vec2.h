@@ -57,6 +57,30 @@ public:// operators
   vec2&
   operator-=(vec2 const& other);
 
+  /**
+  * @brief The same as the 'mulScalar' function.
+  * @bug no known bugs
+  * @param[in] The scalar that multiply's the vector.
+  */
+  vec2
+  operator*(float const & scalar)const;
+
+
+  /**
+  * @brief The same as the 'mulScalar' function.
+  * @bug no known bugs
+  * @param[in] other : The scalar that multiply's the vector.
+  */
+  vec2&
+  operator*=(float const& scalar);
+
+  /**
+  * @brief The same as the 'dot' function.
+  * @bug no known bugs
+  * @param[in] other : The scalar that multiply's the vector.
+  */
+  float
+  operator*(vec2 const & other)const;
 
 public:// member functions
 
@@ -125,6 +149,50 @@ public:// member functions
   */
   vec2&
   subtractFromSelf(float const& x, float const& y);
+
+  /**
+  * @brief Calculates the dot product.
+  * @returns the dot product.
+  * @bug no known bugs.
+  * @param[in] other : The vector used to get the dot product.
+  */
+  float
+  dot(vec2 const& other)const;
+
+  /**
+  * @brief Create a vector that's the result of multiplying the current vector by a scalar.
+  * @returns A vector with it's components multiplied.
+  * @bug no known bug.
+  * @param[in] scalar : The value the components are multiplied by.
+  */
+  vec2 
+  mulScalar(float const &scalar)const;
+
+  /**
+  * @brief Multiply's the components of the vector by a scalar.
+  * @returns A vector with it's components multiplied.
+  * @bug no known bug.
+  * @param[in] scalar : The value the components are multiplied by.
+  */
+  vec2& 
+  mulSelfByScalar(float const &scalar);
+
+  /**
+  * @brief Calculates the magnitude of the vector.
+  * @returns the magnitude of the vector.
+  * @bug no known bugs.
+  */
+  float 
+  magnitude()const;
+
+  /**
+  * @brief It's the same as 'magnitude' function.
+  * @returns the length of the vector.
+  * @bug no known bugs.
+  */
+  float 
+  length()const;
+
 
 public://variables
   /**

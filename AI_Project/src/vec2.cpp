@@ -1,4 +1,5 @@
 #include "vec2.h"
+#include <cmath>
 
 vec2::vec2() 
   :x(0.0f),
@@ -33,6 +34,24 @@ vec2&
 vec2::operator-=(vec2 const& other)
 {
   return  subtractFromSelf(other);
+}
+
+vec2 
+vec2::operator*(float const& scalar) const
+{
+  return mulScalar(scalar);
+}
+
+vec2&
+vec2::operator*=(float const& scalar)
+{
+  return mulSelfByScalar(scalar);
+}
+
+float 
+vec2::operator*(vec2 const& other) const
+{
+  return dot(other);
 }
 
 vec2 
@@ -89,6 +108,38 @@ vec2::subtractFromSelf(float const& x, float const& y)
   this->x = x;
   this->y = y;
   return *this;
+}
+
+float 
+vec2::dot(vec2 const& other) const
+{
+  return (this->x * other.x) + (this->y * other.y);
+}
+
+vec2 
+vec2::mulScalar(float const& scalar) const
+{
+  return vec2(this->x * scalar, this->y * scalar);
+}
+
+vec2&
+vec2::mulSelfByScalar(float const& scalar) 
+{
+  this->x *= scalar;
+  this->y *= scalar;
+  return *this;
+}
+
+float 
+vec2::magnitude() const
+{
+  return std::sqrtf((this->x * this->x) + (this->y * this->y));
+}
+
+float 
+vec2::length() const
+{
+  return magnitude();
 }
 
 
