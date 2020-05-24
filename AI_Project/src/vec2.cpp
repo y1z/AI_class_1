@@ -1,4 +1,4 @@
-#include "vec2D.h"
+#include "vec2.h"
 
 vec2::vec2() 
   :x(0.0f),
@@ -6,7 +6,7 @@ vec2::vec2()
 {}
 
 vec2::vec2(float const& X,
-             float const& Y)
+           float const& Y)
   : x(X),
   y(Y)
 {}
