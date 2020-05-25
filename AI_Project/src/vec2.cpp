@@ -1,5 +1,6 @@
 #include "vec2.h"
-#include <cmath>
+#include <cmath> // for std::sqrtf
+#include <limits>// for std::numeric_limits
 
 vec2::vec2()
   :x(0.0f),
@@ -52,6 +53,48 @@ float
 vec2::operator*(vec2 const& other) const
 {
   return dot(other);
+}
+
+bool
+vec2::operator==(vec2 const& other) const
+{
+  //controls how many digits of accuracy we check for
+  static constexpr int digitsBeforeTheDot = 3;
+  vec2 const delta = this->subtract(other);
+  vec2 const Sum = this->add(other);
+
+  float const scaleEpsilonInX =
+    std::numeric_limits<float>::epsilon() * std::fabsf(Sum.x);
+
+  float const scaleEpsilonInY =
+    std::numeric_limits<float>::epsilon() * std::fabsf(Sum.y);
+
+  if( std::fabsf(delta.x) <= (scaleEpsilonInX * digitsBeforeTheDot) &&
+     std::fabsf(delta.y) <= (scaleEpsilonInY * digitsBeforeTheDot) || (
+     std::fabsf(delta.x) < std::numeric_limits<float>::min() &&
+     std::fabsf(delta.y) < std::numeric_limits<float>::min()) )
+     return true;
+      
+  return false;
+}
+
+bool 
+vec2::operator<(vec2 const& other) const
+{
+  if( this->magnitudeSqr() < other.magnitudeSqr() )
+    return true;
+
+  return false;
+}
+
+bool 
+vec2::operator>(vec2 const& other) const
+{
+
+  if( this->magnitudeSqr() > other.magnitudeSqr() )
+    return true;
+
+  return false;
 }
 
 vec2
@@ -197,3 +240,8 @@ vec2::rotateSelfBy(float const& radians)
   return *this;
 }
 
+std::ostream& 
+operator<<(std::ostream& os, vec2 const& vector)
+{
+  return os << '<' << vector.x << ", " << vector.y << '>';
+}

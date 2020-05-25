@@ -1,11 +1,19 @@
 #include <iostream>
 #include "vec2.h"
+#include "../src/test_vec2.cpp"
 
 
 int main()
 {
-  vec2 up(0.0f, 1.0f);
-  vec2 down(0.0f, 1.0f);
+
+  if( false == testEverthing() )
+  {
+    std::cout << "\n\n=========================\n something failed in the test's\n";
+  }
+  else
+  {
+    std::cout << "everything when well \n";
+  }
 
 
   return 0;
