@@ -70,13 +70,23 @@ vec2::operator==(vec2 const& other) const
     std::numeric_limits<float>::epsilon() * std::fabsf(Sum.y);
 
   if( std::fabsf(delta.x) <= (scaleEpsilonInX * digitsBeforeTheDot) &&
-     std::fabsf(delta.y) <= (scaleEpsilonInY * digitsBeforeTheDot) || (
+     std::fabsf(delta.y) <= (scaleEpsilonInY * digitsBeforeTheDot) ||
      std::fabsf(delta.x) < std::numeric_limits<float>::min() &&
-     std::fabsf(delta.y) < std::numeric_limits<float>::min()) )
+     std::fabsf(delta.y) < std::numeric_limits<float>::min() )
      return true;
       
   return false;
 }
+
+bool 
+vec2::operator!=(vec2 const& other) const
+{
+  if(*this == other)
+    return false;
+      
+  return true;
+}
+
 
 bool 
 vec2::operator<(vec2 const& other) const

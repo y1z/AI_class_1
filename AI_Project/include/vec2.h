@@ -86,11 +86,21 @@ public:// operators
 
   /**
   * @brief Checks if two vectors are similar enough to be considered the same.
+  * @returns 'true' if they are similar enough, returns 'false' otherwise.
   * @bug no known bugs.
   * @param[in] other : The vector to be compared.
   */
   bool
   operator==(vec2 const&other)const;
+
+  /**
+  * @brief Checks if two vectors are similar enough to be considered the same.
+  * @returns 'false' if they are similar enough, returns 'true' otherwise.
+  * @bug no known bugs.
+  * @param[in] other : The vector to be compared.
+  */
+  bool
+  operator!=(vec2 const&other)const;
 
   /**
   * @brief Compares the magnitude of the vectors.
@@ -298,3 +308,9 @@ public://variables
   float y;
 };
   
+  
+    
+    
+    
+    
+    
