@@ -1,0 +1,30 @@
+#include "..\include\Boid.h"
+
+vec2
+Boid::seek(vec2 const& currentPos,
+           vec2 const& destination,
+           float const strength) const
+{
+  vec2 const dirToDestination = destination - currentPos;
+
+  return dirToDestination.normalize() * strength;
+}
+
+vec2
+Boid::flee(vec2 const& currentPos,
+           vec2 const& destination,
+           float const strength,
+           float const radius) const
+{
+
+  vec2 const distanceToDestination = destination - currentPos;
+
+  if( distanceToDestination.lengthSqr() < (radius * radius) )
+  {
+
+    return  this->seek(currentPos, destination, strength) * -1.0f;
+  }
+
+
+  return vec2(0.0f, 0.0f);
+}
