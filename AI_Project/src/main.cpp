@@ -1,6 +1,6 @@
 #include <iostream>
 #include "vec2.h"
-#include "../src/test_vec2.cpp"
+#include "test_vec2.h"
 
 
 int main()

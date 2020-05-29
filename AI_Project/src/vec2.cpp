@@ -59,21 +59,33 @@ bool
 vec2::operator==(vec2 const& other) const
 {
   //controls how many digits of accuracy we check for
-  static constexpr int digitsBeforeTheDot = 3;
+//  static constexpr int digitsBeforeTheDot = 6; // Threshold
+  static constexpr float const minimalThreshold = 1.0f / 1000.0f;// 0.001
   vec2 const delta = this->subtract(other);
-  vec2 const Sum = this->add(other);
 
-  float const scaleEpsilonInX =
-    std::numeric_limits<float>::epsilon() * std::fabsf(Sum.x);
+  if( std::fabsf(delta.x) <= minimalThreshold &&
+     std::fabsf(delta.y) <= minimalThreshold )
+  {
+    return true;
+  }
 
-  float const scaleEpsilonInY =
-    std::numeric_limits<float>::epsilon() * std::fabsf(Sum.y);
+  //float const scaleEpsilonInX =
+  //  std::numeric_limits<float>::epsilon() * std::fabsf(Sum.x);
 
-  if( std::fabsf(delta.x) <= (scaleEpsilonInX * digitsBeforeTheDot) &&
-     std::fabsf(delta.y) <= (scaleEpsilonInY * digitsBeforeTheDot) ||
-     std::fabsf(delta.x) < std::numeric_limits<float>::min() &&
-     std::fabsf(delta.y) < std::numeric_limits<float>::min() )
-     return true;
+  //float const scaleEpsilonInY =
+  //  std::numeric_limits<float>::epsilon() * std::fabsf(Sum.y);
+
+  //if( std::fabsf(delta.x) <= (scaleEpsilonInX * digitsBeforeTheDot) &&
+  //   std::fabsf(delta.y) <= (scaleEpsilonInY * digitsBeforeTheDot) )
+  //{
+  //  return true;
+  //}
+
+  //else if( std::fabsf(delta.x) < std::numeric_limits<float>::min() &&
+  //       std::fabsf(delta.y) < std::numeric_limits<float>::min() )
+  //{
+  //  return true;
+  //}
       
   return false;
 }
