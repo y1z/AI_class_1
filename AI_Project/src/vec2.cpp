@@ -4,9 +4,9 @@
 #include <cassert>
 
 Vec2::Vec2(float const x_,
-           float const Y_ )
+           float const y_ )
   : x(x_),
-  y(Y_)
+  y(y_)
 {}
 
 Vec2
@@ -56,7 +56,7 @@ bool
 Vec2::operator==(Vec2 const& other) const
 {
   //controls how many digits of accuracy we check for
-  static constexpr int unitsInLastPlace = 6;
+  static constexpr int unitsInLastPlace = 5;
 
   Vec2 const delta = this->subtract(other);
   Vec2 const sum = this->add(other);
@@ -87,7 +87,6 @@ Vec2::operator!=(Vec2 const& other) const
 {
   return !(*this == other);
 }
-
 
 bool
 Vec2::operator<(Vec2 const& other) const
@@ -144,9 +143,9 @@ Vec2::subtractFromSelf(Vec2 const& other)
 }
 
 Vec2&
-Vec2::subtractFromSelf(float const X, float const Y)
+Vec2::subtractFromSelf(float const x_, float const y_)
 {
-  return (*this = subtract(X, Y));
+  return (*this = subtract(x_, y_));
 }
 
 float
@@ -199,6 +198,12 @@ Vec2::inverseMagnitude() const
   return 1.0f/mag;
 }
 
+float 
+Vec2::inverseLength() const
+{
+  return inverseMagnitude();
+}
+
 Vec2
 Vec2::normalize() const
 {
@@ -227,6 +232,42 @@ Vec2&
 Vec2::rotateSelfBy(float const radians)
 {
   return (*this = rotate(radians));
+}
+
+float 
+Vec2::getAngle() const
+{
+  return std::atan2f(y,x);
+}
+
+Vec2 
+Vec2::perpendicularCounterClockWise() const
+{
+  return Vec2(-y, x);
+}
+
+Vec2 
+Vec2::perpendicularClockWise() const
+{
+  return Vec2(y,-x );
+}
+
+Vec2&
+Vec2::selfPerpendicularCounterClockWise()
+{
+  return (*this = perpendicularCounterClockWise());
+}
+
+Vec2&
+Vec2::selfPerpendicularClockWise()
+{
+  return (*this = perpendicularClockWise());
+}
+
+Vec2 
+Vec2::projectOnTo(const Vec2& projectedOn) const
+{
+  return projectedOn * (projectedOn.dot(*this) / projectedOn.magnitudeSqr());
 }
 
 std::ostream&

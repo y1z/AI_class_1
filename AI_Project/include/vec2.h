@@ -193,7 +193,7 @@ public:// member functions
   * @param[in] y : The y value being subtracted from the current vector.
   */
   Vec2&
-  subtractFromSelf(float const X, float const Y);
+  subtractFromSelf(float const x_, float const y_);
 
   /**
   * @brief Calculates the dot product.
@@ -263,6 +263,12 @@ public:// member functions
   inverseMagnitude() const;
 
   /**
+  * @brief The same as the 'inverseMagnitude' function.
+  */
+  float
+  inverseLength()const;
+
+  /**
   * @brief Calculates a normalized version of the current vector.
   * @returns The current vector normalized.
   * @bug no known bugs.
@@ -295,6 +301,48 @@ public:// member functions
   */
   Vec2&
   rotateSelfBy(float const radians);
+
+  /**
+  * @returns The angle of the current vector.
+  * @bug no known bugs.
+  */
+  float
+  getAngle()const;
+
+  /**
+  * @brief Calculates a vector that's perpendicularly counter clock-wise to the current one.
+  * @bug no known bugs.
+  */
+  Vec2
+  perpendicularCounterClockWise()const;
+
+
+  /**
+  * @brief Calculates a vector that's perpendicularly clock-wise to the current one.
+  * @bug no known bugs.
+  */
+  Vec2
+  perpendicularClockWise()const;
+
+  /**
+  * @brief Applies the 'perpendicualrCounterClockWise' to the current vector.
+  */
+  Vec2&
+  selfPerpendicularCounterClockWise();
+
+  /**
+  * @brief Applies the 'perpendicularClockWise' to the current vector.
+  */
+  Vec2&
+  selfPerpendicularClockWise();
+
+  /**
+  * @brief Calculates the projection of the current vector on to a different vector.
+  * @bug no known bugs.
+  * @param[in] projectedOn : The vector that's being projected on to.
+  */
+  Vec2
+  projectOnTo(const Vec2& projectedOn)const;
 
 public://variables
 
