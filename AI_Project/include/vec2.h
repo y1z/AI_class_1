@@ -11,7 +11,7 @@ class Vec2
 public: // constructors
   Vec2() = default;
   ~Vec2() = default;
-  explicit  Vec2(float const x_, float const y_ = 0.0f);
+  explicit  Vec2(const float  x_, const float  y_ = 0.0f);
   Vec2(Vec2 const& other) = default;
   Vec2(Vec2&& other) noexcept = default;
 
@@ -66,7 +66,7 @@ public:// operators
   * @param[in] The scalar that multiply's the vector.
   */
    Vec2
-  operator*(float const scalar)const;
+  operator*(const float  scalar)const;
 
 
   /**
@@ -75,7 +75,7 @@ public:// operators
   * @param[in] other : The scalar that multiply's the vector.
   */
    Vec2&
-  operator*=(float const scalar);
+  operator*=(const float  scalar);
 
   /**
   * @brief The same as the 'dot' function.
@@ -139,11 +139,12 @@ public:// member functions
 
   /**
   * @returns the sum of the current vector and the input vector.
+  * @param[in] x_ : The x value that going to be added to the vector.
+  * @param[in] y_ : The y value that going to be added to the vector.
   * @bug no known bugs.
-  * @param[in] other : the other vector to be added.
   */
   Vec2
-  add(float const x_, float const y_)const;
+  add(const float  x_, const float  y_)const;
 
   /**
   * @brief Adds the input vector to the current one.
@@ -155,51 +156,52 @@ public:// member functions
 
   /**
   * @brief Adds the input vector to the current one.
+  * @param[in] x_ : the x value being added to the current vector.
+  * @param[in] y_ : the y value being added to the current vector.
   * @bug no known bugs.
-  * @param[in] x : the x value being added to the current vector.
-  * @param[in] y : the y value being added to the current vector.
   */
   Vec2&
-  addToSelf(float const x_, float const y_);
+  addToSelf(const float  x_, const float  y_);
 
   /**
   * @returns The current vector minus the input vector.
-  * @bug no known bugs.
   * @param[in] other : The to be subtracted by.
+  * @bug no known bugs.
   */
   Vec2
   subtract(Vec2 const& other)const;
 
   /**
   * @returns The sum of the current vector and the input vector.
+  * @param[in] x_ : the x value being added to subtracted from the vector.
+  * @param[in] y_ : the y value being added to subtracted from the vector.
   * @bug no known bugs.
-  * @param[in] other : the other vector to be added.
   */
   Vec2
-  subtract(float const x_, float const y_)const;
+  subtract(const float  x_, const float  y_)const;
 
   /**
   * @brief Adds the input vector to the current one.
-  * @bug no known bugs.
   * @param[in] other : The vector thats going to be subtracted from the current one.
+  * @bug no known bugs.
   */
   Vec2&
   subtractFromSelf(Vec2 const& other);
 
   /**
   * @brief Subtracts the input vector from the current one.
+  * @param[in] x_ : The x value being subtracted from the current vector.
+  * @param[in] y_ : The y value being subtracted from the current vector.
   * @bug no known bugs.
-  * @param[in] x : The x value being subtracted from the current vector.
-  * @param[in] y : The y value being subtracted from the current vector.
   */
   Vec2&
-  subtractFromSelf(float const x_, float const y_);
+  subtractFromSelf(const float  x_, const float  y_);
 
   /**
   * @brief Calculates the dot product.
   * @returns the dot product.
-  * @bug no known bugs.
   * @param[in] other : The vector used to get the dot product.
+  * @bug no known bugs.
   */
   float
   dot(Vec2 const& other)const;
@@ -207,20 +209,20 @@ public:// member functions
   /**
   * @brief Create a vector that's the result of multiplying the current vector by a scalar.
   * @returns A vector with it's components multiplied.
-  * @bug no known bug.
   * @param[in] scalar : The value the components are multiplied by.
+  * @bug no known bug.
   */
   Vec2
-  mulScalar(float const scalar)const;
+  mulScalar(const float  scalar)const;
 
   /**
   * @brief Multiply's the components of the vector by a scalar.
   * @returns A vector with it's components multiplied.
-  * @bug no known bug.
   * @param[in] scalar : The value the components are multiplied by.
+  * @bug no known bug.
   */
   Vec2&
-  mulSelfByScalar(float const scalar);
+  mulSelfByScalar(const float  scalar);
 
   /**
   * @brief Calculates the magnitude of the vector.
@@ -291,7 +293,7 @@ public:// member functions
   * @param[in] radians : The Amount of radians to rotate by.
   */
   Vec2
-  rotate(float const radians) const;
+  rotate(const float  radians) const;
 
   /**
   * @brief Calculates a rotated version of the current vector.
@@ -300,7 +302,7 @@ public:// member functions
   * @param[in] radians : The Amount of radians to rotate by.
   */
   Vec2&
-  rotateSelfBy(float const radians);
+  rotateSelfBy(const float  radians);
 
   /**
   * @returns The angle of the current vector.
@@ -325,13 +327,13 @@ public:// member functions
   perpendicularClockWise()const;
 
   /**
-  * @brief Applies the 'perpendicualrCounterClockWise' to the current vector.
+  * @brief Applies the Vec2::perpendicularClockWise to the current vector.
   */
   Vec2&
   selfPerpendicularCounterClockWise();
 
   /**
-  * @brief Applies the 'perpendicularClockWise' to the current vector.
+  * @brief Applies the Vec2::perpendicularClockWise operation to the current vector.
   */
   Vec2&
   selfPerpendicularClockWise();
@@ -355,4 +357,5 @@ public://variables
   * @brief Represent the 'y' component of the vector
   */
   float y;
-};
+
+}; 
