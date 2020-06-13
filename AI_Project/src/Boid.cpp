@@ -2,15 +2,36 @@
 
 Boid::Boid(const Vec2& position)
   :
-  m_shape(100.0f),
+  m_shape(20.0f),
   m_position(position),
+  m_forceSum(Vec2(0.0f)),
   m_prevPosition(Vec2(0.0f, 0.0f)),
   m_speed(10.0f),
   m_wanderTime(0.0f),
+  m_maxForce(1.0f),
   m_isWandering(false)
 
 {
   m_shape.setFillColor(sf::Color::Blue);
+}
+
+void 
+Boid::addForce(const Vec2& force)
+{
+  m_forceSum += force;  
+}
+
+void
+Boid::update(float deltaTime)
+{
+  m_prevPosition = m_position;
+  m_position += m_forceSum.normalize() * m_speed * deltaTime;
+  m_shape.setPosition(m_position.x, m_position.y);
+
+  if( m_forceSum.lengthSqr() > m_maxForce )
+  {
+    m_forceSum.normalize() *= m_maxForce;
+  }
 }
 
 void
@@ -20,6 +41,7 @@ Boid::init(Vec2 const& position,
            const sf::Color boidColor)
 {
   m_position = position;
+  m_forceSum = Vec2(0.0f, 0.0f);
   m_prevPosition = Vec2(0.0f, 0.0f);
   m_speed = speed;
   m_shape.setRadius(radius);

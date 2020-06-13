@@ -1,11 +1,9 @@
-#include <iostream>
-#include "Vec2.h"
-#include "helper.h"
+#include  "TestBoidApp.h"
+#include <memory>
 
 int main()
 {
-
-
-  return 0;
+  std::unique_ptr<BaseApp> app = std::make_unique<TestBoidApp>();
+  return  app->run();
 }
 

@@ -8,7 +8,7 @@
 /**
 * @brief Defines an app used to test the Boids.
 */
-class TestBoidApp : public BaseApp
+class TestBoidApp final : public BaseApp
 {
 public:
   
@@ -20,6 +20,7 @@ private:
 
   int loop();
   
+private:
   std::unique_ptr<Boid> m_boid;
 
   std::unique_ptr<sf::RenderWindow> m_window;

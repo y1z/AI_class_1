@@ -17,6 +17,12 @@ public: // operators
  Boid& operator=(const Boid& other) = default;
  Boid& operator=(Boid&& other) noexcept = default;
 public: // member functions
+
+  void
+  addForce(const Vec2& force);
+
+  void
+  update(float deltaTime);
   /**
   * @brief Initializes the boid.
   * @bug
@@ -113,6 +119,8 @@ public:
   Vec2 m_position;
 private:
 
+  Vec2 m_forceSum;
+
   /**
   * @brief Where the current boid was located and used to determine the 
   * direction of the boid.
@@ -130,6 +138,11 @@ private:
   * @brief How much time the boid has been wandering.
   */
   float m_wanderTime;
+
+  /**
+  * @brief How much time the boid has been wandering.
+  */
+  float m_maxForce;
 
   /**
   * @brief keeps track if the boid is wandering.
