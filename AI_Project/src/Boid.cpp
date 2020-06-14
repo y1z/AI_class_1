@@ -1,4 +1,6 @@
 #include "Boid.h"
+#include "helper.h"
+#include <cassert>
 
 Boid::Boid(const Vec2& position)
   :
@@ -9,41 +11,61 @@ Boid::Boid(const Vec2& position)
   m_speed(10.0f),
   m_wanderTime(0.0f),
   m_maxForce(1.0f),
+  m_mass(0.7f),
   m_isWandering(false)
 
 {
   m_shape.setFillColor(sf::Color::Blue);
 }
 
-void 
+void
 Boid::addForce(const Vec2& force)
 {
-  m_forceSum += force;  
+  m_forceSum += force;
 }
 
 void
 Boid::update(float deltaTime)
 {
-  m_prevPosition = m_position;
-  m_position += m_forceSum.normalize() * m_speed * deltaTime;
+  Vec2 const Dir = getDir();
+  Vec2 const TempPrevPosition = m_position;
+  m_forceSum *= m_mass;
+  Vec2 const SteerDir = (m_forceSum - Dir).normalize();
+
+  Vec2 const ResultDir = (SteerDir + Dir).normalize();
+
+  m_position += ResultDir * (m_speed * deltaTime); // m_forceSum * (m_speed * deltaTime);
+
+  if( TempPrevPosition != m_position )
+  {
+    m_prevPosition = TempPrevPosition;
+  }
+
   m_shape.setPosition(m_position.x, m_position.y);
 
-  if( m_forceSum.lengthSqr() > m_maxForce )
+  if( m_forceSum.lengthSqr() > m_maxForce * m_maxForce )
   {
     m_forceSum.normalize() *= m_maxForce;
   }
 }
 
+
 void
 Boid::init(Vec2 const& position,
            const float speed,
            const float radius,
+           const float massOfBoid,
+           const float maximumForce,
            const sf::Color boidColor)
 {
+  assert(massOfBoid > 0.0f && massOfBoid < 1.0f + FLT_EPSILON);
   m_position = position;
   m_forceSum = Vec2(0.0f, 0.0f);
   m_prevPosition = Vec2(0.0f, 0.0f);
   m_speed = speed;
+  m_mass = massOfBoid;
+  m_maxForce = maximumForce;
+
   m_shape.setRadius(radius);
   m_shape.setFillColor(boidColor);
   m_isWandering = false;
@@ -98,7 +120,7 @@ Boid::arrive(const Vec2& currentPos,
              const float  radius) const
 {
   Vec2 const distanceToDestination = destination - currentPos;
-  const float  distance = distanceToDestination.magnitude();
+  const float distance = distanceToDestination.magnitude();
 
   if( distance < radius )
   {
@@ -134,7 +156,10 @@ Boid::pursue(const Vec2& currentPos,
 
 Vec2
 Boid::badWander(Boid& boidToWander,
-                const float wanderTime)
+                const float minimumRange,
+                const float maximumRange,
+                const float wanderTime,
+                const float strength)
 {
   if( boidToWander.m_isWandering &&
      boidToWander.m_wanderTime >= wanderTime )
@@ -143,13 +168,17 @@ Boid::badWander(Boid& boidToWander,
     boidToWander.m_wanderTime = 0.0f;
     return Vec2(0.0f, 0.0f);
   }
-  else
+  else if( !boidToWander.m_isWandering )
   {
     boidToWander.m_isWandering = true;
-    boidToWander.m_wanderTime = wanderTime;
+    Vec2 const position = Vec2(util::randomRangeFloat(minimumRange, maximumRange),
+                               util::randomRangeFloat(minimumRange, maximumRange));
+    return this->seek(boidToWander.m_position, position, strength);
   }
-  return Vec2();
+
+  return Vec2(0.0f, 0.0f);
 }
+
 
 Vec2
 Boid::evade(const Vec2& currentPos,

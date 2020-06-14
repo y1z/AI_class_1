@@ -2,7 +2,6 @@
 #include "BaseApp.h"
 #include "Boid.h"
 
-#include <vector>
 #include <memory>
 
 /**
@@ -12,18 +11,42 @@ class TestBoidApp final : public BaseApp
 {
 public:
   
-  int run() override;
+  int
+  run() override;
 private:
 
-  int init();
+  /**
+  * @brief Initializes all the variables used by the app.
+  * @bug no known bugs.
+  */
+  int 
+  init();
 
+  /**
+  * @brief Takes care of handling user input.
+  * @bug no known bugs.
+  */
+  void 
+  handleInput();
 
-  int loop();
+  /**
+  * @brief 
+  * @bug no known bugs.
+  */
+  void
+  handleBoids();
+
+  /**
+  * @brief Contains the main Loop of the app.
+  * @bug no known bugs.
+  */
+  int
+  mainLoop();
   
 private:
   std::unique_ptr<Boid> m_boid;
-
   std::unique_ptr<sf::RenderWindow> m_window;
+  Vec2 m_mousePosition;
 
 };
 

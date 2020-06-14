@@ -23,14 +23,23 @@ public: // member functions
 
   void
   update(float deltaTime);
+
   /**
-  * @brief Initializes the boid.
-  * @bug
+  * @brief Initializes every variable used by the boid.
+  * @bug no known bugs.
   */
   void
   init(Vec2 const &position, 
        const float speed = 10.0f,
        const float radius = 100.0f,
+       const sf::Color boidColor = sf::Color::Blue);
+
+  void
+  init(Vec2 const &position, 
+       const float speed = 10.0f,
+       const float radius = 100.0f,
+       const float massOfBoid = 0.5f,
+       const float maximumForce = 1.0f,
        const sf::Color boidColor = sf::Color::Blue);
 
   /**
@@ -90,9 +99,17 @@ public: // member functions
          const float predictionTime,
          const float strength = 1.0f)const;
 
+  /**
+  * @brief 
+  * @param[in] 
+  * @bug no known bugs.
+  */
   Vec2
   badWander(Boid& boidToWander,
-            const float wanderTime);
+            const float minimumRange,
+            const float maximumRange,
+            const float wanderTime,
+            const float strength = 1.0f);
 
   /**
   * @brief Calculates a vector that attempts to avoid a pursuer.
@@ -111,14 +128,19 @@ public: // member functions
         const float radius = 100.0f,
         const float strength = 1.0f)const;
 public:
-
+  /**
+  * @brief Used to represent the boid visual on screen.
+  */
   sf::CircleShape m_shape;
+
   /**
   * @brief Where the current boid is located.
   */
   Vec2 m_position;
 private:
-
+  /**
+  * @brief The collective sum of all forces applied to the boid.
+  */
   Vec2 m_forceSum;
 
   /**
@@ -140,9 +162,14 @@ private:
   float m_wanderTime;
 
   /**
-  * @brief How much time the boid has been wandering.
+  * @brief The maximum force the boid can use.
   */
   float m_maxForce;
+
+  /**
+  * @brief How much mass does the boid have.
+  */
+  float m_mass;
 
   /**
   * @brief keeps track if the boid is wandering.

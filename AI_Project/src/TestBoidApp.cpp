@@ -3,8 +3,8 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 
-#include <ctime>
 #include <iostream>
+#include <random>
 
 int
 TestBoidApp::run()
@@ -13,13 +13,19 @@ TestBoidApp::run()
     return -1;
 
 
-  return loop();
+  return mainLoop();
 }
 
 int
 TestBoidApp::init()
 {
-  std::srand(time(nullptr));
+  std::random_device rd{};
+  std::srand(rd());
+
+  m_deltaTime = 0.0f;
+
+  m_mousePosition = Vec2(0.0f,0.0f);
+
   try
   {
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(600, 600), "Boid test");
@@ -34,24 +40,44 @@ TestBoidApp::init()
   return 0;
 }
 
-int
-TestBoidApp::loop()
+void 
+TestBoidApp::handleInput()
 {
+  
   sf::Event event;
-  m_deltaTime = 0.0f;
+  while( m_window->pollEvent(event) )
+  {
+    if( event.type == sf::Event::Closed )
+      m_window->close();
 
+    if(event.type == sf::Event::MouseMoved )
+    {
+      m_mousePosition = Vec2(event.mouseMove.x, event.mouseMove.y);
+    }
+  }
+
+}
+
+void 
+TestBoidApp::handleBoids()
+{
+  m_boid->addForce(m_boid->seek(m_boid->m_position,
+                   m_mousePosition));
+
+  m_boid->update(m_deltaTime);
+}
+
+int
+TestBoidApp::mainLoop()
+{
   while( m_window->isOpen() )
   {
     m_timer.StartTiming();
-    while( m_window->pollEvent(event) )
-    {
-      if( event.type == sf::Event::Closed )
-        m_window->close();
-    }
 
-    m_boid->addForce(m_boid->seek(m_boid->m_position, Vec2(50.0f, 1.0f)));
+    handleInput();
 
-    m_boid->update(m_deltaTime);
+    handleBoids();
+
 
     m_window->clear();
     m_window->draw(m_boid->m_shape);

@@ -6,11 +6,21 @@
 */
 class BaseApp 
 {
-public:
-  BaseApp() = default;
+public:// constructors
+  BaseApp()
+    :m_timer(Timer()),
+    m_deltaTime(0.0f)
+  {}
+
   virtual ~BaseApp() = default;
+
+  /**
+  * @brief Starts the app
+  * @bug no known bugs.
+  */
   virtual int run() = 0;
 protected:
+
   Timer m_timer;
   float m_deltaTime;
 
