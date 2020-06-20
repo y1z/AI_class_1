@@ -75,7 +75,7 @@ TestBoidApp::handleBoids()
   force = m_boid->badWander(*m_boid,
                             -200.f,
                             200.f,
-                            1.0f);//(m_boid->m_position, m_mousePosition);
+                            .0f);//(m_boid->m_position, m_mousePosition);
   m_boid->addForce(force);
 
   m_boid->update(m_deltaTime);

@@ -1,7 +1,6 @@
 #include "Vec2.h"
 #include <cmath>  // for std::sqrtf
 #include <limits>// for std::numeric_limits
-#include <cassert>
 
 Vec2::Vec2(float const x_,
            float const y_ )
@@ -194,8 +193,9 @@ float
 Vec2::inverseMagnitude() const
 {
   float const mag = magnitude();
-  assert(mag >= std::numeric_limits<float>::epsilon());
-  return 1.0f/mag;
+  return (mag > std::numeric_limits<float>::epsilon())
+    ? 1.0f / mag
+    : 0.0f;
 }
 
 float 

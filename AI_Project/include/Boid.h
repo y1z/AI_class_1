@@ -52,6 +52,23 @@ public: // member functions
   getDir()const;
 
   /**
+  * @brief Sets the force that the boid will used to wander.
+  * @param[in] position : Where the boid will wander to.
+  * @bug no known bugs.
+  */
+  void
+  setWanderPosition(const Vec2& position );
+
+
+
+  /**
+  * @returns the position where the boid wil wander to.
+  * @bug no known bugs.
+  */
+  Vec2
+  getWanderPosition()const;
+
+  /**
   * @returns A vector that goes to the positionToFleeFrom
   * @param[in] currentPos : Where we are in the world.
   * @param[in] targetBoid : The position where we are going.
@@ -108,7 +125,7 @@ public: // member functions
          const float strength = 1.0f)const;
 
   /**
-  * @brief 
+  * @brief Calculates a random position to seek.
   * @param[in] 
   * @bug no known bugs.
   */
@@ -159,6 +176,12 @@ private:
   * direction of the boid.
   */
   Vec2 m_prevPosition;
+
+  /**
+  * @brief Used for when the boid needs to wander.
+  * @bug no known bugs.
+  */
+  Vec2 m_wanderPosition;
 public:
 
   /**
