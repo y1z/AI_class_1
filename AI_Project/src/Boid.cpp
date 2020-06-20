@@ -1,5 +1,5 @@
 #include "Boid.h"
-#include "helper.h"
+#include "util.h"
 #include <cassert>
 
 Boid::Boid(const Vec2& position)
@@ -10,7 +10,7 @@ Boid::Boid(const Vec2& position)
   m_prevPosition(Vec2(0.0f, 0.0f)),
   m_speed(10.0f),
   m_wanderTime(0.0f),
-  m_maxForce(1.0f),
+  m_maxForce(1.1f),
   m_mass(0.7f),
   m_isWandering(false)
 
@@ -29,12 +29,15 @@ Boid::update(float deltaTime)
 {
   Vec2 const Dir = getDir();
   Vec2 const TempPrevPosition = m_position;
-  m_forceSum *= m_mass;
-  Vec2 const SteerDir = (m_forceSum - Dir).normalize();
 
+  m_forceSum *= m_mass;
+
+  m_wanderTime += deltaTime;
+
+  Vec2 const SteerDir = (m_forceSum - Dir).normalize();
   Vec2 const ResultDir = (SteerDir + Dir).normalize();
 
-  m_position += ResultDir * (m_speed * deltaTime); // m_forceSum * (m_speed * deltaTime);
+  m_position += ResultDir * (m_speed * deltaTime);
 
   if( TempPrevPosition != m_position )
   {

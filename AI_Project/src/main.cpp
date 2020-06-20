@@ -1,4 +1,4 @@
-#include  "TestBoidApp.h"
+#include "TestBoidApp.h"
 #include <memory>
 
 int main()

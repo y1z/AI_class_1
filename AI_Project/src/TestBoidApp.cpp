@@ -24,12 +24,15 @@ TestBoidApp::init()
 
   m_deltaTime = 0.0f;
 
-  m_mousePosition = Vec2(0.0f,0.0f);
+  m_mousePosition = Vec2(0.0f, 0.0f);
 
   try
   {
-    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(600, 600), "Boid test");
-    m_boid = std::make_unique<Boid>(Vec2(10.f, 0.f));
+    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1200, 700),
+                                                  "Boid test",
+                                                  sf::Style::Default);
+
+    m_boid = std::make_unique<Boid>(Vec2(10.f, 10.f));
   }
   catch( const std::exception& e )
   {
@@ -40,29 +43,40 @@ TestBoidApp::init()
   return 0;
 }
 
-void 
+void
 TestBoidApp::handleInput()
 {
-  
+
   sf::Event event;
   while( m_window->pollEvent(event) )
   {
-    if( event.type == sf::Event::Closed )
+    if( sf::Event::Closed == event.type )
       m_window->close();
 
-    if(event.type == sf::Event::MouseMoved )
+    if( sf::Event::MouseMoved == event.type )
     {
       m_mousePosition = Vec2(event.mouseMove.x, event.mouseMove.y);
     }
+
+    if( sf::Event::Resized == event.type )
+    {
+      sf::View const newView(sf::FloatRect(0, 0, event.size.width, event.size.height));
+      m_window->setView(newView);
+    }
+
   }
 
 }
 
-void 
+void
 TestBoidApp::handleBoids()
 {
-  m_boid->addForce(m_boid->seek(m_boid->m_position,
-                   m_mousePosition));
+  Vec2 force(.0f, .0f);
+  force = m_boid->badWander(*m_boid,
+                            -200.f,
+                            200.f,
+                            1.0f);//(m_boid->m_position, m_mousePosition);
+  m_boid->addForce(force);
 
   m_boid->update(m_deltaTime);
 }

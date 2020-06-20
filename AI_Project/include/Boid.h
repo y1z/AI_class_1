@@ -18,22 +18,25 @@ public: // operators
  Boid& operator=(Boid&& other) noexcept = default;
 public: // member functions
 
+  /**
+  * @brief Add the force to the current force sum.
+  * @param[in] force : The force that will control the boid.
+  * @bug no know bugs.
+  */
   void
   addForce(const Vec2& force);
 
+  /**
+  * @brief Updates the position, forceSum of the boid, should be called every frame.
+  * @bug
+  */
   void
   update(float deltaTime);
-
+  
   /**
   * @brief Initializes every variable used by the boid.
   * @bug no known bugs.
   */
-  void
-  init(Vec2 const &position, 
-       const float speed = 10.0f,
-       const float radius = 100.0f,
-       const sf::Color boidColor = sf::Color::Blue);
-
   void
   init(Vec2 const &position, 
        const float speed = 10.0f,
@@ -93,6 +96,11 @@ public: // member functions
          const float  strength = 1.0f,
          const float  radius = 100.0f)const;
 
+  /**
+  * @brief 
+  * @bug
+  * @param[in] 
+  */
   Vec2
   pursue(const Vec2& currentPos,
          const Boid& target,
@@ -128,8 +136,9 @@ public: // member functions
         const float radius = 100.0f,
         const float strength = 1.0f)const;
 public:
+
   /**
-  * @brief Used to represent the boid visual on screen.
+  * @brief Used to represent the boid visually on screen.
   */
   sf::CircleShape m_shape;
 
@@ -137,7 +146,9 @@ public:
   * @brief Where the current boid is located.
   */
   Vec2 m_position;
+
 private:
+
   /**
   * @brief The collective sum of all forces applied to the boid.
   */
@@ -175,6 +186,5 @@ private:
   * @brief keeps track if the boid is wandering.
   */
   bool m_isWandering;
-
 };
 

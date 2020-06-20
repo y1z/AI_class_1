@@ -30,7 +30,7 @@ private:
   handleInput();
 
   /**
-  * @brief 
+  * @brief Takes care of all boid related operations.
   * @bug no known bugs.
   */
   void
