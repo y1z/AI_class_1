@@ -45,9 +45,13 @@ private:
   mainLoop();
   
 private:
-  std::unique_ptr<Boid> m_boid;
-  std::unique_ptr<sf::RenderWindow> m_window;
-  Vec2 m_mousePosition;
 
+  std::unique_ptr<Boid> m_boid;
+
+  std::vector<Boid> m_boids;
+
+  std::unique_ptr<sf::RenderWindow> m_window;
+
+  Boid m_mousePosition;
 };
 

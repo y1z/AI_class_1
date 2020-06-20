@@ -8,7 +8,7 @@ Boid::Boid(const Vec2& position)
   m_position(position),
   m_forceSum(Vec2(0.0f)),
   m_prevPosition(Vec2(0.0f, 0.0f)),
-  m_wanderPosition(Vec2(0.f,0.f)),
+  m_wanderPosition(Vec2(0.f, 0.f)),
   m_speed(10.0f),
   m_wanderTime(0.0f),
   m_maxForce(1.1f),
@@ -17,6 +17,10 @@ Boid::Boid(const Vec2& position)
 
 {
   m_shape.setFillColor(sf::Color::Blue);
+
+
+  m_shape.setOrigin(m_shape.getLocalBounds().width * .5f,
+                    m_shape.getLocalBounds().height * .5f);
 }
 
 void
@@ -36,7 +40,7 @@ Boid::update(float deltaTime)
   m_wanderTime += deltaTime;
 
   Vec2 const SteerDir = (m_forceSum - Dir).normalize();
-  Vec2 const ResultDir = (SteerDir + Dir); 
+  Vec2 const ResultDir = (SteerDir + Dir);
 
   m_position += ResultDir.normalize() * (m_speed * deltaTime);
 
@@ -48,7 +52,7 @@ Boid::update(float deltaTime)
 
   m_shape.setPosition(m_position.x, m_position.y);
 
-  if( m_forceSum.lengthSqr() > m_maxForce * m_maxForce)
+  if( m_forceSum.lengthSqr() > m_maxForce * m_maxForce )
   {
     m_forceSum.normalize() *= m_maxForce;
   }
@@ -74,6 +78,10 @@ Boid::init(Vec2 const& position,
 
   m_shape.setRadius(radius);
   m_shape.setFillColor(boidColor);
+  m_shape.setFillColor(sf::Color::Blue);
+  m_shape.setOrigin(m_shape.getLocalBounds().width * .5f,
+                    m_shape.getLocalBounds().height * .5f);
+
   m_isWandering = false;
 }
 
@@ -83,13 +91,13 @@ Boid::getDir() const
   return (m_position - m_prevPosition).normalize();
 }
 
-void 
+void
 Boid::setWanderPosition(const Vec2& position)
 {
   m_wanderPosition = position;
 }
 
-Vec2 
+Vec2
 Boid::getWanderPosition() const
 {
   return m_wanderPosition;
@@ -143,10 +151,23 @@ Boid::arrive(const Vec2& currentPos,
   if( distance < radius )
   {
     const float  inverseRadius = 1.0f / radius;
-    return this->seek(currentPos, destination, strength) * (inverseRadius * distance);
+    const Vec2 result = this->seek(currentPos, destination, strength) * (inverseRadius * distance);
+    return result;
   }
 
   return this->seek(currentPos, destination, strength);
+}
+
+Vec2
+Boid::arrive(const Boid& currentPos,
+             const Vec2& destination,
+             const float strength,
+             const float radius) const
+{
+  return this->arrive(currentPos.m_position,
+                      destination,
+                      strength,
+                      radius);
 }
 
 Vec2
@@ -177,7 +198,7 @@ Boid::badWander(Boid& boidToWander,
                 const float minimumRange,
                 const float maximumRange,
                 const float wanderTime,
-                const float strength)
+                const float strength)const
 {
   if( boidToWander.m_isWandering &&
      boidToWander.m_wanderTime >= wanderTime )
@@ -206,12 +227,72 @@ Boid::badWander(Boid& boidToWander,
 
 
 Vec2
-Boid::evade(const Vec2& currentPos,
+Boid::evade(const Boid& evaderBoid,
             const Boid& pursuer,
             const float predictionTime,
             const float radius,
             const float strength) const
 {
+  Vec2 const projectedRadius = pursuer.getDir() * (pursuer.m_speed * predictionTime);
+
+  Vec2 const projectedPosition = projectedRadius + pursuer.m_position;
+
+  Vec2 const distanceFromPursuer = evaderBoid.m_position - pursuer.m_position;
+
+  if( distanceFromPursuer.lengthSqr() < projectedRadius.lengthSqr() )
+  {
+    Vec2 const FleeFromThis = distanceFromPursuer.perpendicularClockWise() + evaderBoid.m_position;;
+
+    return flee(evaderBoid.m_position, FleeFromThis, strength, radius);
+  }
+  else
+  {
+    return flee(evaderBoid.m_position, projectedPosition, strength, radius);
+  }
+
   return Vec2();
+}
+
+Vec2
+Boid::wander(Boid& boidToWander,
+             float strength,
+             float inputAngle,
+             float circleRadius,
+             float PredictionTime,
+             float WanderTime)
+{
+
+  if( !boidToWander.m_isWandering )
+  {
+    // find out what direction I'm going in
+    Vec2 currentDirection = boidToWander.getDir();
+    // find out where i am going  
+    Vec2 const FuturePosition = boidToWander.getDir() * boidToWander.m_speed * PredictionTime;
+    const float percentageChange = util::randomRangeFloat(0.0f, 1.0f);
+    const float ChangeInAngle = (percentageChange * inputAngle) - (inputAngle * .5f);
+
+    currentDirection *= circleRadius;
+    currentDirection.rotateSelfBy(ChangeInAngle);
+
+    Vec2 const FinalPosition = FuturePosition + currentDirection;
+
+    boidToWander.setWanderPosition(FinalPosition);
+    boidToWander.m_wanderTime = 0.0f;
+    boidToWander.m_isWandering = true;
+
+    return  seek(boidToWander.m_position, FinalPosition, strength);
+  }
+  else if( boidToWander.m_isWandering &&
+          boidToWander.m_wanderTime < PredictionTime )
+  {
+
+    return  seek(boidToWander.m_position, boidToWander.getWanderPosition(), strength);
+  }
+  else
+  {
+    boidToWander.m_isWandering = false;
+  }
+
+  return Vec2(0.f);
 }
 

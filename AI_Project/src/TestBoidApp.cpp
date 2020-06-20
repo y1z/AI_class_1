@@ -12,7 +12,6 @@ TestBoidApp::run()
   if( -1 == init() )
     return -1;
 
-
   return mainLoop();
 }
 
@@ -24,7 +23,7 @@ TestBoidApp::init()
 
   m_deltaTime = 0.0f;
 
-  m_mousePosition = Vec2(0.0f, 0.0f);
+  m_mousePosition = Boid(Vec2(0.0f, 0.0f));
 
   try
   {
@@ -55,7 +54,7 @@ TestBoidApp::handleInput()
 
     if( sf::Event::MouseMoved == event.type )
     {
-      m_mousePosition = Vec2(event.mouseMove.x, event.mouseMove.y);
+      m_mousePosition.m_position = Vec2(event.mouseMove.x, event.mouseMove.y);
     }
 
     if( sf::Event::Resized == event.type )
@@ -72,10 +71,10 @@ void
 TestBoidApp::handleBoids()
 {
   Vec2 force(.0f, .0f);
-  force = m_boid->badWander(*m_boid,
-                            -200.f,
-                            200.f,
-                            .0f);//(m_boid->m_position, m_mousePosition);
+
+  //= m_boid->seek(m_boid->m_position, m_mousePosition.m_position, 2);//m_boid->arrive(*m_boid, m_mousePosition, 3, 200.0f);
+  force = m_boid->pursue(m_boid->m_position, m_mousePosition, 2.5f, 4);
+
   m_boid->addForce(force);
 
   m_boid->update(m_deltaTime);
@@ -91,7 +90,6 @@ TestBoidApp::mainLoop()
     handleInput();
 
     handleBoids();
-
 
     m_window->clear();
     m_window->draw(m_boid->m_shape);

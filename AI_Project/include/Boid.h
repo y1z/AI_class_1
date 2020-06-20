@@ -113,6 +113,13 @@ public: // member functions
          const float  strength = 1.0f,
          const float  radius = 100.0f)const;
 
+  /** Just a redirect to Boid::arrive */
+  Vec2
+  arrive(const Boid& currentPos,
+         const Vec2& destination,
+         const float  strength = 1.0f,
+         const float  radius = 100.0f)const;
+
   /**
   * @brief 
   * @bug
@@ -134,11 +141,10 @@ public: // member functions
             const float minimumRange,
             const float maximumRange,
             const float wanderTime,
-            const float strength = 1.0f);
+            const float strength = 1.0f)const;
 
   /**
   * @brief Calculates a vector that attempts to avoid a pursuer.
-  * @param[in] currentPos : The current position of the evader.
   * @param[in] pursuer : The agent we are trying to evade.
   * @param[in] predictionTime : Use to determine were the pursuer is going to be
   * in N seconds.
@@ -147,11 +153,20 @@ public: // member functions
   * @bug no known bugs.
   */
   Vec2
-  evade(const Vec2& currentPos,
+  evade(const Boid& evadeBoid,
         const Boid& pursuer,
         const float predictionTime,
         const float radius = 100.0f,
         const float strength = 1.0f)const;
+
+  Vec2
+  wander(Boid& boidToWander,
+         float strength,
+         float inputAngle,
+         float circleRadius,
+         float PredictionTime,
+         float WanderTime);
+
 public:
 
   /**
