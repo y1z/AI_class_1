@@ -1,5 +1,6 @@
 #include "Boid.h"
 #include "util.h"
+#include "Types.h"
 #include <cassert>
 
 Boid::Boid(const Vec2& position)
@@ -255,38 +256,39 @@ Boid::evade(const Boid& evaderBoid,
 
 Vec2
 Boid::wander(Boid& boidToWander,
-             float strength,
-             float inputAngle,
-             float circleRadius,
-             float PredictionTime,
-             float WanderTime)
+             const float inputAngle,
+             const float circleRadius,
+             const float PredictionTime,
+             const float WanderTime,
+             const float strength) const
 {
 
   if( !boidToWander.m_isWandering )
   {
-    // find out what direction I'm going in
-    Vec2 currentDirection = boidToWander.getDir();
-    // find out where i am going  
-    Vec2 const FuturePosition = boidToWander.getDir() * boidToWander.m_speed * PredictionTime;
     const float percentageChange = util::randomRangeFloat(0.0f, 1.0f);
-    const float ChangeInAngle = (percentageChange * inputAngle) - (inputAngle * .5f);
 
-    currentDirection *= circleRadius;
-    currentDirection.rotateSelfBy(ChangeInAngle);
+    const float changeInAngle = (percentageChange * inputAngle) - (inputAngle * .5f);
 
-    Vec2 const FinalPosition = FuturePosition + currentDirection;
+    Vec2 const currentDirection = boidToWander.getDir();
 
-    boidToWander.setWanderPosition(FinalPosition);
+    Vec2 const positionInCirclePerimeter = (currentDirection * circleRadius).rotate(changeInAngle);
+
+    Vec2 const futurePosition = currentDirection * boidToWander.m_speed * PredictionTime;
+
+    Vec2 const finalPosition = futurePosition + positionInCirclePerimeter;
+
+    boidToWander.setWanderPosition(finalPosition);
     boidToWander.m_wanderTime = 0.0f;
     boidToWander.m_isWandering = true;
 
-    return  seek(boidToWander.m_position, FinalPosition, strength);
+    return  seek(boidToWander.m_position, finalPosition, strength);
   }
   else if( boidToWander.m_isWandering &&
-          boidToWander.m_wanderTime < PredictionTime )
+          boidToWander.m_wanderTime < WanderTime )
   {
-
-    return  seek(boidToWander.m_position, boidToWander.getWanderPosition(), strength);
+    return  seek(boidToWander.m_position,
+                 boidToWander.getWanderPosition(),
+                 strength);
   }
   else
   {

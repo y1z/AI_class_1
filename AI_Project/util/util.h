@@ -11,7 +11,7 @@ namespace util {
     constexpr static float inverseMaximum = 1.0f / RAND_MAX;
     const float delta = maximum - minimum;
 
-    return  (inverseMaximum * std::rand() * delta) + minimum;
+    return  minimum + (inverseMaximum * std::rand() * delta);
   }
   
 }

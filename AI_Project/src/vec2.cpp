@@ -193,7 +193,7 @@ float
 Vec2::inverseMagnitude() const
 {
   float const mag = magnitude();
-  return (mag > std::numeric_limits<float>::epsilon())
+  return (mag >= std::numeric_limits<float>::epsilon())
     ? 1.0f / mag
     : 0.0f;
 }

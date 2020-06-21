@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseApp.h"
 #include "Boid.h"
+#include "Types.h"
 
 #include <memory>
 
@@ -37,6 +38,14 @@ private:
   void
   handleBoids();
 
+
+  /**
+  * @brief Takes care of everything related with drawing on the screen.
+  * @bug no known bugs.
+  */
+  void
+  handleRendering();
+
   /**
   * @brief Contains the main Loop of the app.
   * @bug no known bugs.
@@ -48,9 +57,9 @@ private:
 
   std::unique_ptr<Boid> m_boid;
 
-  std::vector<Boid> m_boids;
-
   std::unique_ptr<sf::RenderWindow> m_window;
+
+  std::vector<BoidAndBehavior> m_boids;
 
   Boid m_mousePosition;
 };

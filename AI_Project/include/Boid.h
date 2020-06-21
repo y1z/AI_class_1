@@ -2,10 +2,15 @@
 #include "Vec2.h"
 #include <SFML/Graphics.hpp>
 /** @file Boid.h
- * @brief Describes an agent that uses steering behaviors.
  */
 
-class Boid
+/** 
+ * FORWARD DECLARATIONS  
+ */
+ struct FollowPathNode;
+
+/**@brief Describes an agent that uses steering behaviors.*/
+class Boid 
 {
 public:
   Boid() = default;
@@ -13,9 +18,12 @@ public:
   Boid(Boid && other) noexcept = default;
 
   explicit Boid(const Vec2 & position);
+
 public: // operators 
+
  Boid& operator=(const Boid& other) = default;
  Boid& operator=(Boid&& other) noexcept = default;
+
 public: // member functions
 
   /**
@@ -83,9 +91,9 @@ public: // member functions
 
   /** Just a redirect to Boid::seek */
   Vec2 
-  seek(const Boid& someBoid,
+  seek(const Boid& seekerBoid,
        const Boid& targetBoid,
-       const float  strength = 1.0f) const;
+       const float strength = 1.0f) const;
 
   /**
   * @returns A vector that flees from a position.
@@ -159,13 +167,24 @@ public: // member functions
         const float radius = 100.0f,
         const float strength = 1.0f)const;
 
+  /**
+  * @brief Calculates a vector that attempts to avoid a pursuer.
+  * @param[in] boidToWander : The boid that is going to start wandering.
+  * @param[in] inputAngle : The angle in the circle that the boid can wander to.
+  * @param[in] circleRadius : The minimum Distance before we start evading.
+  * @param[in] PredictionTime : Used to determine how far to make the circle from the boid.
+  * @param[in] WanderTime : how long the boid will be wandering.
+  * @param[in] strength : How strong is the resulting force.
+  * @bug no known bugs.
+  */
   Vec2
   wander(Boid& boidToWander,
-         float strength,
-         float inputAngle,
-         float circleRadius,
-         float PredictionTime,
-         float WanderTime);
+         const float inputAngle,
+         const float circleRadius,
+         const float PredictionTime,
+         const float WanderTime,
+         const float strength = 1.0f)const;
+         
 
 public:
 

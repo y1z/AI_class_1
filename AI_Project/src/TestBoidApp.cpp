@@ -24,7 +24,6 @@ TestBoidApp::init()
   m_deltaTime = 0.0f;
 
   m_mousePosition = Boid(Vec2(0.0f, 0.0f));
-
   try
   {
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1200, 700),
@@ -80,6 +79,14 @@ TestBoidApp::handleBoids()
   m_boid->update(m_deltaTime);
 }
 
+void 
+TestBoidApp::handleRendering()
+{
+  m_window->clear();
+  m_window->draw(m_boid->m_shape);
+  m_window->display();
+}
+
 int
 TestBoidApp::mainLoop()
 {
@@ -91,9 +98,7 @@ TestBoidApp::mainLoop()
 
     handleBoids();
 
-    m_window->clear();
-    m_window->draw(m_boid->m_shape);
-    m_window->display();
+    handleRendering();
 
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();
