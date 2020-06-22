@@ -22,15 +22,18 @@ TestBoidApp::init()
   std::srand(rd());
 
   m_deltaTime = 0.0f;
-
   m_mousePosition = Boid(Vec2(0.0f, 0.0f));
+
+  m_screenHeight = 720;
+  m_screenWidth = 1200;
+
   try
   {
-    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1200, 700),
+    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                   "Boid test",
                                                   sf::Style::Default);
 
-    m_boid = std::make_unique<Boid>(Vec2(10.f, 10.f));
+    m_boid = std::make_unique<Boid>(Vec2(m_screenWidth * .5f,m_screenHeight * .5f));
   }
   catch( const std::exception& e )
   {
@@ -71,8 +74,13 @@ TestBoidApp::handleBoids()
 {
   Vec2 force(.0f, .0f);
 
-  //= m_boid->seek(m_boid->m_position, m_mousePosition.m_position, 2);//m_boid->arrive(*m_boid, m_mousePosition, 3, 200.0f);
-  force = m_boid->pursue(m_boid->m_position, m_mousePosition, 2.5f, 4);
+  force = m_boid->wander(*m_boid,
+                         3.14159f * .5f,
+                         100.f,
+                         1.0f,
+                         1.0f); //  m_boid->pursue(m_boid->m_position, m_mousePosition, 2.5f, 4);
+
+  std::cout << "The force of the vector = " << force << '\n';
 
   m_boid->addForce(force);
 

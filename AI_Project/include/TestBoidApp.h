@@ -55,12 +55,17 @@ private:
   
 private:
 
+  Boid m_mousePosition;
+
   std::unique_ptr<Boid> m_boid;
 
   std::unique_ptr<sf::RenderWindow> m_window;
 
   std::vector<BoidAndBehavior> m_boids;
 
-  Boid m_mousePosition;
+  unsigned int m_screenWidth;
+
+  unsigned int m_screenHeight;
+
 };
 

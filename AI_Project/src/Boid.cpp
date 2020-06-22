@@ -265,17 +265,17 @@ Boid::wander(Boid& boidToWander,
 
   if( !boidToWander.m_isWandering )
   {
-    const float percentageChange = util::randomRangeFloat(0.0f, 1.0f);
+    const float percentageChange = util::randomRangeFloat(-0.5f, 0.5f);
 
-    const float changeInAngle = (percentageChange * inputAngle) - (inputAngle * .5f);
+    const float changeInAngle = (percentageChange * inputAngle); 
 
     Vec2 const currentDirection = boidToWander.getDir();
 
-    Vec2 const positionInCirclePerimeter = (currentDirection * circleRadius).rotate(changeInAngle);
+    Vec2 const futurePosition = boidToWander.m_position + (currentDirection * boidToWander.m_speed * PredictionTime);
 
-    Vec2 const futurePosition = currentDirection * boidToWander.m_speed * PredictionTime;
+    Vec2 const positionInCirclePerimeter = currentDirection * circleRadius;
 
-    Vec2 const finalPosition = futurePosition + positionInCirclePerimeter;
+    Vec2 const finalPosition = futurePosition + (positionInCirclePerimeter.rotate(changeInAngle));
 
     boidToWander.setWanderPosition(finalPosition);
     boidToWander.m_wanderTime = 0.0f;
@@ -293,8 +293,53 @@ Boid::wander(Boid& boidToWander,
   else
   {
     boidToWander.m_isWandering = false;
+    boidToWander.m_wanderTime = 0.0f;
+    boidToWander.setWanderPosition(Vec2(0.0f,0.0f));
   }
 
   return Vec2(0.f);
 }
+
+Vec2
+Boid::followPath(const Boid& pathFollower,
+                 std::size_t& currentNode,
+                 const std::vector<FollowPathNode>& path,
+                 const bool cyclePath,
+                 const float strength)
+{
+
+  const FollowPathNode* nextNode = &path.at(currentNode);
+
+  const float distanceSquared = (nextNode->m_position - pathFollower.m_position).lengthSqr();
+  if( distanceSquared <= nextNode->m_radius * nextNode->m_radius )
+  {
+    if( cyclePath )
+    {
+      currentNode = (currentNode + 1) % path.size();
+    }
+    else if( currentNode + 1 <= path.size() - 1 )
+    {
+      ++currentNode;
+    }
+    nextNode = &path.at(currentNode);
+  }
+
+  if( 0u == currentNode )
+  {
+    return seek(pathFollower.m_position,
+                path[currentNode].m_position,
+                strength);
+  }
+
+  const FollowPathNode* prevNode = &path.at(currentNode - 1);
+
+  const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
+  const Vec2 pathToBoid = pathFollower.m_position - prevNode->m_position;
+
+  const Vec2 pointOnTheLine = pathToBoid.projectOnTo(pathToNextNode) + prevNode->m_position;
+
+ return seek(pathFollower.m_position,pointOnTheLine, strength) + 
+  seek(pathFollower.m_position, nextNode->m_position, strength);
+}
+
 

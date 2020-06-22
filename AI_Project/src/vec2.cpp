@@ -221,11 +221,8 @@ Vec2::normalizeSelf()
 Vec2
 Vec2::rotate(float const radians) const
 {
-  float const AngleInX = this->x * radians;
-  float const AngleInY = this->y * radians;
-
-  return Vec2(std::cosf(AngleInX) - std::sinf(AngleInY),
-              std::sinf(AngleInX) + std::cosf(AngleInY));
+  return Vec2((std::cosf(radians) * this->x) - (std::sinf(radians) * this->y),
+              (std::sinf(radians) * this->x) + (std::cosf(radians) * this->y));
 }
 
 Vec2&

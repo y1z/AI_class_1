@@ -1,6 +1,8 @@
 #pragma once
 #include "Vec2.h"
 #include <SFML/Graphics.hpp>
+#include <cstdint>
+
 /** @file Boid.h
  */
 
@@ -184,6 +186,21 @@ public: // member functions
          const float PredictionTime,
          const float WanderTime,
          const float strength = 1.0f)const;
+
+  /**
+  * @brief Makes the boid follow a path created a series of nodes.
+  * @param[in] pathFollower : The node that is following the path.
+  * @param[in] currentNode : Which node is the Boid current going to.
+  * @param[in] cyclePath  : Used to know if the boid traverses the path in a cycle.
+  * @param[in] strength : The resulting strength of the force.
+  * @bug no known bugs.
+  */
+  Vec2
+  followPath(const Boid& pathFollower,
+             std::size_t& currentNode,
+             const std::vector<FollowPathNode>& path,
+             const bool cyclePath = false,
+             const float strength = 1.0f);
          
 
 public:

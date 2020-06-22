@@ -1,11 +1,16 @@
 #pragma once
 #include "Boid.h"
 #include "Vec2.h"
+#include <cstdint>
 /**
 * @file Types.h
 * It contains many common types use in the project.
 */
 
+
+/**
+ * ENUMS 
+ */
 enum class BoidBehavior
 {
   Seek =  1 << 0,
@@ -19,6 +24,9 @@ enum class BoidBehavior
 };
 
 
+/**
+ * STRUCTS
+ */
 struct BoidAndBehavior
 {
   Boid m_boid;
