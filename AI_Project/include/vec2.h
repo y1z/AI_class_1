@@ -11,7 +11,7 @@ class Vec2
 public: // constructors
   Vec2() = default;
   ~Vec2() = default;
-  explicit  Vec2(const float  x_, const float  y_ = 0.0f);
+  explicit Vec2(const float  x_, const float  y_ = 0.0f);
   Vec2(Vec2 const& other) = default;
   Vec2(Vec2&& other) noexcept = default;
 public:// static constants 

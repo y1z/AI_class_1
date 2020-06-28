@@ -47,7 +47,6 @@ TestBoidApp::init()
 void
 TestBoidApp::handleInput()
 {
-
   sf::Event event;
   while( m_window->pollEvent(event) )
   {
