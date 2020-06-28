@@ -4,24 +4,13 @@
 #include <cassert>
 
 Boid::Boid(const Vec2& position)
-  :
-  m_shape(20.0f),
-  m_position(position),
-  m_forceSum(Vec2(0.0f)),
-  m_prevPosition(Vec2(0.0f, 0.0f)),
-  m_wanderPosition(Vec2(0.f, 0.f)),
-  m_speed(10.0f),
-  m_wanderTime(0.0f),
-  m_maxForce(1.1f),
-  m_mass(0.7f),
-  m_isWandering(false)
-
 {
-  m_shape.setFillColor(sf::Color::Blue);
-
-
-  m_shape.setOrigin(m_shape.getLocalBounds().width * .5f,
-                    m_shape.getLocalBounds().height * .5f);
+  this->init(position,
+  10.0f,
+  100.0f,
+  0.5f,
+  2.5f,
+  sf::Color::Blue);
 }
 
 void
@@ -79,7 +68,6 @@ Boid::init(Vec2 const& position,
 
   m_shape.setRadius(radius);
   m_shape.setFillColor(boidColor);
-  m_shape.setFillColor(sf::Color::Blue);
   m_shape.setOrigin(m_shape.getLocalBounds().width * .5f,
                     m_shape.getLocalBounds().height * .5f);
 
