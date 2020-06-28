@@ -14,6 +14,35 @@ public: // constructors
   explicit  Vec2(const float  x_, const float  y_ = 0.0f);
   Vec2(Vec2 const& other) = default;
   Vec2(Vec2&& other) noexcept = default;
+public:// static constants 
+
+  /**@brief a vector that points up*/
+  static const Vec2 upVector2;
+
+  /**@brief a vector that points down*/
+  static const Vec2 downVector2;
+
+  /**@brief a vector that points left*/
+  static const Vec2 leftVector2;
+
+  /**@brief a vector that points right*/
+  static const Vec2 rightVector2;
+
+  /**@brief a vector with the value zero in every component*/
+  static const Vec2 zeroVector2;
+
+  /**@brief a vector with the value one in every component*/
+  static const Vec2 oneVector2;
+
+  /**@brief a vector with the minimum value for floats in every component*/
+  static const Vec2 minVector2;
+
+  /**@brief a vector with the maximum value for floats in every component*/
+  static const Vec2 maxVector2;
+
+  /**@brief a vector with the lowest value for floats in every component*/
+  static const Vec2 lowestVector2;
+
 
 public:// operators
   /**
@@ -345,6 +374,7 @@ public:// member functions
   */
   Vec2
   projectOnTo(const Vec2& projectedOn)const;
+
 
 public://variables
 

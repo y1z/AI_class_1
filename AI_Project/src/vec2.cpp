@@ -7,6 +7,23 @@ Vec2::Vec2(float const x_,
   : x(x_),
   y(y_)
 {}
+const Vec2 Vec2::upVector2 = Vec2(0.f,1.0f);;
+
+const Vec2 Vec2::downVector2 = Vec2(0.f,-1.0f);;
+
+const Vec2 Vec2::leftVector2 = Vec2(1.0f,0.0f);;
+
+const Vec2 Vec2::rightVector2 = Vec2(-1.0f,0.0f);
+
+const Vec2 Vec2::zeroVector2 = Vec2(0.0f,0.0f);;
+
+const Vec2 Vec2::oneVector2 = Vec2(1.0f,1.0f);;
+
+const Vec2 Vec2::minVector2 = Vec2(std::numeric_limits<float>::min(),std::numeric_limits<float>::min());;
+
+const Vec2 Vec2::maxVector2 = Vec2( std::numeric_limits<float>::max(), std::numeric_limits<float>::max());;
+
+const Vec2 Vec2::lowestVector2 = Vec2( std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());;
 
 Vec2
 Vec2::operator+(Vec2 const& other) const
