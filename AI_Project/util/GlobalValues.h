@@ -2,7 +2,7 @@
   /**
   * @brief : a namespace that contains global variables
   */
-namespace gvars
+namespace gvar
 {
   /**
   * @brief : the value of pi calculated with fractions.
@@ -16,11 +16,11 @@ namespace gvars
   static constexpr float twoPi = pi * 2.0f;
 
   /**
-  * @brief :
+  * @brief : Represents 3/2 of pi.
   */
-  static constexpr float threeFourthsPi = pi * 1.5f;
+  static constexpr float threeHalfsPi = pi * 1.5f;
   /**
-  * @brief : pi divided by half.
+  * @brief : pi divided by 2.
   */
   static constexpr float halfPi = pi * .5f;
 
@@ -28,4 +28,10 @@ namespace gvars
   * @brief : 1 fourth of pi.
   */
   static constexpr float quarterPi = pi * .25f;//
+
+  /**
+  * @brief : The inverse of pi.
+  */
+  static constexpr float inversePi = 1.0f / pi;
+
 }

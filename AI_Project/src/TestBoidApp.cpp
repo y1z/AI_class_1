@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include "GlobalValues.h"
 
 #include <iostream>
 #include <random>
@@ -74,7 +75,7 @@ TestBoidApp::handleBoids()
   Vec2 force(.0f, .0f);
 
   force = m_boid->wander(*m_boid,
-                         3.14159f * .5f,
+                         gvar::pi,
                          100.f,
                          1.0f,
                          1.0f); //  m_boid->pursue(m_boid->m_position, m_mousePosition, 2.5f, 4);

@@ -1,15 +1,11 @@
 #pragma once
 #include "Vec2.h"
+#include "Types.h"
 #include <SFML/Graphics.hpp>
-#include <cstdint>
 
 /** @file Boid.h
  */
 
-/** 
- * FORWARD DECLARATIONS  
- */
- struct FollowPathNode;
 
 /**@brief Describes an agent that uses steering behaviors.*/
 class Boid 
@@ -19,7 +15,8 @@ public:
   Boid(const Boid & other) = default;
   Boid(Boid && other) noexcept = default;
 
-  explicit Boid(const Vec2 & position);
+  explicit Boid(const BoidDescriptor &descriptor);
+  explicit Boid(BoidDescriptor &&descriptor);
 
 public: // operators 
 
@@ -48,12 +45,7 @@ public: // member functions
   * @bug no known bugs.
   */
   void
-  init(Vec2 const &position, 
-       const float speed = 10.0f,
-       const float radius = 100.0f,
-       const float massOfBoid = 0.5f,
-       const float maximumForce = 1.0f,
-       const sf::Color boidColor = sf::Color::Blue);
+  init(const BoidDescriptor& descriptor);
 
   /**
   * @reutrns The direction of the boid.
@@ -205,60 +197,8 @@ public: // member functions
 
 public:
 
-  /**
-  * @brief Used to represent the boid visually on screen.
-  */
-  sf::CircleShape m_shape;
+  /** Contains all the data the boid needs to work.*/
 
-  /**
-  * @brief Where the current boid is located.
-  */
-  Vec2 m_position;
-
-private:
-
-  /**
-  * @brief The collective sum of all forces applied to the boid.
-  */
-  Vec2 m_forceSum;
-
-  /**
-  * @brief Where the current boid was located and used to determine the 
-  * direction of the boid.
-  */
-  Vec2 m_prevPosition;
-
-  /**
-  * @brief Used for when the boid needs to wander.
-  * @bug no known bugs.
-  */
-  Vec2 m_wanderPosition;
-public:
-
-  /**
-  * @brief How fast is the boid.
-  */
-  float m_speed;
-private:
-
-  /**
-  * @brief How much time the boid has been wandering.
-  */
-  float m_wanderTime;
-
-  /**
-  * @brief The maximum force the boid can use.
-  */
-  float m_maxForce;
-
-  /**
-  * @brief How much mass does the boid have.
-  */
-  float m_mass;
-
-  /**
-  * @brief keeps track if the boid is wandering.
-  */
-  bool m_isWandering;
+  BoidDescriptor m_data;
 };
 
