@@ -375,6 +375,22 @@ public:// member functions
   Vec2
   projectOnTo(const Vec2& projectedOn)const;
 
+  /**
+  * @brief Calculates a truncated vector.
+  * @bug
+  * @param[in] magnitude : how much to truncate the vector.
+  */
+  Vec2
+  truncate(const float magnitude)const;
+
+
+  /**
+  * @brief Calculates a truncated vector.
+  * @bug
+  * @param[in] magnitude : how much to truncate the vector.
+  */
+  Vec2&
+  truncateSelf(const float magnitude);
 
 public://variables
 

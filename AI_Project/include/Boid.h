@@ -1,7 +1,6 @@
 #pragma once
 #include "Vec2.h"
 #include "Types.h"
-#include <SFML/Graphics.hpp>
 
 /** @file Boid.h
  */
@@ -193,6 +192,13 @@ public: // member functions
              const std::vector<FollowPathNode>& path,
              const bool cyclePath = false,
              const float strength = 1.0f);
+
+  /**
+  * @returns A descriptor with all the variables initialized.
+  */
+  static BoidDescriptor
+  createDefaultDescriptor();
+
          
 
 public:

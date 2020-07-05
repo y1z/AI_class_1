@@ -1,7 +1,6 @@
 #pragma once
 #include "BaseApp.h"
 #include "Boid.h"
-#include "Types.h"
 
 #include <memory>
 
@@ -61,7 +60,9 @@ private:
 
   std::unique_ptr<sf::RenderWindow> m_window;
 
-  std::vector<BoidAndBehavior> m_boids;
+  std::vector<Boid> m_boids;
+
+  std::vector<FollowPathNode> m_path;
 
   unsigned int m_screenWidth;
 

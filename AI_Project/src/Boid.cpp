@@ -23,23 +23,22 @@ Boid::addForce(const Vec2& force)
 void
 Boid::update(float deltaTime)
 {
+  Vec2 force = Vec2::zeroVector2;
+
+  force += this->seek(m_data.m_position, m_data.m_seekTargetPosition, m_data.m_seekMagnitude);
+  force += this->flee();
+
   Vec2 const Dir = getDir();
-  Vec2 const TempPrevPosition = m_data.m_position;
-
-  m_data.m_forceSum *= m_data.m_mass;
-
-  m_data.m_wanderTime += deltaTime;
-
   Vec2 const SteerDir = (m_data.m_forceSum - Dir).normalize();
   Vec2 const ResultDir = (SteerDir + Dir);
 
   m_data.m_position += ResultDir.normalize() * (m_data.m_speed * deltaTime);
 
+  Vec2 const TempPrevPosition = m_data.m_position;
   if( TempPrevPosition != m_data.m_position )
   {
     m_data.m_prevPosition = TempPrevPosition;
   }
-
 
   m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
 
@@ -47,12 +46,19 @@ Boid::update(float deltaTime)
   {
     m_data.m_forceSum.normalize() *= m_data.m_maxForce;
   }
+
+  if(this->m_data.m_isWandering )
+  {
+    m_data.m_wanderTime += deltaTime;
+  }
 }
 
 void 
 Boid::init(const BoidDescriptor& descriptor)
 {
   m_data = descriptor;
+
+  m_data.m_shape.setFillColor(sf::Color::Blue);
 }
 
 Vec2
@@ -72,6 +78,7 @@ Boid::getWanderPosition() const
 {
   return m_data.m_wanderPosition;
 }
+
 
 Vec2
 Boid::seek(const Vec2& currentPos,
@@ -309,6 +316,41 @@ Boid::followPath(const Boid& pathFollower,
 
  return seek(pathFollower.m_data.m_position,pointOnTheLine, strength) + 
   seek(pathFollower.m_data.m_position, nextNode->m_position, strength);
+}
+
+BoidDescriptor 
+Boid::createDefaultDescriptor()
+{
+  BoidDescriptor result;
+
+  result.m_boidSize = 30.0f;
+  result.m_color = sf::Color::Blue;
+  result.m_shape.setRadius(result.m_boidSize);
+  result.m_shape.setFillColor(result.m_color);
+
+  result.m_position = Vec2::zeroVector2;
+  result.m_prevPosition = Vec2::downVector2;
+  result.m_seekTargetPosition = Vec2::zeroVector2;
+  result.m_fleeTargetPosition = Vec2::zeroVector2;
+  result.m_evadeTargetPosition = Vec2::zeroVector2;
+  result.m_pursueTargetPosition = Vec2::zeroVector2;
+  result.m_wanderPosition = Vec2::zeroVector2;
+
+  result.m_forceSum = Vec2::zeroVector2;
+
+  result.m_seekMagnitude = 1.0f;
+  result.m_fleeMagnitude = 0.0f;
+  result.m_pursueMagnitude = 0.0f;
+  result.m_evadeMagnitude = 0.0f;
+
+  result.m_acceleration = 1.5f;
+  result.m_speed = 5.0f;
+  result.m_wanderTime = 0.0f;
+  result.m_timeInMotion = 0.0f;
+  result.m_mass = 0.5f;
+  result.m_maxForce = 2.0f;
+
+  return result;
 }
 
 

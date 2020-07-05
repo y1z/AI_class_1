@@ -284,6 +284,18 @@ Vec2::projectOnTo(const Vec2& projectedOn) const
   return projectedOn * (projectedOn.dot(*this) / projectedOn.magnitudeSqr());
 }
 
+Vec2 
+Vec2::truncate(const float magnitude) const
+{
+  return normalize() * magnitude;
+}
+
+Vec2&
+Vec2::truncateSelf(const float magnitude)
+{
+  return (*this = truncate(magnitude));
+}
+
 std::ostream&
 operator<<(std::ostream& os, Vec2 const& vector)
 {

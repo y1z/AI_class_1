@@ -19,7 +19,7 @@ enum class BoidBehavior
 
   ALL_BEHAVIORS = Seek | Flee | Pursue | Evade ,
 
-  Count,
+  COUNT,
 };
 
 struct FollowPathNode
@@ -77,6 +77,11 @@ struct BoidDescriptor
   Vec2 m_wanderPosition;
 
   /**
+  * @brief The color of the boid.
+  */
+  sf::Color m_color;
+
+  /**
   * @brief How fast is the boid.
   */
   float m_speed;
@@ -125,6 +130,11 @@ struct BoidDescriptor
   * @brief How much mass does the boid have.
   */
   float m_mass;
+
+  /**
+  * @brief : controls how big the boid is.
+  */
+  float m_boidSize;
 
   /**
   * @brief keeps track if the boid is wandering.

@@ -1,8 +1,10 @@
 #pragma once
 #include <random>
 #include <cassert>
+#include "Types.h"
 
-namespace util {
+namespace util 
+{
 
   static float
   randomRangeFloat(const float minimum, const float maximum)
