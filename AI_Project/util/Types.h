@@ -1,5 +1,6 @@
 #pragma once
 #include "Vec2.h"
+#include "IndexTracker.h"
 #include <SFML/Graphics.hpp>
 /**
 * @file Types.h
@@ -25,7 +26,7 @@ enum class BoidBehavior
 struct FollowPathNode
 {
   Vec2 m_position;
-  float m_radius;
+  float m_radius; 
 };
 
 struct BoidDescriptor
@@ -34,6 +35,16 @@ struct BoidDescriptor
   * @brief Used to represent the boid visually on screen.
   */
   sf::CircleShape m_shape;
+
+  /**
+  * @brief Container for the boids path.
+  */
+  std::vector<FollowPathNode> m_followPathNodes;
+
+  /**
+  * @brief used to keep track of what index the boid is following.
+  */
+  IndexTracker m_indexTracker;
 
   /**
   * @brief Where the current boid is located.
@@ -50,6 +61,7 @@ struct BoidDescriptor
   * direction of the boid.
   */
   Vec2 m_prevPosition;
+
 
   /**
   * @brief the position of what the boid is pursuing.
@@ -70,6 +82,7 @@ struct BoidDescriptor
   * @brief the position of what the boid is seeking.
   */
   Vec2 m_seekTargetPosition;
+
 
   /**
   * @brief Used for when the boid needs to wander.
@@ -105,6 +118,8 @@ struct BoidDescriptor
   * @brief Magnitude of the flee behavior.
   */
   float m_fleeMagnitude;
+
+  float m_fleeRadius;
 
   /**
   * @brief Magnitude of the seek behavior.

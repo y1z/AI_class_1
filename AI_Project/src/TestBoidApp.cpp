@@ -25,13 +25,15 @@ TestBoidApp::init()
   m_deltaTime = 0.0f;
 
   BoidDescriptor desc = Boid::createDefaultDescriptor();
-  m_mousePosition.init(Boid::createDefaultDescriptor());
 
   m_screenHeight = 720;
   m_screenWidth = 1200;
 
   
   desc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .5f);
+
+  m_mousePosition.init(Boid::createDefaultDescriptor());
+
 
   try
   {
@@ -78,17 +80,6 @@ TestBoidApp::handleInput()
 void
 TestBoidApp::handleBoids()
 {
-  Vec2 force(.0f, .0f);
-
-  force = m_boid->wander(*m_boid,
-                         gvar::pi,
-                         100.f,
-                         1.0f,
-                         2.0f,
-                         10.0f);
-
-  //m_boid->addForce(force);
-
   m_boid->update(m_deltaTime);
 }
 

@@ -26,7 +26,8 @@ Boid::update(float deltaTime)
   Vec2 force = Vec2::zeroVector2;
 
   force += this->seek(m_data.m_position, m_data.m_seekTargetPosition, m_data.m_seekMagnitude);
-  force += this->flee();
+  force += this->flee(m_data.m_position, m_data.m_fleeTargetPosition, m_data.m_fleeMagnitude, m_data.m_fleeRadius);
+  force += this->followPath(m_data )
 
   Vec2 const Dir = getDir();
   Vec2 const SteerDir = (m_data.m_forceSum - Dir).normalize();
@@ -340,6 +341,7 @@ Boid::createDefaultDescriptor()
 
   result.m_seekMagnitude = 1.0f;
   result.m_fleeMagnitude = 0.0f;
+  result.m_fleeRadius = 100.0f;
   result.m_pursueMagnitude = 0.0f;
   result.m_evadeMagnitude = 0.0f;
 
