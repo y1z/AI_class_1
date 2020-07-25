@@ -29,7 +29,6 @@ TestBoidApp::init()
   m_screenHeight = 720;
   m_screenWidth = 1200;
 
-  
   desc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .5f);
 
   m_mousePosition.init(Boid::createDefaultDescriptor());

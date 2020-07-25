@@ -25,6 +25,8 @@ const Vec2 Vec2::maxVector2 = Vec2( std::numeric_limits<float>::max(), std::nume
 
 const Vec2 Vec2::lowestVector2 = Vec2( std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
 
+const Vec2 Vec2::epsilonVector2 = Vec2(std::numeric_limits<float>::epsilon(), std::numeric_limits<float>::epsilon());
+
 Vec2
 Vec2::operator+(Vec2 const& other) const
 {

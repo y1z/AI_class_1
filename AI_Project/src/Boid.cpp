@@ -27,10 +27,19 @@ Boid::update(float deltaTime)
 
   force += this->seek(m_data.m_position, m_data.m_seekTargetPosition, m_data.m_seekMagnitude);
   force += this->flee(m_data.m_position, m_data.m_fleeTargetPosition, m_data.m_fleeMagnitude, m_data.m_fleeRadius);
-  force += this->followPath(m_data )
+  force += this->followPath(*this, m_data.m_indexTracker, m_data.m_followPathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
+
+  if(force.lengthSqr() > 0.0f )
+  {
+    m_data.m_timeInMotion += deltaTime;
+  }
+  else
+  {
+    m_data.m_timeInMotion = 0.0f;
+  }
 
   Vec2 const Dir = getDir();
-  Vec2 const SteerDir = (m_data.m_forceSum - Dir).normalize();
+  Vec2 const SteerDir = (force - Dir).normalize();
   Vec2 const ResultDir = (SteerDir + Dir);
 
   m_data.m_position += ResultDir.normalize() * (m_data.m_speed * deltaTime);
@@ -43,12 +52,7 @@ Boid::update(float deltaTime)
 
   m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
 
-  if( m_data.m_forceSum.lengthSqr() > m_data.m_maxForce * m_data.m_maxForce )
-  {
-    m_data.m_forceSum.normalize() *= m_data.m_maxForce;
-  }
-
-  if(this->m_data.m_isWandering )
+  if( m_data.m_isWandering )
   {
     m_data.m_wanderTime += deltaTime;
   }
@@ -277,38 +281,40 @@ Boid::wander(Boid& boidToWander,
   return Vec2(0.f);
 }
 
+
 Vec2
 Boid::followPath(const Boid& pathFollower,
-                 std::size_t& currentNode,
+                 IndexTracker& currentNode,
                  const std::vector<FollowPathNode>& path,
                  const bool cyclePath,
                  const float strength)
 {
-
-  const FollowPathNode* nextNode = &path.at(currentNode);
+  const FollowPathNode* nextNode = &path.at(currentNode.getCurrentIndex());
 
   const float distanceSquared = (nextNode->m_position - pathFollower.m_data.m_position).lengthSqr();
+
   if( distanceSquared <= nextNode->m_radius * nextNode->m_radius )
   {
+   const auto currentIndex = currentNode.getCurrentIndex();
     if( cyclePath )
     {
-      currentNode = (currentNode + 1) % path.size();
+      currentNode.setCurrentIndex((currentIndex + 1) % path.size());
     }
-    else if( currentNode + 1 <= path.size() - 1 )
+    else if( currentIndex  + 1 <= path.size() - 1 )
     {
-      ++currentNode;
+      currentNode.incrementIndex();
     }
-    nextNode = &path.at(currentNode);
+    nextNode = &path.at(currentNode.getCurrentIndex());
   }
 
-  if( 0u == currentNode )
+  if( 0u == currentNode.getCurrentIndex() )
   {
     return seek(pathFollower.m_data.m_position,
-                path[currentNode].m_position,
+                path[currentNode.getCurrentIndex()].m_position,
                 strength);
   }
 
-  const FollowPathNode* prevNode = &path.at(currentNode - 1);
+  const FollowPathNode* const prevNode = &path.at(currentNode.getCurrentIndex() - 1);
 
   const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
   const Vec2 pathToBoid = pathFollower.m_data.m_position - prevNode->m_position;
@@ -319,15 +325,22 @@ Boid::followPath(const Boid& pathFollower,
   seek(pathFollower.m_data.m_position, nextNode->m_position, strength);
 }
 
-BoidDescriptor 
+BoidDescriptor
 Boid::createDefaultDescriptor()
 {
   BoidDescriptor result;
 
   result.m_boidSize = 30.0f;
   result.m_color = sf::Color::Blue;
+
+  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(100, 100)));
+  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(200, 100)));
+  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(100, 200)));
+  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(500, 500)));
+
   result.m_shape.setRadius(result.m_boidSize);
   result.m_shape.setFillColor(result.m_color);
+
 
   result.m_position = Vec2::zeroVector2;
   result.m_prevPosition = Vec2::downVector2;
@@ -344,6 +357,7 @@ Boid::createDefaultDescriptor()
   result.m_fleeRadius = 100.0f;
   result.m_pursueMagnitude = 0.0f;
   result.m_evadeMagnitude = 0.0f;
+  result.m_followPathMagnitude = 0.0f;
 
   result.m_acceleration = 1.5f;
   result.m_speed = 5.0f;

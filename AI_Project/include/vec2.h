@@ -43,6 +43,9 @@ public:// static constants
   /**@brief a vector with the lowest value for floats in every component*/
   static const Vec2 lowestVector2;
 
+  /**@brief a with an epsilon for each of it's values.*/
+  static const Vec2 epsilonVector2;
+
 
 public:// operators
   /**

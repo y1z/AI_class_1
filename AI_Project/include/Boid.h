@@ -188,11 +188,12 @@ public: // member functions
   */
   Vec2
   followPath(const Boid& pathFollower,
-             std::size_t& currentNode,
+             IndexTracker& currentNode,
              const std::vector<FollowPathNode>& path,
              const bool cyclePath = false,
              const float strength = 1.0f);
 
+public:
   /**
   * @returns A descriptor with all the variables initialized.
   */

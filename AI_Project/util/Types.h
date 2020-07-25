@@ -25,8 +25,15 @@ enum class BoidBehavior
 
 struct FollowPathNode
 {
+  FollowPathNode(const Vec2 position, const float radius = 100.0f)
+    :m_position(position), m_radius(radius) {}
   Vec2 m_position;
   float m_radius; 
+};
+
+struct FollowPathCollection 
+{
+  std::vector<FollowPathNode> m_path;
 };
 
 struct BoidDescriptor
@@ -100,9 +107,19 @@ struct BoidDescriptor
   float m_speed;
 
   /**
+  * @brief How fast is the boid.
+  */
+  float m_speedMax;
+
+  /**
   * @brief controls the accelerations of the boid.
   */
   float m_acceleration;
+
+  /**
+  * @brief Magnitude of the pursue behavior.
+  */
+  float m_followPathMagnitude;
 
   /**
   * @brief Magnitude of the pursue behavior.
@@ -119,6 +136,9 @@ struct BoidDescriptor
   */
   float m_fleeMagnitude;
 
+  /**
+  * @brief the radius that the flees from the target before stopping.
+  */
   float m_fleeRadius;
 
   /**
@@ -155,5 +175,10 @@ struct BoidDescriptor
   * @brief keeps track if the boid is wandering.
   */
   bool m_isWandering;
+
+  /**
+  * @brief decides if the boid cycles through a path.
+  */
+  bool m_cycleFollowPath;
 };
 
