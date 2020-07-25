@@ -35,10 +35,8 @@ FSM::run()
   while(beginningIter != endingIter )
   {
 
-
     ++beginningIter;
   }
-
 
   return 0;
 }

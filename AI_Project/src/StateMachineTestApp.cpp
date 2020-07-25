@@ -58,6 +58,19 @@ StateMachineTestApp::mainLoop()
   {
     GameManager& gm = GameManager::getInstance();
     m_timer.StartTiming();
+    auto beginnigIter = gm.getBeginningIter();
+    auto endIter = gm.getEndingIter();
+
+    handleInput();
+
+    m_window->clear();
+
+    for(;beginnigIter != endIter; ++beginnigIter )
+    {
+      m_window->draw(beginnigIter->m_data.m_shape);
+    }
+
+    m_window->display();
 
 
 
