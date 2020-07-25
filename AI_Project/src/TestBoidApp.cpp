@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include "GameManager.h"
 
 #include <iostream>
 #include <random>
@@ -18,6 +19,7 @@ TestBoidApp::run()
 int
 TestBoidApp::init()
 {
+  GameManager::StartUp(nullptr);
   std::random_device rd{};
   std::srand(rd());
 
@@ -29,6 +31,7 @@ TestBoidApp::init()
   m_screenWidth = 1200;
 
   desc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .5f);
+
 
   m_mousePosition.init(Boid::createDefaultDescriptor());
 

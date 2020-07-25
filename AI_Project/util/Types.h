@@ -27,14 +27,16 @@ struct FollowPathNode
 {
   FollowPathNode(const Vec2 position, const float radius = 100.0f)
     :m_position(position), m_radius(radius) {}
+
   Vec2 m_position;
   float m_radius; 
 };
 
-struct FollowPathCollection 
+struct FollowPathCollection
 {
   std::vector<FollowPathNode> m_path;
 };
+
 
 struct BoidDescriptor
 {
@@ -181,4 +183,12 @@ struct BoidDescriptor
   */
   bool m_cycleFollowPath;
 };
+
+
+struct GameManagerDescriptor
+{
+  std::vector<BoidDescriptor> m_boidDescriptors;
+  std::vector<FollowPathNode> m_path;
+};
+
 
