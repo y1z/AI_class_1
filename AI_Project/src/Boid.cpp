@@ -38,6 +38,8 @@ Boid::update(float deltaTime)
     m_data.m_timeInMotion = 0.0f;
   }
 
+  m_data.m_speed = (m_data.m_timeInMotion * m_data.m_timeInMotion) * m_data.m_acceleration;
+
   Vec2 const Dir = getDir();
   Vec2 const SteerDir = (force - Dir).normalize();
   Vec2 const ResultDir = (SteerDir + Dir);

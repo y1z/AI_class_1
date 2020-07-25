@@ -205,7 +205,6 @@ public:
 public:
 
   /** Contains all the data the boid needs to work.*/
-
   BoidDescriptor m_data;
 };
 

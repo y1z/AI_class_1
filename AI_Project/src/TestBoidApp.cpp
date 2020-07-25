@@ -2,7 +2,6 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
-#include "GlobalValues.h"
 
 #include <iostream>
 #include <random>
@@ -36,12 +35,12 @@ TestBoidApp::init()
 
   try
   {
-
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                   "Boid test",
                                                   sf::Style::Default);
 
     m_boid = std::make_unique<Boid>(desc);
+
   }
   catch( const std::exception& e )
   {
@@ -58,8 +57,11 @@ TestBoidApp::handleInput()
   sf::Event event;
   while( m_window->pollEvent(event) )
   {
-    if( sf::Event::Closed == event.type )
+    if( sf::Event::Closed == event.type ||
+       sf::Keyboard::Escape == event.key.code )
+    {
       m_window->close();
+    }
 
     if( sf::Event::MouseMoved == event.type )
     {
