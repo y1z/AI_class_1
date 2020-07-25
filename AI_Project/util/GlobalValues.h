@@ -29,6 +29,12 @@ namespace gvar
   */
   static constexpr float quarterPi = pi * .25f;
 
+
+  /**
+  * @brief : 1 eights of pi.
+  */
+  static constexpr float halfQuarterPi = quarterPi * .50f;
+
   /**
   * @brief : The inverse of pi.
   */

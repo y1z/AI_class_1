@@ -75,22 +75,22 @@ struct BoidDescriptor
   /**
   * @brief the position of what the boid is pursuing.
   */
-  Vec2 m_pursueTargetPosition;
+  Vec2* m_pursueTargetPosition;
 
   /**
   * @brief the position of what the boid is evading from.
   */
-  Vec2 m_evadeTargetPosition;
+  Vec2* m_evadeTargetPosition;
 
   /**
   * @brief the position of what the boid is fleeing from.
   */
-  Vec2 m_fleeTargetPosition;
+  Vec2* m_fleeTargetPosition;
 
   /**
   * @brief the position of what the boid is seeking.
   */
-  Vec2 m_seekTargetPosition;
+  Vec2* m_seekTargetPosition;
 
 
   /**
@@ -192,3 +192,9 @@ struct GameManagerDescriptor
 };
 
 
+enum class State 
+{
+  Idle = 0,
+  FollowCourse,
+  RunOver,
+};

@@ -12,6 +12,9 @@
 class GameManager final : public soModule<GameManager>
 {
 public: // constructors 
+
+  GameManager() = default;
+
   GameManager(const GameManager&) = delete;
   GameManager(GameManager&&) = delete;
 

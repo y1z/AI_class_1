@@ -25,11 +25,16 @@ Boid::update(float deltaTime)
 {
   Vec2 force = Vec2::zeroVector2;
 
-  force += this->seek(m_data.m_position, m_data.m_seekTargetPosition, m_data.m_seekMagnitude);
-  force += this->flee(m_data.m_position, m_data.m_fleeTargetPosition, m_data.m_fleeMagnitude, m_data.m_fleeRadius);
-  force += this->followPath(*this, m_data.m_indexTracker, m_data.m_followPathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
+  if( nullptr != m_data.m_seekTargetPosition )
+    force += this->seek(m_data.m_position, *m_data.m_seekTargetPosition, m_data.m_seekMagnitude);
 
-  if(force.lengthSqr() > 0.0f )
+  if( nullptr != m_data.m_fleeTargetPosition )
+    force += this->flee(m_data.m_position, *m_data.m_fleeTargetPosition, m_data.m_fleeMagnitude, m_data.m_fleeRadius);
+
+  if( !m_data.m_followPathNodes.empty() )
+    force += this->followPath(*this, m_data.m_indexTracker, m_data.m_followPathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
+
+  if(force.length() > std::numeric_limits<float>::epsilon() )
   {
     m_data.m_timeInMotion += deltaTime;
   }
@@ -39,20 +44,23 @@ Boid::update(float deltaTime)
   }
 
   m_data.m_speed = (m_data.m_timeInMotion * m_data.m_timeInMotion) * m_data.m_acceleration;
+  if(m_data.m_speed > m_data.m_speedMax)
+  {
+    m_data.m_speed = m_data.m_speedMax;
+  }
 
   Vec2 const Dir = getDir();
-  Vec2 const SteerDir = (force - Dir).normalize();
-  Vec2 const ResultDir = (SteerDir + Dir);
+  Vec2 const SteerDir = (force).normalize();
+  Vec2 const ResultDir = (SteerDir + Dir) * m_data.m_mass;
 
-  m_data.m_position += ResultDir.normalize() * (m_data.m_speed * deltaTime);
+  m_data.m_position += (force * m_data.m_mass) * (m_data.m_speed * deltaTime);
+  m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
 
   Vec2 const TempPrevPosition = m_data.m_position;
   if( TempPrevPosition != m_data.m_position )
   {
     m_data.m_prevPosition = TempPrevPosition;
   }
-
-  m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
 
   if( m_data.m_isWandering )
   {
@@ -233,8 +241,6 @@ Boid::evade(const Boid& evaderBoid,
   {
     return flee(evaderBoid.m_data.m_position, projectedPosition, strength, radius);
   }
-
-  return Vec2();
 }
 
 Vec2
@@ -335,22 +341,23 @@ Boid::createDefaultDescriptor()
   result.m_boidSize = 30.0f;
   result.m_color = sf::Color::Blue;
 
-  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(100, 100)));
-  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(200, 100)));
-  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(100, 200)));
-  result.m_followPathNodes.emplace_back(FollowPathNode(Vec2(500, 500)));
-
   result.m_shape.setRadius(result.m_boidSize);
   result.m_shape.setFillColor(result.m_color);
 
 
   result.m_position = Vec2::zeroVector2;
   result.m_prevPosition = Vec2::downVector2;
-  result.m_seekTargetPosition = Vec2::zeroVector2;
-  result.m_fleeTargetPosition = Vec2::zeroVector2;
-  result.m_evadeTargetPosition = Vec2::zeroVector2;
-  result.m_pursueTargetPosition = Vec2::zeroVector2;
+  result.m_seekTargetPosition = nullptr; 
+  result.m_fleeTargetPosition = nullptr; 
+  result.m_evadeTargetPosition = nullptr; 
+  result.m_pursueTargetPosition = nullptr; 
   result.m_wanderPosition = Vec2::zeroVector2;
+
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 0)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 500)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 500)));
 
   result.m_forceSum = Vec2::zeroVector2;
 
@@ -361,8 +368,9 @@ Boid::createDefaultDescriptor()
   result.m_evadeMagnitude = 0.0f;
   result.m_followPathMagnitude = 0.0f;
 
-  result.m_acceleration = 1.5f;
-  result.m_speed = 5.0f;
+  result.m_acceleration = 3.5f;
+  result.m_speed = 0.0f;
+  result.m_speedMax = 125.0f;
   result.m_wanderTime = 0.0f;
   result.m_timeInMotion = 0.0f;
   result.m_mass = 0.5f;
