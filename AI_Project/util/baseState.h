@@ -1,16 +1,21 @@
 #pragma once
 #include "Types.h"
-
+#include "Boid.h"
 
 class BaseState
 {
 public:
+ BaseState() = default;
+  virtual ~BaseState() = default;
 
-  void virtual OnEnter() = 0;
+  
+  virtual 
+  void OnEnter(Boid& boid) = 0;
 
+  virtual 
+  StateType OnUpdate(float deltaTime,Boid& boid) = 0;
 
-  State virtual OnUpdate(float deltaTime) = 0;
+  virtual
+  void OnExit(Boid& boid) = 0;
 
-
-  void virtual OnExit() = 0;
 };

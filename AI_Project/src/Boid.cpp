@@ -353,11 +353,13 @@ Boid::createDefaultDescriptor()
   result.m_pursueTargetPosition = nullptr; 
   result.m_wanderPosition = Vec2::zeroVector2;
 
-  result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 0)));
-  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
-  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 500)));
-  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
-  result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 500)));
+  /// ONLY FOR TESTING FOLLOW PATH
+
+  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 0)));
+  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 500)));
+  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 500)));
 
   result.m_forceSum = Vec2::zeroVector2;
 
@@ -373,8 +375,11 @@ Boid::createDefaultDescriptor()
   result.m_speedMax = 125.0f;
   result.m_wanderTime = 0.0f;
   result.m_timeInMotion = 0.0f;
+  result.m_agressiveTime = 0.0f;
   result.m_mass = 0.5f;
   result.m_maxForce = 2.0f;
+
+  result.m_state = StateType::FollowCourse;
 
   return result;
 }

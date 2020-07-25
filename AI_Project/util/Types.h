@@ -23,6 +23,15 @@ enum class BoidBehavior
   COUNT,
 };
 
+enum class StateType
+{
+  Idle = 0,
+  FollowCourse,
+  RunOver,
+
+  COUNT
+};
+
 struct FollowPathNode
 {
   FollowPathNode(const Vec2 position, const float radius = 100.0f)
@@ -153,6 +162,10 @@ struct BoidDescriptor
   */
   float m_timeInMotion;
 
+  float m_agressiveTime;
+
+  StateType m_state;
+
   /**
   * @brief How much time the boid has been wandering.
   */
@@ -173,6 +186,7 @@ struct BoidDescriptor
   */
   float m_boidSize;
 
+
   /**
   * @brief keeps track if the boid is wandering.
   */
@@ -192,9 +206,3 @@ struct GameManagerDescriptor
 };
 
 
-enum class State 
-{
-  Idle = 0,
-  FollowCourse,
-  RunOver,
-};
