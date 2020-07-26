@@ -1,8 +1,8 @@
 #pragma once
 #include "baseState.h"
 
-class FollowCourse :
-  public BaseState {
+class FollowCourse : public BaseState 
+{
 public:
   FollowCourse() = default;
   ~FollowCourse() = default;

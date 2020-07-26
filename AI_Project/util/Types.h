@@ -1,7 +1,11 @@
 #pragma once
 #include "Vec2.h"
 #include "IndexTracker.h"
+
 #include <SFML/Graphics.hpp>
+
+#include <cstdint>
+#include <cstddef>
 /**
 * @file Types.h
 * It contains many common types use in the project.
@@ -40,12 +44,6 @@ struct FollowPathNode
   Vec2 m_position;
   float m_radius; 
 };
-
-struct FollowPathCollection
-{
-  std::vector<FollowPathNode> m_path;
-};
-
 
 struct BoidDescriptor
 {
@@ -205,4 +203,17 @@ struct GameManagerDescriptor
   std::vector<FollowPathNode> m_path;
 };
 
+/**
+ * TYPEDEFS
+ */
+
+using int8 = int8_t;
+using int16 = int16_t;
+using int32 = int32_t;
+using int64 = int64_t;
+
+using uint8 = uint8_t;
+using uint16 = uint16_t;
+using uint32 = uint32_t;
+using uint64 = uint64_t;
 

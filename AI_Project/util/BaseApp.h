@@ -21,6 +21,8 @@ public:// constructors
   virtual int run() = 0;
 protected:
 
+  virtual int mainLoop() = 0;
+
   Timer m_timer;
   float m_deltaTime;
 

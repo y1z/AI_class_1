@@ -22,6 +22,8 @@ private:
   void
   handleInput();
 
+private://variables
+
   unsigned int m_screenWidth = 900;
   unsigned int m_screenHeight = 900;
 

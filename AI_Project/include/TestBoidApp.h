@@ -50,7 +50,7 @@ private:
   * @bug no known bugs.
   */
   int
-  mainLoop();
+  mainLoop()override;
   
 private:
 

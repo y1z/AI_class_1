@@ -18,8 +18,8 @@ StateMachineTestApp::run()
 int
 StateMachineTestApp::start()
 {
-  const unsigned int halfScreenWidth = m_screenWidth * 0.5f;
-  const  unsigned int halfScreenHeight = m_screenHeight * 0.5f;
+  const unsigned int halfScreenWidth = m_screenWidth / 2;
+  const  unsigned int halfScreenHeight = m_screenHeight / 2;
 
   m_deltaTime = 0.0f;
 
