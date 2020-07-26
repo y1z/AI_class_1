@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Folders 
+AI_Project/[bB]in/
+AI_Project/.[vV]s/
+
+# Visual Studio files
+*.sln 
+*.vcxproj
+*.vcxproj.*
