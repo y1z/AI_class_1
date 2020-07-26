@@ -12,8 +12,8 @@ StateType
 IdleState::OnUpdate(float deltaTime, class Boid &boid)
 {
   GameManager& gm = GameManager::getInstance();
-  auto firstIter = gm.getBeginningIter();
-  auto endingIter = gm.getEndingIter();
+  auto firstIter = gm.begin();
+  auto endingIter = gm.end();
 
   for(; firstIter != endingIter; ++firstIter )
   {

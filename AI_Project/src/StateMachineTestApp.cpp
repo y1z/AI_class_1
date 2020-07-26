@@ -19,7 +19,7 @@ int
 StateMachineTestApp::start()
 {
   const unsigned int halfScreenWidth = m_screenWidth / 2;
-  const  unsigned int halfScreenHeight = m_screenHeight / 2;
+  const unsigned int halfScreenHeight = m_screenHeight / 2;
 
   m_deltaTime = 0.0f;
 
@@ -58,8 +58,9 @@ StateMachineTestApp::mainLoop()
   {
     GameManager& gm = GameManager::getInstance();
     m_timer.StartTiming();
-    auto beginnigIter = gm.getBeginningIter();
-    auto endIter = gm.getEndingIter();
+
+    auto beginnigIter = gm.begin();
+    auto endIter = gm.end();
 
     handleInput();
 

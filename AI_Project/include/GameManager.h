@@ -80,10 +80,10 @@ public:// functions
   getBoidPtr(const size_t index);
 
   std::deque<Boid>::iterator
-  getBeginningIter();
+  begin();
 
   std::deque<Boid>::iterator
-  getEndingIter();
+  end();
 
 private:
 

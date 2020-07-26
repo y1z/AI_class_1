@@ -15,14 +15,19 @@ public:// constructors
   virtual ~BaseApp() = default;
 
   /**
-  * @brief Starts the app
+  * @brief Starts the app.
   * @bug no known bugs.
   */
   virtual int run() = 0;
-protected:
+private:
 
+  /**
+  * @brief where the main loop occurs
+  * @bug no known bugs.
+  */
   virtual int mainLoop() = 0;
 
+protected:
   Timer m_timer;
   float m_deltaTime;
 

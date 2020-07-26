@@ -30,8 +30,8 @@ int
 FSM::run()
 {
   GameManager& gm = GameManager::getInstance();
-  auto beginningIter = gm.getBeginningIter();
-  auto endingIter = gm.getEndingIter();
+  auto beginningIter = gm.begin();
+  auto endingIter = gm.end();
   while(beginningIter != endingIter )
   {
 

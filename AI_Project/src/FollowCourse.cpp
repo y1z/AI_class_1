@@ -18,8 +18,8 @@ FollowCourse::OnUpdate(float deltaTime, Boid& boid)
   GameManager& gm = GameManager::getInstance();
   boid.update(deltaTime);
 
-  auto beginningIter = gm.getBeginningIter();
-  auto endingIter = gm.getEndingIter();
+  auto beginningIter = gm.begin();
+  auto endingIter = gm.end();
   for( ; beginningIter != endingIter; ++beginningIter )
   {
     if( boid.m_data.m_mass < beginningIter->m_data.m_mass &&

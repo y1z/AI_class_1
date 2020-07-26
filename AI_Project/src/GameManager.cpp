@@ -76,13 +76,13 @@ GameManager::getBoidPtr(const size_t index)
 }
 
 std::deque<Boid>::iterator 
-GameManager::getBeginningIter()
+GameManager::begin()
 {
   return m_boids.begin();
 }
 
 std::deque<Boid>::iterator 
-GameManager::getEndingIter()
+GameManager::end()
 {
   return m_boids.end();
 }

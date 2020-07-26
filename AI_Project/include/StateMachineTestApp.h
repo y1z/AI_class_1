@@ -17,7 +17,7 @@ private:
   start();
 
   int
-  mainLoop();
+  mainLoop()override;
 
   void
   handleInput();
