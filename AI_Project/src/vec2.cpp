@@ -73,31 +73,7 @@ Vec2::operator*(Vec2 const& other) const
 bool
 Vec2::operator==(Vec2 const& other) const
 {
-  //controls how many digits of accuracy we check for
-  static constexpr int unitsInLastPlace = 5;
-
-  Vec2 const delta = this->subtract(other);
-  Vec2 const sum = this->add(other);
-
-  float const scaleEpsilonInX =
-    std::numeric_limits<float>::epsilon() * std::fabsf(sum.x);
-
-  float const scaleEpsilonInY =
-    std::numeric_limits<float>::epsilon() * std::fabsf(sum.y);
-
-  if( std::fabsf(delta.x) <= (scaleEpsilonInX * unitsInLastPlace) &&
-     std::fabsf(delta.y) <= (scaleEpsilonInY * unitsInLastPlace) )
-  {
-    return true;
-  }
-
-  else if( std::fabsf(delta.x) < std::numeric_limits<float>::min() &&
-          std::fabsf(delta.y) < std::numeric_limits<float>::min() )
-  {
-    return true;
-  }
-
-  return false;
+  return equals(other);
 }
 
 bool
@@ -296,6 +272,33 @@ Vec2&
 Vec2::truncateSelf(const float magnitude)
 {
   return (*this = truncate(magnitude));
+}
+
+bool
+Vec2::equals(const Vec2& other,const int precision)const//precision
+{
+  Vec2 const delta = this->subtract(other);
+  Vec2 const sum = this->add(other);
+
+  float const scaleEpsilonInX =
+    std::numeric_limits<float>::epsilon() * std::fabsf(sum.x);
+
+  float const scaleEpsilonInY =
+    std::numeric_limits<float>::epsilon() * std::fabsf(sum.y);
+
+  if( std::fabsf(delta.x) <= (scaleEpsilonInX * precision) &&
+     std::fabsf(delta.y) <= (scaleEpsilonInY * precision) )
+  {
+    return true;
+  }
+
+  else if( std::fabsf(delta.x) < std::numeric_limits<float>::min() &&
+          std::fabsf(delta.y) < std::numeric_limits<float>::min() )
+  {
+    return true;
+  }
+
+  return false;
 }
 
 std::ostream&

@@ -395,6 +395,10 @@ public:// member functions
   Vec2&
   truncateSelf(const float magnitude);
 
+  bool
+  equals(const Vec2& other,
+         const int precision = 3) const;
+
 public://variables
 
   /**
