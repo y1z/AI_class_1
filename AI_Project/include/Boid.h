@@ -53,14 +53,26 @@ public: // member functions
   getDir()const;
 
   /**
-  * @brief Sets the force that the boid will used to wander.
+  * @brief Set the position the boid will wander to.
   * @param[in] position : Where the boid will wander to.
   * @bug no known bugs.
   */
   void
   setWanderPosition(const Vec2& position );
 
+  /**
+  * @brief sets the current state of the boid.
+  * @param[in] newState : Where the boid will wander to.
+  * @bug no known bugs.
+  */
+  void
+  setStateType(const StateType newState);
 
+  /**
+  * @returns The current state.
+  */
+  StateType
+  getStateType()const;
 
   /**
   * @returns the position where the boid wil wander to.

@@ -9,13 +9,15 @@ class BaseApp
 public:// constructors
   BaseApp()
     :m_timer(Timer()),
-    m_deltaTime(0.0f)
+    m_deltaTime(0.0f),
+    m_screenWidth(1280u),
+    m_screenHeight(720u)
   {}
 
   virtual ~BaseApp() = default;
 
   /**
-  * @brief Starts the app.
+  * @brief The interface of the app.
   * @bug no known bugs.
   */
   virtual int run() = 0;
@@ -30,5 +32,6 @@ private:
 protected:
   Timer m_timer;
   float m_deltaTime;
-
+  unsigned int m_screenWidth;
+  unsigned int m_screenHeight;
 };

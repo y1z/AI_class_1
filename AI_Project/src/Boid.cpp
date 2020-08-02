@@ -1,6 +1,7 @@
 #include "Boid.h"
 #include "util.h"
 #include "Types.h"
+#include <iostream>
 
 Boid::Boid(const BoidDescriptor& descriptor)
 :m_data(descriptor)
@@ -34,7 +35,7 @@ Boid::update(float deltaTime)
   if( !m_data.m_followPathNodes.empty() )
     force += this->followPath(*this, m_data.m_indexTracker, m_data.m_followPathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
 
-  if(force.length() > std::numeric_limits<float>::epsilon() )
+  if( force.lengthSqr() > std::numeric_limits<float>::epsilon() * std::numeric_limits<float>::epsilon() )
   {
     m_data.m_timeInMotion += deltaTime;
   }
@@ -51,12 +52,14 @@ Boid::update(float deltaTime)
 
   Vec2 const Dir = getDir();
   Vec2 const SteerDir = (force).normalize();
-  Vec2 const ResultDir = (SteerDir + Dir) * m_data.m_mass;
-
-  m_data.m_position += (force * m_data.m_mass) * (m_data.m_speed * deltaTime);
-  m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
+  Vec2 const AdditiveDir = (Dir - SteerDir) * m_data.m_mass;
+  Vec2 const ResultDir = (Dir + AdditiveDir).normalize(); 
 
   Vec2 const TempPrevPosition = m_data.m_position;
+
+  m_data.m_position += (ResultDir) * (m_data.m_speed * deltaTime);
+  m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
+
   if( TempPrevPosition != m_data.m_position )
   {
     m_data.m_prevPosition = TempPrevPosition;
@@ -86,6 +89,18 @@ void
 Boid::setWanderPosition(const Vec2& position)
 {
   m_data.m_wanderPosition = position;
+}
+
+void
+Boid::setStateType(const StateType newState)
+{
+ m_data.m_state = newState;
+}
+
+StateType 
+Boid::getStateType() const
+{
+  return m_data.m_state;
 }
 
 Vec2
@@ -355,11 +370,11 @@ Boid::createDefaultDescriptor()
 
   /// ONLY FOR TESTING FOLLOW PATH
 
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 0)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 500)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 500)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 0)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 500)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 500)));
 
   result.m_forceSum = Vec2::zeroVector2;
 
@@ -375,11 +390,12 @@ Boid::createDefaultDescriptor()
   result.m_speedMax = 125.0f;
   result.m_wanderTime = 0.0f;
   result.m_timeInMotion = 0.0f;
-  result.m_agressiveTime = 0.0f;
+  result.m_aggressiveTime = 0.0f;
   result.m_mass = 0.5f;
   result.m_maxForce = 2.0f;
 
   result.m_state = StateType::FollowCourse;
+  result.m_isWandering = false;
 
   return result;
 }

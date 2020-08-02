@@ -10,6 +10,8 @@
 class TestBoidApp final : public BaseApp
 {
 public:
+  TestBoidApp() = default;
+  ~TestBoidApp() = default;
   
   int
   run() override;
@@ -63,10 +65,6 @@ private:
   std::vector<Boid> m_boids;
 
   std::vector<FollowPathNode> m_path;
-
-  unsigned int m_screenWidth;
-
-  unsigned int m_screenHeight;
 
 };
 

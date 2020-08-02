@@ -5,33 +5,28 @@
 int
 StateMachineTestApp::run()
 {
-
-  if( -1 == start() )
+  if( -1 == init() )
     return -1;
-
-
-
 
   return mainLoop();
 }
 
 int
-StateMachineTestApp::start()
+StateMachineTestApp::init()
 {
   const unsigned int halfScreenWidth = m_screenWidth / 2;
   const unsigned int halfScreenHeight = m_screenHeight / 2;
-
-  m_deltaTime = 0.0f;
 
   m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                 "State machine test",
                                                 sf::Style::Default);
 
+  m_stateMachine = std::make_unique<FSM>();
 
   GameManagerDescriptor descriptor;
   for( int i = 0; i < 8; ++i )
   {
-    Vec2 Position = Vec2(std::cosf(i * gvar::halfQuarterPi), std::sinf(i * gvar::halfQuarterPi));
+    Vec2 Position = Vec2(std::cosf(i * gvar::eighthPi) * 200.0f, std::sinf(i * gvar::eighthPi) * 200.0f);
     Position += Vec2(halfScreenWidth, halfScreenHeight);
     descriptor.m_path.emplace_back(FollowPathNode(Position));
   }
@@ -39,7 +34,8 @@ StateMachineTestApp::start()
   for( int i = 0; i < 8; ++i )
   {
     auto boidDesc = Boid::createDefaultDescriptor();
-    boidDesc.m_followPathMagnitude = 1.4f;
+    boidDesc.m_followPathMagnitude = 2.0f;
+    boidDesc.m_cycleFollowPath = true;
     boidDesc.m_followPathNodes = descriptor.m_path;
     descriptor.m_boidDescriptors.emplace_back(boidDesc);
   }
@@ -56,29 +52,19 @@ StateMachineTestApp::mainLoop()
 {
   while( m_window->isOpen() )
   {
-    GameManager& gm = GameManager::getInstance();
     m_timer.StartTiming();
 
-    auto beginnigIter = gm.begin();
-    auto endIter = gm.end();
+    m_stateMachine->run(m_deltaTime);
 
     handleInput();
 
-    m_window->clear();
-
-    for(;beginnigIter != endIter; ++beginnigIter )
-    {
-      m_window->draw(beginnigIter->m_data.m_shape);
-    }
-
-    m_window->display();
-
-
+    handleRender();
 
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();
   }
 
+  GameManager::ShutDown();
   return 0;
 }
 
@@ -94,4 +80,18 @@ StateMachineTestApp::handleInput()
       m_window->close();
     }
   }
+}
+
+void 
+StateMachineTestApp::handleRender()
+{
+  GameManager& gm = GameManager::getInstance();
+  m_window->clear();
+
+  for( auto& Boid : gm )
+  {
+    m_window->draw(Boid.m_data.m_shape);
+  }
+
+  m_window->display();
 }

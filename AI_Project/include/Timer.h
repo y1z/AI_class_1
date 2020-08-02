@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <cinttypes>
+
 /*!
  * \author Yhaliff said Barraza Zubia
  * \brief measures time and prints to the screen can also receive the time 
@@ -24,6 +25,9 @@ class Timer
 	using TimePointNanoSeconds = std::chrono::time_point<std::chrono::steady_clock, TimeMeasurementNano>;
 public:// constructor
 	Timer();
+	Timer(const Timer &other) = default;
+	Timer(Timer &&other) = default;
+
 	~Timer();
 public: // functions 
 

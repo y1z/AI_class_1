@@ -1,11 +1,11 @@
 #pragma once
 #include "baseState.h"
 
-class FollowCourse : public BaseState 
+class FollowCourseState : public BaseState 
 {
 public:
-  FollowCourse() = default;
-  ~FollowCourse() = default;
+  FollowCourseState() = default;
+  ~FollowCourseState() = default;
 
   void 
   OnEnter(Boid& boid)override; 

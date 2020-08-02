@@ -1,32 +1,41 @@
 #pragma once
-
 #include "BaseApp.h"
+#include "FSM.h"
+
 #include <SFML/Graphics.hpp>
 #include <memory>
+
 
 class StateMachineTestApp :
   public BaseApp
 {
 
 public:
+  /**
+  * @brief The function that starts the app.
+  */
   int 
   run() override;
 private:
 
   int 
-  start();
+  init();
 
+  /**
+  * @brief 
+  */
   int
   mainLoop()override;
 
   void
   handleInput();
 
+  void
+  handleRender();
+
 private://variables
-
-  unsigned int m_screenWidth = 900;
-  unsigned int m_screenHeight = 900;
-
   std::unique_ptr<sf::RenderWindow> m_window;
+  std::unique_ptr<FSM> m_stateMachine;
 };
+
 

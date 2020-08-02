@@ -1,7 +1,8 @@
 #pragma once
-  /**
-  * @brief : a namespace that contains global variables
-  */
+/**
+* @brief : a namespace that contains global variables
+*/
+
 namespace gvar
 {
   /**
@@ -19,6 +20,7 @@ namespace gvar
   * @brief : Represents 3/2 of pi.
   */
   static constexpr float threeHalfsPi = pi * 1.5f;
+
   /**
   * @brief : pi divided by 2.
   */

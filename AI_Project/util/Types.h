@@ -160,9 +160,8 @@ struct BoidDescriptor
   */
   float m_timeInMotion;
 
-  float m_agressiveTime;
 
-  StateType m_state;
+  float m_aggressiveTime;
 
   /**
   * @brief How much time the boid has been wandering.
@@ -184,6 +183,10 @@ struct BoidDescriptor
   */
   float m_boidSize;
 
+  /**
+  * @brief keeps track of the state of the boid.
+  */
+  StateType m_state;
 
   /**
   * @brief keeps track if the boid is wandering.

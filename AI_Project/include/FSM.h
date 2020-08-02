@@ -1,9 +1,11 @@
 #pragma once
-#include  "baseState.h"
-#include  "Types.h"
+#include "baseState.h"
+#include "Types.h"
 #include <array>
 
-
+/**
+* @brief contains a series of state each boid can execute
+*/
 class FSM 
 {
 public:
@@ -11,11 +13,12 @@ public:
   ~FSM();
 
   
+public:
 
-  
   int 
-  run();
+  run(const float deltaTime);
 
-  std::array<BaseState*, (size_t)StateType::COUNT >m_states;
+private:
+  std::array<BaseState*, static_cast< size_t >(StateType::COUNT) >m_states;
 };
 
