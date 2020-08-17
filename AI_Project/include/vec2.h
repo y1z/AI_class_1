@@ -395,9 +395,37 @@ public:// member functions
   Vec2&
   truncateSelf(const float magnitude);
 
+  /**
+  * @brief Check if the vectors are equal.
+  * @param[in] other : the other vector being compared.
+  * @param[in] precision : How precise to do the comparison.
+  */
   bool
   equals(const Vec2& other,
          const int precision = 3) const;
+
+  /**
+  * @brief Check if the vectors are NOT equal.
+  * @param[in] other : the other vector being compared.
+  * @param[in] precision : How precise to do the comparison.
+  */
+  bool
+  notEquals(const Vec2& other,
+            const int precision = 3) const;
+
+  /**
+  * @brief Calculates the distance from this Vec2 to another Vec2.
+  * @param[in] distanceFrom : the vector we are getting the distance from.
+  */
+  float
+  distanceFromVector(const Vec2& distanceFrom) const;
+
+  /**
+  * @brief Calculates the distance from this Vec2 to another Vec2.
+  * @param[in] distanceFrom : the vector we are getting the distance from.
+  */
+  float
+  distanceFromVectorSqr(const Vec2& distanceFrom) const;
 
 public://variables
 

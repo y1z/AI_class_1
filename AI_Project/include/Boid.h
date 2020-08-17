@@ -196,11 +196,19 @@ public: // member functions
   * @param[in] currentNode : Which node is the Boid current going to.
   * @param[in] cyclePath  : Used to know if the boid traverses the path in a cycle.
   * @param[in] strength : The resulting strength of the force.
+  * @param[in] path : The path to follow.
   * @bug no known bugs.
   */
   Vec2
   followPath(const Boid& pathFollower,
              IndexTracker& currentNode,
+             const std::vector<FollowPathNode>& path,
+             const bool cyclePath = false,
+             const float strength = 1.0f);
+
+  Vec2
+  patrolPath(const Boid& patrolBoid,
+             IndexTracker& indexTracker,
              const std::vector<FollowPathNode>& path,
              const bool cyclePath = false,
              const float strength = 1.0f);

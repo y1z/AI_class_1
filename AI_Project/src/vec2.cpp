@@ -1,29 +1,30 @@
 #include "Vec2.h"
 #include <cmath>  // for std::sqrtf
 #include <limits>// for std::numeric_limits
+#include <cassert>
 
 Vec2::Vec2(float const x_,
-           float const y_ )
+           float const y_)
   : x(x_),
   y(y_)
 {}
-const Vec2 Vec2::upVector2 = Vec2(0.f,1.0f);
+const Vec2 Vec2::upVector2 = Vec2(0.f, 1.0f);
 
-const Vec2 Vec2::downVector2 = Vec2(0.f,-1.0f);
+const Vec2 Vec2::downVector2 = Vec2(0.f, -1.0f);
 
-const Vec2 Vec2::leftVector2 = Vec2(1.0f,0.0f);
+const Vec2 Vec2::leftVector2 = Vec2(1.0f, 0.0f);
 
-const Vec2 Vec2::rightVector2 = Vec2(-1.0f,0.0f);
+const Vec2 Vec2::rightVector2 = Vec2(-1.0f, 0.0f);
 
-const Vec2 Vec2::zeroVector2 = Vec2(0.0f,0.0f);
+const Vec2 Vec2::zeroVector2 = Vec2(0.0f, 0.0f);
 
-const Vec2 Vec2::oneVector2 = Vec2(1.0f,1.0f);
+const Vec2 Vec2::oneVector2 = Vec2(1.0f, 1.0f);
 
-const Vec2 Vec2::minVector2 = Vec2(std::numeric_limits<float>::min(),std::numeric_limits<float>::min());
+const Vec2 Vec2::minVector2 = Vec2(std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
 
-const Vec2 Vec2::maxVector2 = Vec2( std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+const Vec2 Vec2::maxVector2 = Vec2(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 
-const Vec2 Vec2::lowestVector2 = Vec2( std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
+const Vec2 Vec2::lowestVector2 = Vec2(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
 
 const Vec2 Vec2::epsilonVector2 = Vec2(std::numeric_limits<float>::epsilon(), std::numeric_limits<float>::epsilon());
 
@@ -79,7 +80,7 @@ Vec2::operator==(Vec2 const& other) const
 bool
 Vec2::operator!=(Vec2 const& other) const
 {
-  return !(*this == other);
+  return notEquals(other);
 }
 
 bool
@@ -97,7 +98,7 @@ Vec2::operator>(Vec2 const& other) const
 Vec2
 Vec2::add(Vec2 const& other) const
 {
-  return Vec2(x + other.x,y + other.y);
+  return Vec2(x + other.x, y + other.y);
 }
 
 Vec2
@@ -113,7 +114,7 @@ Vec2::addToSelf(Vec2 const& other)
 }
 
 Vec2&
-Vec2::addToSelf (float const x_, float const y_)
+Vec2::addToSelf(float const x_, float const y_)
 {
   return (*this = add(x_, y_));
 }
@@ -193,7 +194,7 @@ Vec2::inverseMagnitude() const
     : 0.0f;
 }
 
-float 
+float
 Vec2::inverseLength() const
 {
   return inverseMagnitude();
@@ -226,22 +227,22 @@ Vec2::rotateSelfBy(float const radians)
   return (*this = rotate(radians));
 }
 
-float 
+float
 Vec2::getAngle() const
 {
-  return std::atan2f(y,x);
+  return std::atan2f(y, x);
 }
 
-Vec2 
+Vec2
 Vec2::perpendicularCounterClockWise() const
 {
   return Vec2(-y, x);
 }
 
-Vec2 
+Vec2
 Vec2::perpendicularClockWise() const
 {
-  return Vec2(y,-x );
+  return Vec2(y, -x);
 }
 
 Vec2&
@@ -256,13 +257,13 @@ Vec2::selfPerpendicularClockWise()
   return (*this = perpendicularClockWise());
 }
 
-Vec2 
+Vec2
 Vec2::projectOnTo(const Vec2& projectedOn) const
 {
   return projectedOn * (projectedOn.dot(*this) / projectedOn.magnitudeSqr());
 }
 
-Vec2 
+Vec2
 Vec2::truncate(const float magnitude) const
 {
   return normalize() * magnitude;
@@ -275,8 +276,10 @@ Vec2::truncateSelf(const float magnitude)
 }
 
 bool
-Vec2::equals(const Vec2& other,const int precision)const//precision
+Vec2::equals(const Vec2& other,
+             const int precision)const
 {
+  assert(precision > 0 && precision <= 7);
   Vec2 const delta = this->subtract(other);
   Vec2 const sum = this->add(other);
 
@@ -299,6 +302,25 @@ Vec2::equals(const Vec2& other,const int precision)const//precision
   }
 
   return false;
+}
+
+bool
+Vec2::notEquals(const Vec2& other,
+                const int precision) const
+{
+  return !equals(other, precision);
+}
+
+float
+Vec2::distanceFromVector(const Vec2& distanceFrom) const
+{
+  return ((*this) - distanceFrom).length();
+}
+
+float
+Vec2::distanceFromVectorSqr(const Vec2& distanceFrom) const
+{
+  return ((*this) - distanceFrom).lengthSqr();
 }
 
 std::ostream&

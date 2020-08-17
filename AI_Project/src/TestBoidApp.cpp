@@ -31,9 +31,9 @@ TestBoidApp::init()
   m_screenWidth = 1200;
 
   desc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .5f);
-  desc.m_seekMagnitude = 0.01f;
+  desc.m_seekMagnitude = 1.01f;
   desc.m_seekTargetPosition = &m_mousePosition.m_data.m_position;
-  desc.m_followPathMagnitude = 2.0f;
+  desc.m_followPathMagnitude = 0.0f;
   desc.m_cycleFollowPath = true;
 
   m_mousePosition.init(Boid::createDefaultDescriptor());
@@ -43,7 +43,7 @@ TestBoidApp::init()
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                   "Boid test",
                                                   sf::Style::Default);
-    m_window->setFramerateLimit(60);
+    //m_window->setFramerateLimit(60);
 
     m_boid = std::make_unique<Boid>(desc);
 

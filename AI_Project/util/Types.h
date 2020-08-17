@@ -197,6 +197,11 @@ struct BoidDescriptor
   * @brief decides if the boid cycles through a path.
   */
   bool m_cycleFollowPath;
+
+  /**
+  * @brief decides if the boid cycles through a patrol path.
+  */
+  bool m_cyclePatrolPath;
 };
 
 
