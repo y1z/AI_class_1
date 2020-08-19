@@ -12,26 +12,26 @@ IndexTracker::resetIndex()
   m_currentIndex = m_resetAmount;
 }
 
-size_t
+int64_t 
 IndexTracker::getCurrentIndex() const
 {
   return m_currentIndex;
 }
 
-int32_t 
+int64_t 
 IndexTracker::getIncrementAmount() const
 {
   return m_incrementAmount;
 }
 
 void
-IndexTracker::setIncrementAmount(int32_t const newIncrementAmount)
+IndexTracker::setIncrementAmount( const int64_t newIncrementAmount)
 {
   m_incrementAmount = newIncrementAmount; 
 }
 
 void 
-IndexTracker::setCurrentIndex(const size_t newCurrentIndex)
+IndexTracker::setCurrentIndex(const int64_t newCurrentIndex)
 {
   m_currentIndex = newCurrentIndex;
 }

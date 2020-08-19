@@ -354,9 +354,25 @@ Boid::patrolPath(const Boid& patrolBoid,
                  const bool cyclePath,
                  const float strength)
 {
-  const FollowPathNode* nextNode = &path.at(indexTracker.getCurrentIndex());
+  const FollowPathNode* Node = &path.at(indexTracker.getCurrentIndex());
 
-  const float distanceSquared = (nextNode->m_position - patrolBoid.m_data.m_position).lengthSqr();
+  const float distanceSquared = Node->m_position.distanceFromVectorSqr(patrolBoid.m_data.m_position);
+
+  if( distanceSquared < Node->m_position * Node->m_position)
+  {
+    size_t const currentIndex = indexTracker.getCurrentIndex();
+    if( 0 == currentIndex )
+    {
+      indexTracker.setIncrementAmount(1);  
+    }
+    else if(path.size() - 1 == currentIndex )
+    {
+      indexTracker.setIncrementAmount(-1);  
+    }
+    
+    indexTracker.incrementIndex();
+    Node = &path.at(indexTracker.getCurrentIndex());
+  }
 
   return Vec2();
 }
