@@ -47,6 +47,31 @@ struct FollowPathNode
 
 struct BoidDescriptor
 {
+  BoidDescriptor()
+    :m_boidSize(30.0f),
+    m_color(sf::Color::Blue),
+    m_shape(m_boidSize),
+    m_position(Vec2::zeroVector2),
+    m_forceSum(Vec2::zeroVector2),
+    m_prevPosition(Vec2::downVector2),
+    m_pursueTargetPosition(nullptr),
+    m_evadeTargetPosition(nullptr),
+    m_fleeTargetPosition(nullptr),
+    m_seekTargetPosition(nullptr),
+    m_speed(0.0f),
+    m_speedMax(125.0f),
+    m_acceleration(3.5f),
+m_followPathMagnitude(1.0f),
+m_patrolPathMagnitude(1.0f),
+m_pursueMagnitude(1.0f),
+m_evadeMagnitude(1.0f),
+m_fleeMagnitude(1.0f),
+
+  {
+    m_shape.setRadius(m_boidSize);
+    m_shape.setFillColor(m_color);
+  }
+  
   /**
   * @brief Used to represent the boid visually on screen.
   */
@@ -55,7 +80,7 @@ struct BoidDescriptor
   /**
   * @brief Container for the boids path.
   */
-  std::vector<FollowPathNode> m_followPathNodes;
+  std::vector<FollowPathNode> m_pathNodes;
 
   /**
   * @brief used to keep track of what index the boid is following.
@@ -126,9 +151,14 @@ struct BoidDescriptor
   float m_acceleration;
 
   /**
-  * @brief Magnitude of the pursue behavior.
+  * @brief Magnitude of the follow-path behavior.
   */
   float m_followPathMagnitude;
+
+  /**
+  * @brief Magnitude of the patrol-path behavior. 
+  */
+  float m_patrolPathMagnitude;
 
   /**
   * @brief Magnitude of the pursue behavior.
@@ -146,14 +176,14 @@ struct BoidDescriptor
   float m_fleeMagnitude;
 
   /**
-  * @brief the radius that the flees from the target before stopping.
-  */
-  float m_fleeRadius;
-
-  /**
   * @brief Magnitude of the seek behavior.
   */
   float m_seekMagnitude;
+
+  /**
+  * @brief the radius that the flees from the target before stopping.
+  */
+  float m_fleeRadius;
 
   /**
   * @brief Keeps track of how long the boid has been moving.
@@ -193,6 +223,7 @@ struct BoidDescriptor
   */
   bool m_isWandering;
 
+  bool m_isFollowingPath;
   /**
   * @brief decides if the boid cycles through a path.
   */

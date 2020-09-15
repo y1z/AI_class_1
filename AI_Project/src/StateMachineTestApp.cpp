@@ -36,7 +36,7 @@ StateMachineTestApp::init()
     auto boidDesc = Boid::createDefaultDescriptor();
     boidDesc.m_followPathMagnitude = 2.0f;
     boidDesc.m_cycleFollowPath = true;
-    boidDesc.m_followPathNodes = descriptor.m_path;
+    boidDesc.m_pathNodes = descriptor.m_path;
     descriptor.m_boidDescriptors.emplace_back(boidDesc);
   }
 

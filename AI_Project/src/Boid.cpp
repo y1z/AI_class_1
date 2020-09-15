@@ -32,8 +32,11 @@ Boid::update(float deltaTime)
   if( nullptr != m_data.m_fleeTargetPosition )
     force += this->flee(m_data.m_position, *m_data.m_fleeTargetPosition, m_data.m_fleeMagnitude, m_data.m_fleeRadius);
 
-  if( !m_data.m_followPathNodes.empty() )
-    force += this->followPath(*this, m_data.m_indexTracker, m_data.m_followPathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
+  if( !m_data.m_pathNodes.empty() && m_data.m_isFollowingPath )
+    force += this->followPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
+
+  if( !m_data.m_pathNodes.empty() && !m_data.m_isFollowingPath )
+    force += this->patrolPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cyclePatrolPath);
 
   if( force.length() > std::numeric_limits<float>::epsilon() )
   {
@@ -306,37 +309,39 @@ Boid::wander(Boid& boidToWander,
 
 Vec2
 Boid::followPath(const Boid& pathFollower,
-                 IndexTracker& currentNode,
+                 IndexTracker& indexTracker,
                  const std::vector<FollowPathNode>& path,
                  const bool cyclePath,
                  const float strength)
 {
-  const FollowPathNode* nextNode = &path.at(currentNode.getCurrentIndex());
+  const FollowPathNode* nextNode = &path.at(indexTracker.getCurrentIndex());
 
   const float distanceSquared = (nextNode->m_position - pathFollower.m_data.m_position).lengthSqr();
 
   if( distanceSquared <= nextNode->m_radius * nextNode->m_radius )
   {
-    const auto currentIndex = currentNode.getCurrentIndex();
+    const auto currentIndex = indexTracker.getCurrentIndex();
     if( cyclePath )
     {
-      currentNode.setCurrentIndex((currentIndex + 1) % path.size());
+      indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
     }
     else if( currentIndex + 1 <= path.size() - 1 )
     {
-      currentNode.incrementIndex();
+      indexTracker.incrementIndex();
     }
-    nextNode = &path.at(currentNode.getCurrentIndex());
+    nextNode = &path.at(indexTracker.getCurrentIndex());
   }
 
-  if( 0u == currentNode.getCurrentIndex() )
+  if( 0u == indexTracker.getCurrentIndex() )
   {
     return seek(pathFollower.m_data.m_position,
-                path[currentNode.getCurrentIndex()].m_position,
+                path[indexTracker.getCurrentIndex()].m_position,
                 strength);
   }
 
-  const FollowPathNode* const prevNode = &path.at(currentNode.getCurrentIndex() - 1);
+  auto const previousNode = (indexTracker.getIncrementAmount() * -1);
+
+  const FollowPathNode* const prevNode = &path.at(indexTracker.getCurrentIndex() + previousNode);
 
   const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
   const Vec2 pathToBoid = pathFollower.m_data.m_position - prevNode->m_position;
@@ -354,27 +359,36 @@ Boid::patrolPath(const Boid& patrolBoid,
                  const bool cyclePath,
                  const float strength)
 {
-  const FollowPathNode* Node = &path.at(indexTracker.getCurrentIndex());
+  const FollowPathNode* nextNode = &path.at(indexTracker.getCurrentIndex());
 
-  const float distanceSquared = Node->m_position.distanceFromVectorSqr(patrolBoid.m_data.m_position);
+  const float distanceSquared = nextNode->m_position.distanceFromVectorSqr(patrolBoid.m_data.m_position);
 
-  if( distanceSquared < Node->m_position * Node->m_position)
+  if( distanceSquared < nextNode->m_position * nextNode->m_position )
   {
-    size_t const currentIndex = indexTracker.getCurrentIndex();
-    if( 0 == currentIndex )
+    auto const currentIndex = indexTracker.getCurrentIndex();
+    if( 1 > currentIndex )
     {
-      indexTracker.setIncrementAmount(1);  
+      indexTracker.setIncrementAmount(1);
     }
-    else if(path.size() - 1 == currentIndex )
+    else if( path.size() - 1 == currentIndex )
     {
-      indexTracker.setIncrementAmount(-1);  
+      indexTracker.setIncrementAmount(-1);
     }
-    
+
     indexTracker.incrementIndex();
-    Node = &path.at(indexTracker.getCurrentIndex());
+
   }
 
-  return Vec2();
+  auto const previousNode = (indexTracker.getIncrementAmount() * -1);
+  const FollowPathNode* prevNode = &path.at(indexTracker.getCurrentIndex() + previousNode);
+
+  const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
+  const Vec2 pathToBoid = patrolBoid.m_data.m_position - prevNode->m_position;
+
+  const Vec2 pointOnTheLine = pathToBoid.projectOnTo(pathToNextNode) + prevNode->m_position;
+
+  return seek(patrolBoid.m_data.m_position, pointOnTheLine, strength) +
+    seek(patrolBoid.m_data.m_position, nextNode->m_position, strength);
 }
 
 BoidDescriptor
@@ -399,11 +413,11 @@ Boid::createDefaultDescriptor()
 
   /// ONLY FOR TESTING FOLLOW PATH
 
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 0)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 500)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(500, 0)));
-  //result.m_followPathNodes.push_back(FollowPathNode(Vec2(0, 500)));
+  //result.m_pathNodes.push_back(FollowPathNode(Vec2(0, 0)));
+  //result.m_pathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  //result.m_pathNodes.push_back(FollowPathNode(Vec2(500, 500)));
+  //result.m_pathNodes.push_back(FollowPathNode(Vec2(500, 0)));
+  //result.m_pathNodes.push_back(FollowPathNode(Vec2(0, 500)));
 
   result.m_forceSum = Vec2::zeroVector2;
 
@@ -413,6 +427,7 @@ Boid::createDefaultDescriptor()
   result.m_pursueMagnitude = 0.0f;
   result.m_evadeMagnitude = 0.0f;
   result.m_followPathMagnitude = 0.0f;
+  result.m_patrolPathMagnitude = 1.0f;
 
   result.m_acceleration = 3.5f;
   result.m_speed = 0.0f;
@@ -425,6 +440,7 @@ Boid::createDefaultDescriptor()
 
   result.m_state = StateType::FollowCourse;
   result.m_isWandering = false;
+  result.m_isFollowingPath = true;
 
   return result;
 }

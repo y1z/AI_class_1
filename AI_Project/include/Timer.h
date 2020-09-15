@@ -9,10 +9,10 @@
  **/
 class Timer
 {
-	/*! used for measuring durations in terms of picoseconds*/
+	/*! used for measuring durations in terms of nanoseconds */
 	using TimeMeasurementNano = std::chrono::duration<uint64_t, std::nano>;
 
-  using TimeMesuermentSeconds = std::chrono::duration<uint64_t, std::ratio<1,1>>; 
+  using TimeMesuermentSeconds = std::chrono::duration<uint64_t, std::ratio<1,1>>; //mesuerment
   
 	/*! this duration has seconds that can have a decimal point
 	(just because I get confused with other Representation)*/
