@@ -12,17 +12,17 @@
 */
 
 /**
- * ENUMS 
+ * ENUMS
  */
 enum class BoidBehavior
 {
-  Seek =  1 << 0,
-  Flee =  1 << 1,
+  Seek = 1 << 0,
+  Flee = 1 << 1,
   Pursue = 1 << 2,
-  Evade =  1 << 3,
+  Evade = 1 << 3,
 
 
-  ALL_BEHAVIORS = Seek | Flee | Pursue | Evade ,
+  ALL_BEHAVIORS = Seek | Flee | Pursue | Evade,
 
   COUNT,
 };
@@ -42,36 +42,53 @@ struct FollowPathNode
     :m_position(position), m_radius(radius) {}
 
   Vec2 m_position;
-  float m_radius; 
+  float m_radius;
 };
 
 struct BoidDescriptor
 {
   BoidDescriptor()
-    :m_boidSize(30.0f),
-    m_color(sf::Color::Blue),
-    m_shape(m_boidSize),
-    m_position(Vec2::zeroVector2),
+    :m_position(Vec2::zeroVector2),
     m_forceSum(Vec2::zeroVector2),
     m_prevPosition(Vec2::downVector2),
+
     m_pursueTargetPosition(nullptr),
     m_evadeTargetPosition(nullptr),
     m_fleeTargetPosition(nullptr),
     m_seekTargetPosition(nullptr),
+
+    m_wanderPosition(0.0f, 0.0f),
+    m_color(sf::Color::Blue),
+
     m_speed(0.0f),
     m_speedMax(125.0f),
     m_acceleration(3.5f),
-m_followPathMagnitude(1.0f),
-m_patrolPathMagnitude(1.0f),
-m_pursueMagnitude(1.0f),
-m_evadeMagnitude(1.0f),
-m_fleeMagnitude(1.0f),
+
+    m_followPathMagnitude(1.0f),
+    m_patrolPathMagnitude(1.0f),
+    m_pursueMagnitude(1.0f),
+    m_evadeMagnitude(1.0f),
+    m_fleeMagnitude(1.0f),
+    m_seekMagnitude(1.0f),
+
+    m_fleeRadius(300.0f),
+    m_timeInMotion(0.0f),
+    m_aggressiveTime(0.0f),
+    m_wanderTime(0.0f),
+    m_maxForce(3.5f),
+    m_mass(0.5f),
+    m_boidSize(30.0f),
+    m_state(StateType::Idle),
+    m_isWandering(false),
+    m_isFollowingPath(false),
+    m_cycleFollowPath(false),
+    m_cyclePatrolPath(false)
 
   {
     m_shape.setRadius(m_boidSize);
     m_shape.setFillColor(m_color);
   }
-  
+
   /**
   * @brief Used to represent the boid visually on screen.
   */
@@ -156,7 +173,7 @@ m_fleeMagnitude(1.0f),
   float m_followPathMagnitude;
 
   /**
-  * @brief Magnitude of the patrol-path behavior. 
+  * @brief Magnitude of the patrol-path behavior.
   */
   float m_patrolPathMagnitude;
 
@@ -190,7 +207,9 @@ m_fleeMagnitude(1.0f),
   */
   float m_timeInMotion;
 
-
+  /**
+  * @brief how long has a boid been aggressive.
+  */
   float m_aggressiveTime;
 
   /**
@@ -223,7 +242,11 @@ m_fleeMagnitude(1.0f),
   */
   bool m_isWandering;
 
+  /**
+   * @brief 
+   */
   bool m_isFollowingPath;
+
   /**
   * @brief decides if the boid cycles through a path.
   */

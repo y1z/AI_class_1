@@ -2,7 +2,7 @@
 #include <cstdint>
 
 /**
-* @brief Keeps track 
+* @brief Keeps track of a index
 */
 class IndexTracker 
 {

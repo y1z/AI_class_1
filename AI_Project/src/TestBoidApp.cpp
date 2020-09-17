@@ -43,6 +43,10 @@ TestBoidApp::init()
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                   "Boid test",
                                                   sf::Style::Default);
+
+    m_window->setVerticalSyncEnabled(true);
+    m_window->setFramerateLimit(1060u);
+
     m_boid = std::make_unique<Boid>(desc);
 
   }
