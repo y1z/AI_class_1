@@ -6,7 +6,7 @@
 void 
 GameManager::OnShutDown()
 {
-  m_boids.clear();
+  m_groupBoids.clear();
   m_globalPath.clear();
 }
 
@@ -22,7 +22,7 @@ GameManager::OnStartUp(void* _Desc)
 
     for(auto& boidDesc : descriptor->m_boidDescriptors )
     {
-      m_boids.emplace_back(Boid(boidDesc));
+      m_groupBoids.emplace_back(Boid(boidDesc));
     }
     return 0;
   }
@@ -40,16 +40,16 @@ GameManager::addBoidToGame(BoidDescriptor& descriptor)
 size_t
 GameManager::addBoidToGame(Boid& newBoid)
 {
-  m_boids.emplace_back(newBoid);
-  return m_boids.size();
+  m_groupBoids.emplace_back(newBoid);
+  return m_groupBoids.size();
 }
 
 bool 
 GameManager::removeBoidFromGame(const size_t index)
 {
-  if(m_boids.size() - 1 >= index )
+  if(m_groupBoids.size() - 1 >= index )
   {
-    m_boids.erase(m_boids.begin() + index);
+    m_groupBoids.erase(m_groupBoids.begin() + index);
     return true;
   }
   return false;
@@ -58,31 +58,31 @@ GameManager::removeBoidFromGame(const size_t index)
 size_t
 GameManager::getTotalBoids() const
 {
-  return m_boids.size();
+  return m_groupBoids.size();
 }
 
 Boid&
 GameManager::getBoidRef(const size_t index)
 {
-  assert(m_boids.size() - 1 >= index);
-  return m_boids[index];
+  assert(m_groupBoids.size() - 1 >= index);
+  return m_groupBoids[index];
 }
 
 Boid*
 GameManager::getBoidPtr(const size_t index)
 {
-  assert(m_boids.size() - 1 >= index);
-  return &m_boids[index];
+  assert(m_groupBoids.size() - 1 >= index);
+  return &m_groupBoids[index];
 }
 
 std::deque<Boid>::iterator 
 GameManager::begin()
 {
-  return m_boids.begin();
+  return m_groupBoids.begin();
 }
 
 std::deque<Boid>::iterator 
 GameManager::end()
 {
-  return m_boids.end();
+  return m_groupBoids.end();
 }

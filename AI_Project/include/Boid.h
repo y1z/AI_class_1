@@ -220,15 +220,30 @@ public: // member functions
 
 public:
   /**
-  * @returns A descriptor with all the variables initialized.
+  * @returns A descriptor with all the variables default initialized.
   */
   static BoidDescriptor
   createDefaultDescriptor();
 
+  /**
+  * @returns A descriptor for creating a boid that flee.
+  */
+  static BoidDescriptor
+  createFleeingBoidDescriptor(const Vec2* targetPosition,
+                              const Vec2 boidPosition,
+                              const float forceMagnitude = 1.0f,
+                              const float fleeRadius = 300.0f);
+
+  /**
+   * @brief draws the boid on a render target.
+   */
   void
-  draw(sf::RenderTarget & renderTarget) const;
+  draw(sf::RenderTarget& renderTarget) const;
 
 
+  /**
+   * @brief removes the boid.
+   */
   void
   destroy();
 

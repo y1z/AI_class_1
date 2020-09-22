@@ -62,7 +62,7 @@ private:
 
   std::unique_ptr<sf::RenderWindow> m_window;
 
-  std::vector<Boid> m_boids;
+  std::vector<Boid> m_groupBoids;
 
   std::vector<FollowPathNode> m_path;
 

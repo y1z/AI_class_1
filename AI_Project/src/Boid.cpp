@@ -142,7 +142,7 @@ Boid::flee(const Vec2& currentPos,
 
   if( distanceToDestination.length() < radius )
   {
-    return this->seek(currentPos, positionToFleeFrom, strength);
+    return this->seek(currentPos, positionToFleeFrom, strength) * -1;
   }
 
   return Vec2(0.0f, 0.0f);
@@ -445,6 +445,21 @@ Boid::createDefaultDescriptor()
 
   return result;
 }
+
+BoidDescriptor 
+Boid::createFleeingBoidDescriptor(const Vec2* targetPosition,
+                                  const Vec2 boidPosition,
+                                  const float forceMagnitude,
+                                  const float fleeRadius)
+{
+  BoidDescriptor result;
+  result.m_fleeTargetPosition = targetPosition;
+  result.m_position = boidPosition;
+  result.m_fleeMagnitude = forceMagnitude;
+  result.m_fleeRadius = fleeRadius;
+  return result;
+}
+
 
 void 
 Boid::draw(sf::RenderTarget& renderTarget) const

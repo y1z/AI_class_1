@@ -92,7 +92,7 @@ private:
   * @note It's a deque because I want to have to ability to
   * get pointers and references to the individual Boids.
   */
-  std::deque<Boid> m_boids;
+  std::deque<Boid> m_groupBoids;
 
 public:
   /**

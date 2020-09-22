@@ -36,6 +36,20 @@ TestBoidApp::init()
   desc.m_followPathMagnitude = 0.0f;
   desc.m_cycleFollowPath = true;
 
+  {
+    BoidDescriptor fleeBoidDesc;
+    fleeBoidDesc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .4f);
+    fleeBoidDesc.m_fleeMagnitude = 1.0f;
+    fleeBoidDesc.m_fleeRadius = 300.0f;
+    fleeBoidDesc.m_fleeTargetPosition = &m_mousePosition.m_data.m_position;
+    
+    m_groupBoids.emplace_back(Boid(fleeBoidDesc));
+  }
+                                                                                         
+  {
+    BoidDescriptor arriveBoidDesc;
+  }
+
   m_mousePosition.init(Boid::createDefaultDescriptor());
 
   try
@@ -94,6 +108,10 @@ void
 TestBoidApp::handleBoids()
 {
   m_boid->update(m_deltaTime);
+  for(auto &boid : m_groupBoids )
+  {
+    boid.update(m_deltaTime); 
+  }
 }
 
 void 
@@ -101,6 +119,10 @@ TestBoidApp::handleRendering()
 {
   m_window->clear();
   m_boid->draw(*m_window);
+  for(auto &boid : m_groupBoids )
+  {
+    boid.draw(*m_window);
+  }
   //m_window->draw(m_boid->m_data.m_shape);
   m_window->display();
 }

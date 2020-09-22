@@ -134,7 +134,7 @@ struct BoidDescriptor
   /**
   * @brief the position of what the boid is fleeing from.
   */
-  Vec2* m_fleeTargetPosition;
+  const Vec2* m_fleeTargetPosition;
 
   /**
   * @brief the position of what the boid is seeking.
