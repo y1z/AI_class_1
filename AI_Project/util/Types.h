@@ -124,12 +124,12 @@ struct BoidDescriptor
   /**
   * @brief the position of what the boid is pursuing.
   */
-  Vec2* m_pursueTargetPosition;
+  const Vec2* m_pursueTargetPosition;
 
   /**
   * @brief the position of what the boid is evading from.
   */
-  Vec2* m_evadeTargetPosition;
+  const Vec2* m_evadeTargetPosition;
 
   /**
   * @brief the position of what the boid is fleeing from.
@@ -139,7 +139,7 @@ struct BoidDescriptor
   /**
   * @brief the position of what the boid is seeking.
   */
-  Vec2* m_seekTargetPosition;
+  const Vec2* m_seekTargetPosition;
 
 
   /**
