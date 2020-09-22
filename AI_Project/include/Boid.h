@@ -226,8 +226,11 @@ public:
   createDefaultDescriptor();
 
   void
-  draw(sf::RenderTarget & renderTarget);
-         
+  draw(sf::RenderTarget & renderTarget) const;
+
+
+  void
+  destroy();
 
 public:
 

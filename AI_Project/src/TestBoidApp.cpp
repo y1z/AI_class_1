@@ -70,6 +70,10 @@ TestBoidApp::handleInput()
     {
       m_window->close();
     }
+    if( sf::Keyboard::D == event.key.code)
+    {
+      m_boid->destroy(); 
+    }
 
     if( sf::Event::MouseMoved == event.type )
     {

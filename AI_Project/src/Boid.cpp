@@ -447,9 +447,24 @@ Boid::createDefaultDescriptor()
 }
 
 void 
-Boid::draw(sf::RenderTarget& renderTarget)
+Boid::draw(sf::RenderTarget& renderTarget) const
 {
   renderTarget.draw(m_data.m_shape);
+}
+
+void 
+Boid::destroy()
+{
+  m_data.m_seekTargetPosition = nullptr;   
+  m_data.m_fleeTargetPosition = nullptr;   
+  m_data.m_evadeTargetPosition = nullptr;
+  m_data.m_pursueTargetPosition= nullptr;   
+  m_data. m_wanderPosition = Vec2::minVector2;   
+
+  m_data.m_pathNodes.clear();
+  m_data.m_shape.setPosition(Vec2::minVector2.x, Vec2::minVector2.y);
+  m_data.m_shape.setFillColor(sf::Color::Transparent);
+
 }
 
 
