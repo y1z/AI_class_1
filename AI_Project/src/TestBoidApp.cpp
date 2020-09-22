@@ -96,7 +96,8 @@ void
 TestBoidApp::handleRendering()
 {
   m_window->clear();
-  m_window->draw(m_boid->m_data.m_shape);
+  m_boid->draw(*m_window);
+  //m_window->draw(m_boid->m_data.m_shape);
   m_window->display();
 }
 

@@ -1,7 +1,8 @@
 #include "Boid.h"
 #include "util.h"
 #include "Types.h"
-#include <iostream>
+
+#include "SFML/Graphics/RenderTarget.hpp"
 
 Boid::Boid(const BoidDescriptor& descriptor)
   :m_data(descriptor)
@@ -443,6 +444,12 @@ Boid::createDefaultDescriptor()
   result.m_isFollowingPath = true;
 
   return result;
+}
+
+void 
+Boid::draw(sf::RenderTarget& renderTarget)
+{
+  renderTarget.draw(m_data.m_shape);
 }
 
 

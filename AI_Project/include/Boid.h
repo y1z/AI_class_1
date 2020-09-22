@@ -5,6 +5,10 @@
 /** @file Boid.h
  */
 
+/* FORWARD  DECLARATION*/
+namespace sf {
+  class RenderTarget;
+}
 
 /**@brief Describes an agent that uses steering behaviors.*/
 class Boid 
@@ -213,6 +217,7 @@ public: // member functions
              const bool cyclePath = false,
              const float strength = 1.0f);
 
+
 public:
   /**
   * @returns A descriptor with all the variables initialized.
@@ -220,6 +225,8 @@ public:
   static BoidDescriptor
   createDefaultDescriptor();
 
+  void
+  draw(sf::RenderTarget & renderTarget);
          
 
 public:
