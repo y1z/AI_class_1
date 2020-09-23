@@ -33,7 +33,7 @@ StateMachineTestApp::init()
 
   for( int i = 0; i < 8; ++i )
   {
-    auto boidDesc = Boid::createDefaultDescriptor();
+    auto boidDesc = BoidDescriptor();
     boidDesc.m_followPathMagnitude = 2.0f;
     boidDesc.m_cycleFollowPath = true;
     boidDesc.m_pathNodes = descriptor.m_path;

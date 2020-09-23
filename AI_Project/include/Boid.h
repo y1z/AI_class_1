@@ -219,11 +219,6 @@ public: // member functions
 
 
 public:
-  /**
-  * @returns A descriptor with all the variables default initialized.
-  */
-  static BoidDescriptor
-  createDefaultDescriptor();
 
   /**
   * @returns A descriptor for creating a boid that flee.
@@ -233,6 +228,15 @@ public:
                               const Vec2 boidPosition,
                               const float forceMagnitude = 1.0f,
                               const float fleeRadius = 300.0f);
+
+  /**
+  * @returns A descriptor for creating a boid that arrives.
+  */
+  static BoidDescriptor
+  createArrivingBoidDescriptor(const Vec2* targetPosition,
+                               const Vec2 boidPosition,
+                               const float forceMagnitude = 1.0f,
+                               const float arriveRadius = 200.0f);
 
   /**
    * @brief draws the boid on a render target.

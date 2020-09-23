@@ -12,9 +12,23 @@
 */
 
 /**
+ * integer types
+ */
+
+using int8 = int8_t;
+using int16 = int16_t;
+using int32 = int32_t;
+using int64 = int64_t;
+
+using uint8 = uint8_t;
+using uint16 = uint16_t;
+using uint32 = uint32_t;
+using uint64 = uint64_t;
+
+/**
  * ENUMS
  */
-enum class BoidBehavior
+enum class BoidBehavior : uint32
 {
   Seek = 1 << 0,
   Flee = 1 << 1,
@@ -27,7 +41,7 @@ enum class BoidBehavior
   COUNT,
 };
 
-enum class StateType
+enum class StateType : uint32
 {
   Idle = 0,
   FollowCourse,
@@ -56,6 +70,7 @@ struct BoidDescriptor
     m_evadeTargetPosition(nullptr),
     m_fleeTargetPosition(nullptr),
     m_seekTargetPosition(nullptr),
+    m_arriveTargetPosition(nullptr),
 
     m_wanderPosition(0.0f, 0.0f),
     m_color(sf::Color::Blue),
@@ -70,13 +85,16 @@ struct BoidDescriptor
     m_evadeMagnitude(1.0f),
     m_fleeMagnitude(1.0f),
     m_seekMagnitude(1.0f),
+    m_arriveMagnitude(1.0f),
 
     m_fleeRadius(300.0f),
+    m_arriveRadius(300.0f),
+
     m_timeInMotion(0.0f),
     m_aggressiveTime(0.0f),
     m_wanderTime(0.0f),
     m_maxForce(3.5f),
-    m_mass(0.5f),
+    m_mass(0.0005f),
     m_boidSize(30.0f),
     m_state(StateType::Idle),
     m_isWandering(false),
@@ -141,6 +159,10 @@ struct BoidDescriptor
   */
   const Vec2* m_seekTargetPosition;
 
+  /**
+  * @brief the position of what the boid is arriving to.
+  */
+  const Vec2* m_arriveTargetPosition;
 
   /**
   * @brief Used for when the boid needs to wander.
@@ -198,9 +220,19 @@ struct BoidDescriptor
   float m_seekMagnitude;
 
   /**
-  * @brief the radius that the flees from the target before stopping.
+  * @brief Magnitude of the arrive behavior.
+  */
+  float m_arriveMagnitude;
+
+  /**
+  * @brief the radius that the used during the flee behavior.
   */
   float m_fleeRadius;
+
+  /**
+  * @brief the radius use to determine when to slow down in the arrive behavior.
+  */
+  float m_arriveRadius;
 
   /**
   * @brief Keeps track of how long the boid has been moving.
@@ -264,18 +296,4 @@ struct GameManagerDescriptor
   std::vector<BoidDescriptor> m_boidDescriptors;
   std::vector<FollowPathNode> m_path;
 };
-
-/**
- * TYPEDEFS
- */
-
-using int8 = int8_t;
-using int16 = int16_t;
-using int32 = int32_t;
-using int64 = int64_t;
-
-using uint8 = uint8_t;
-using uint16 = uint16_t;
-using uint32 = uint32_t;
-using uint64 = uint64_t;
 

@@ -25,32 +25,20 @@ TestBoidApp::init()
 
   m_deltaTime = 0.0f;
 
-  BoidDescriptor desc = Boid::createDefaultDescriptor();
 
   m_screenHeight = 720;
   m_screenWidth = 1200;
 
-  desc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .5f);
-  desc.m_seekMagnitude = 1.01f;
-  desc.m_seekTargetPosition = &m_mousePosition.m_data.m_position;
-  desc.m_followPathMagnitude = 0.0f;
-  desc.m_cycleFollowPath = true;
+  const BoidDescriptor fleeBoidDesc
+    = Boid::createFleeingBoidDescriptor(&m_mousePosition.m_data.m_position,
+                                        Vec2(m_screenWidth * .5f, m_screenHeight * .4f));
+  m_groupBoids.emplace_back(Boid(fleeBoidDesc));
 
-  {
-    BoidDescriptor fleeBoidDesc;
-    fleeBoidDesc.m_position = Vec2(m_screenWidth * .5f, m_screenHeight * .4f);
-    fleeBoidDesc.m_fleeMagnitude = 1.0f;
-    fleeBoidDesc.m_fleeRadius = 300.0f;
-    fleeBoidDesc.m_fleeTargetPosition = &m_mousePosition.m_data.m_position;
-    
-    m_groupBoids.emplace_back(Boid(fleeBoidDesc));
-  }
-                                                                                         
   {
     BoidDescriptor arriveBoidDesc;
   }
 
-  m_mousePosition.init(Boid::createDefaultDescriptor());
+  m_mousePosition.init(BoidDescriptor());
 
   try
   {
@@ -61,7 +49,7 @@ TestBoidApp::init()
     m_window->setVerticalSyncEnabled(true);
     m_window->setFramerateLimit(1060u);
 
-    m_boid = std::make_unique<Boid>(desc);
+    m_boid = std::make_unique<Boid>(BoidDescriptor());
 
   }
   catch( const std::exception& e )
@@ -96,7 +84,10 @@ TestBoidApp::handleInput()
 
     if( sf::Event::Resized == event.type )
     {
-      sf::View const newView(sf::FloatRect(0, 0, event.size.width, event.size.height));
+      sf::View const newView
+      (
+        sf::FloatRect(0, 0, event.size.width, event.size.height)
+      );
       m_window->setView(newView);
     }
 
