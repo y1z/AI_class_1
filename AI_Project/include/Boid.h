@@ -28,13 +28,6 @@ public: // operators
 
 public: // member functions
 
-  /**
-  * @brief Add the force to the current force sum.
-  * @param[in] force : The force that will control the boid.
-  * @bug no know bugs.
-  */
-  void
-  addForce(const Vec2& force);
 
   /**
   * @brief Updates the position, forceSum of the boid, should be called every frame.

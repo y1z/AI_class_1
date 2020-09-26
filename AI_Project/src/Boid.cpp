@@ -18,12 +18,6 @@ Boid::Boid(BoidDescriptor&& descriptor)
 }
 
 void
-Boid::addForce(const Vec2& force)
-{
-  m_data.m_forceSum += force;
-}
-
-void
 Boid::update(float deltaTime)
 {
   Vec2 force = Vec2::zeroVector2;

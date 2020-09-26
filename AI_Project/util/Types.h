@@ -69,7 +69,6 @@ struct BoidDescriptor
 {
   BoidDescriptor()
     :m_position(Vec2::zeroVector2),
-    m_forceSum(Vec2::zeroVector2),
     m_prevPosition(Vec2::downVector2),
     m_wanderPosition(0.0f, 0.0f),
 
@@ -139,10 +138,6 @@ struct BoidDescriptor
   */
   Vec2 m_position;
 
-  /**
-  * @brief The collective sum of all forces applied to the boid.
-  */
-  Vec2 m_forceSum;
 
   /**
   * @brief Where the current boid was located and used to determine the
