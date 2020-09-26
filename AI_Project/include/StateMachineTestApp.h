@@ -6,7 +6,7 @@
 #include <memory>
 
 
-class StateMachineTestApp :
+class StateMachineTestApp final :
   public BaseApp
 {
 

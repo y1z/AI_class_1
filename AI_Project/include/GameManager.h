@@ -79,11 +79,26 @@ public:// functions
   Boid*
   getBoidPtr(const size_t index);
 
+
+  /**
+  * @returns a iterator to the underlying container.
+  */
   std::deque<Boid>::iterator
   begin();
 
+  /**
+  * @returns a iterator to the underlying container.
+  */
   std::deque<Boid>::iterator
   end();
+
+  /** @returns a const iterator to the underlying container. */
+  std::deque<Boid>::const_iterator
+  cbegin() const;
+
+  /** @returns a const iterator to the underlying container. */
+  std::deque<Boid>::const_iterator
+  cend() const;
 
 private:
 
@@ -96,7 +111,7 @@ private:
 
 public:
   /**
-  * @brief Contains every boid in the game.
+  * @brief contains the path that every boid can use.
   */
   std::vector<FollowPathNode> m_globalPath;
 };

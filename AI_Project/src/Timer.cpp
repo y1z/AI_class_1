@@ -3,13 +3,8 @@
 
 
 Timer::Timer()
-{
-  m_Result = std::chrono::seconds(0);
-}
-
-Timer::~Timer()
-{
-}
+ : m_Result(std::chrono::seconds(0) )
+{}
 
 void Timer::StartTiming()
 {
@@ -27,13 +22,13 @@ void Timer::EndTiming()
 void Timer::PrintResult()
 {
   /*! Other Representations of time*/
-  TimeMesuermentSeconds ConverstionSeconds;
+  TimeMeasurementSeconds ConverstionSeconds;
   TimeMeasurementSecondsDouble ConversionF64Seconds;
   TimeMeasurementSecondsFloat ConversionF32Seconds;
 
 
   // converting to respective times 
-  ConverstionSeconds = std::chrono::duration_cast<TimeMesuermentSeconds>(m_Result);
+  ConverstionSeconds = std::chrono::duration_cast<TimeMeasurementSeconds>(m_Result);
   ConversionF64Seconds = std::chrono::duration_cast<TimeMeasurementSecondsDouble>(m_Result);
   ConversionF32Seconds = std::chrono::duration_cast<TimeMeasurementSecondsFloat>(m_Result);
 
@@ -50,14 +45,14 @@ int64_t Timer::GetResult()
   return m_Result.count();
 }
 
-int64_t Timer::GetResultMicroSeconds()
+int64_t Timer::GetResultMicroseconds()
 {
   std::chrono::microseconds ElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(m_Result);
 
   return ElapsedTime.count();
 }
 
-int64_t Timer::GetResultMiliSeconds()
+int64_t Timer::GetResultMilliseconds()
 {
   std::chrono::milliseconds Milisecons = std::chrono::duration_cast<std::chrono::milliseconds>(m_Result);
   return Milisecons.count();

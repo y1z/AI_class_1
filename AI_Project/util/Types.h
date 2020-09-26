@@ -12,6 +12,12 @@
 */
 
 /**
+ * FORWARD DECLARE
+ */
+
+class Boid;
+
+/**
  * integer types
  */
 
@@ -65,14 +71,16 @@ struct BoidDescriptor
     :m_position(Vec2::zeroVector2),
     m_forceSum(Vec2::zeroVector2),
     m_prevPosition(Vec2::downVector2),
+    m_wanderPosition(0.0f, 0.0f),
 
-    m_pursueTargetPosition(nullptr),
-    m_evadeTargetPosition(nullptr),
     m_fleeTargetPosition(nullptr),
     m_seekTargetPosition(nullptr),
     m_arriveTargetPosition(nullptr),
+    m_pursueTargetPosition(nullptr),
+    m_evadeTargetPosition(nullptr),
+    m_boidBeingPursued(nullptr),
+    m_boidToEvade(nullptr),
 
-    m_wanderPosition(0.0f, 0.0f),
     m_color(sf::Color::Blue),
 
     m_speed(0.0f),
@@ -87,7 +95,11 @@ struct BoidDescriptor
     m_seekMagnitude(1.0f),
     m_arriveMagnitude(1.0f),
 
+    m_purseTimePrediction(0.0f),
+    m_evadeTimePrediction(0.0f),
+
     m_fleeRadius(300.0f),
+    m_evadeRadius(300.0f),
     m_arriveRadius(300.0f),
 
     m_timeInMotion(0.0f),
@@ -138,16 +150,11 @@ struct BoidDescriptor
   */
   Vec2 m_prevPosition;
 
-
   /**
-  * @brief the position of what the boid is pursuing.
+  * @brief Used for when the boid needs to wander.
   */
-  const Vec2* m_pursueTargetPosition;
+  Vec2 m_wanderPosition;
 
-  /**
-  * @brief the position of what the boid is evading from.
-  */
-  const Vec2* m_evadeTargetPosition;
 
   /**
   * @brief the position of what the boid is fleeing from.
@@ -165,9 +172,24 @@ struct BoidDescriptor
   const Vec2* m_arriveTargetPosition;
 
   /**
-  * @brief Used for when the boid needs to wander.
+  * @brief the position of what the boid is pursuing.
   */
-  Vec2 m_wanderPosition;
+  const Vec2* m_pursueTargetPosition;
+
+  /**
+  * @brief the position of what the boid is evading from.
+  */
+  const Vec2* m_evadeTargetPosition;
+
+  /**
+  * @brief the boid Being pursued.
+  */
+  const Boid* m_boidBeingPursued;
+
+  /**
+  * @brief the boid Being pursued.
+  */
+  const Boid* m_boidToEvade;
 
   /**
   * @brief The color of the boid.
@@ -224,10 +246,19 @@ struct BoidDescriptor
   */
   float m_arriveMagnitude;
 
+  /** @brief controls how far ahead to predict the */
+  float m_purseTimePrediction;
+
+  /** @brief controls how far ahead to predict the */
+  float m_evadeTimePrediction;
+
   /**
   * @brief the radius that the used during the flee behavior.
   */
   float m_fleeRadius;
+
+  /** @brief the radius that the used during the flee behavior.*/
+  float m_evadeRadius;
 
   /**
   * @brief the radius use to determine when to slow down in the arrive behavior.

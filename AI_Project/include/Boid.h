@@ -218,26 +218,6 @@ public: // member functions
              const float strength = 1.0f);
 
 
-public:
-
-  /**
-  * @returns A descriptor for creating a boid that flee.
-  */
-  static BoidDescriptor
-  createFleeingBoidDescriptor(const Vec2* targetPosition,
-                              const Vec2 boidPosition,
-                              const float forceMagnitude = 1.0f,
-                              const float fleeRadius = 300.0f);
-
-  /**
-  * @returns A descriptor for creating a boid that arrives.
-  */
-  static BoidDescriptor
-  createArrivingBoidDescriptor(const Vec2* targetPosition,
-                               const Vec2 boidPosition,
-                               const float forceMagnitude = 1.0f,
-                               const float arriveRadius = 200.0f);
-
   /**
    * @brief draws the boid on a render target.
    */
@@ -250,6 +230,50 @@ public:
    */
   void
   destroy();
+
+public:
+
+  
+  /**
+  * @returns A descriptor for creating a boid that seeks.
+  */
+  static BoidDescriptor
+  createSeekingBoidDescriptor(const Vec2& targetPosition,
+                              const Vec2 boidPosition,
+                              const float forceMagnitude = 1.0f);
+  
+  /**
+  * @returns A descriptor for creating a boid that flee.
+  */
+  static BoidDescriptor
+  createFleeBoidDescriptor(const Vec2& targetPosition,
+                           const Vec2 boidPosition,
+                           const float forceMagnitude = 1.0f,
+                           const float fleeRadius = 300.0f);
+
+  /**
+  * @returns A descriptor for creating a boid that arrives.
+  */
+  static BoidDescriptor
+  createArrivingBoidDescriptor(const Vec2& targetPosition,
+                               const Vec2 boidPosition,
+                               const float forceMagnitude = 1.0f,
+                               const float arriveRadius = 400.0f);
+
+  /**
+  * @returns A descriptor for creating a boid that arrives.
+  */
+  static BoidDescriptor
+  createPursueBoidDescriptor(const Boid& pursueBoid,
+                             const Vec2 boidPosition,
+                             const float forceMagnitude = 1.0f,
+                             const float predictionTime = 1.0f);
+
+  /** @returns A descriptor for creating a boid that follows a path.*/
+  static BoidDescriptor
+  createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
+                                 const Vec2 boidPosition,
+                                 const float forceMagnitude = 1.0f);
 
 public:
 

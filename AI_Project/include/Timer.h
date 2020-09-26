@@ -12,7 +12,8 @@ class Timer
 	/*! used for measuring durations in terms of nanoseconds */
 	using TimeMeasurementNano = std::chrono::duration<uint64_t, std::nano>;
 
-  using TimeMesuermentSeconds = std::chrono::duration<uint64_t, std::ratio<1,1>>; //mesuerment
+	//measurement
+  using TimeMeasurementSeconds = std::chrono::duration<uint64_t, std::ratio<1,1>>;
   
 	/*! this duration has seconds that can have a decimal point
 	(just because I get confused with other Representation)*/
@@ -28,15 +29,14 @@ public:// constructor
 	Timer(const Timer &other) = default;
 	Timer(Timer &&other) = default;
 
-	~Timer();
 public: // functions 
 
 	void StartTiming();
 	void EndTiming();
 
 	int64_t GetResult();
-	int64_t GetResultMicroSeconds();
-	int64_t GetResultMiliSeconds();
+	int64_t GetResultMicroseconds();
+	int64_t GetResultMilliseconds();
 
 	double GetResultSecondsDouble();
 	float GetResultSecondsFloat();

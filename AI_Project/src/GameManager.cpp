@@ -86,3 +86,15 @@ GameManager::end()
 {
   return m_groupBoids.end();
 }
+
+std::deque<Boid>::const_iterator
+GameManager::cbegin() const 
+{
+  return m_groupBoids.cbegin();
+}
+
+std::deque<Boid>::const_iterator
+GameManager::cend() const
+{
+  return m_groupBoids.cend(); 
+}

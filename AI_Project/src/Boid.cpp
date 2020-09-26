@@ -1,8 +1,9 @@
 #include "Boid.h"
 #include "util.h"
-#include "Types.h"
 
 #include "SFML/Graphics/RenderTarget.hpp"
+
+#include <utility>
 
 Boid::Boid(const BoidDescriptor& descriptor)
   :m_data(descriptor)
@@ -11,7 +12,7 @@ Boid::Boid(const BoidDescriptor& descriptor)
 }
 
 Boid::Boid(BoidDescriptor&& descriptor)
-  : m_data(descriptor)
+  : m_data(std::forward<BoidDescriptor>( descriptor))
 {
   m_data.m_shape.setFillColor(sf::Color::Blue);
 }
@@ -33,11 +34,17 @@ Boid::update(float deltaTime)
   if( nullptr != m_data.m_fleeTargetPosition )
     force += this->flee(m_data.m_position, *m_data.m_fleeTargetPosition, m_data.m_fleeMagnitude, m_data.m_fleeRadius);
 
+  if( nullptr != m_data.m_boidBeingPursued )
+    force += this->pursue(m_data.m_position, *m_data.m_boidBeingPursued, m_data.m_purseTimePrediction, m_data.m_pursueMagnitude);
+
+  if( nullptr != m_data.m_boidToEvade )
+    force += this->evade(*this, *m_data.m_boidToEvade, m_data.m_evadeTimePrediction, m_data.m_evadeRadius, m_data.m_evadeMagnitude);
+
   if( !m_data.m_pathNodes.empty() && m_data.m_isFollowingPath )
     force += this->followPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cycleFollowPath, m_data.m_followPathMagnitude);
 
   if( !m_data.m_pathNodes.empty() && !m_data.m_isFollowingPath )
-    force += this->patrolPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cyclePatrolPath);
+    force += this->patrolPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cyclePatrolPath, m_data.m_patrolPathMagnitude);
 
   if( force.length() > std::numeric_limits<float>::epsilon() )
   {
@@ -184,9 +191,9 @@ Vec2
 Boid::pursue(const Vec2& currentPos,
              const Boid& target,
              const float predictionTime,
-             const float strength)const
+             const float strength) const
 {
-  Vec2 const projectedRadius = target.getDir() * target.m_data.m_speed * predictionTime;
+  Vec2 const projectedRadius = target.getDir() * (target.m_data.m_speed * predictionTime);
 
   Vec2 const projectPos = target.m_data.m_position + projectedRadius;
 
@@ -194,13 +201,17 @@ Boid::pursue(const Vec2& currentPos,
 
   Vec2 const distanceFromProjection = projectPos - currentPos;
 
-  if( distanceFromProjection.lengthSqr() < distanceFromTarget.lengthSqr() )
+  const float projectionMagnitude = distanceFromProjection.lengthSqr();
+
+  const float magnitudeFromTarget = distanceFromTarget.lengthSqr();
+
+  if( projectionMagnitude < magnitudeFromTarget )
   {
-    const float  radiusReduction = distanceFromProjection.lengthSqr() / distanceFromTarget.lengthSqr();
+    const float radiusReduction = projectionMagnitude / magnitudeFromTarget;
     return this->seek(currentPos, projectPos + (projectedRadius * radiusReduction), strength);
   }
   else
-    return  this->seek(currentPos, projectPos, strength);
+    return this->seek(currentPos, projectPos, strength);
 }
 
 Vec2
@@ -392,38 +403,7 @@ Boid::patrolPath(const Boid& patrolBoid,
     seek(patrolBoid.m_data.m_position, nextNode->m_position, strength);
 }
 
-
-BoidDescriptor 
-Boid::createFleeingBoidDescriptor(const Vec2* targetPosition,
-                                  const Vec2 boidPosition,
-                                  const float forceMagnitude,
-                                  const float fleeRadius)
-{
-  BoidDescriptor result;
-  result.m_fleeTargetPosition = targetPosition;
-  result.m_position = boidPosition;
-  result.m_fleeMagnitude = forceMagnitude;
-  result.m_fleeRadius = fleeRadius;
-  return result;
-}
-
-BoidDescriptor 
-Boid::createArrivingBoidDescriptor(const Vec2* targetPosition,
-                                   const Vec2 boidPosition,
-                                   const float forceMagnitude,
-                                   const float arriveRadius)
-{
-  BoidDescriptor result;
-  result.m_arriveTargetPosition = targetPosition;
-  result.m_position = boidPosition;
-  result.m_arriveMagnitude = forceMagnitude;
-  result.m_arriveRadius = arriveRadius;
-
-  return result;
-}
-
-
-void 
+void
 Boid::draw(sf::RenderTarget& renderTarget) const
 {
   renderTarget.draw(m_data.m_shape);
@@ -437,12 +417,83 @@ Boid::destroy()
   m_data.m_evadeTargetPosition = nullptr;
   m_data.m_pursueTargetPosition = nullptr;
   m_data.m_arriveTargetPosition = nullptr;
+  m_data.m_boidBeingPursued = nullptr;
+  m_data.m_boidToEvade = nullptr;
   m_data.m_wanderPosition = Vec2::minVector2;
+  
 
   m_data.m_pathNodes.clear();
+  m_data.m_pathNodes.shrink_to_fit();
   m_data.m_shape.setPosition(Vec2::minVector2.x, Vec2::minVector2.y);
   m_data.m_shape.setFillColor(sf::Color::Transparent);
 
+}
+
+BoidDescriptor 
+Boid::createSeekingBoidDescriptor(const Vec2& targetPosition,
+                                  const Vec2 boidPosition,
+                                  const float forceMagnitude)
+{
+  BoidDescriptor result;
+  result.m_seekTargetPosition = &targetPosition;
+  result.m_position = boidPosition;
+  result.m_seekMagnitude = forceMagnitude;
+  return result;
+}
+
+BoidDescriptor
+Boid::createFleeBoidDescriptor(const Vec2& targetPosition,
+                                  const Vec2 boidPosition,
+                                  const float forceMagnitude,
+                                  const float fleeRadius)
+{
+  BoidDescriptor result;
+  result.m_fleeTargetPosition = &targetPosition;
+  result.m_position = boidPosition;
+  result.m_fleeMagnitude = forceMagnitude;
+  result.m_fleeRadius = fleeRadius;
+  return result;
+}
+
+BoidDescriptor
+Boid::createArrivingBoidDescriptor(const Vec2& targetPosition,
+                                   const Vec2 boidPosition,
+                                   const float forceMagnitude,
+                                   const float arriveRadius)
+{
+  BoidDescriptor result;
+  result.m_arriveTargetPosition = &targetPosition;
+  result.m_position = boidPosition;
+  result.m_arriveMagnitude = forceMagnitude;
+  result.m_arriveRadius = arriveRadius;
+  return result;
+}
+
+
+BoidDescriptor 
+Boid::createPursueBoidDescriptor(const Boid& pursueBoid,
+                                 const Vec2 boidPosition,
+                                 const float forceMagnitude,
+                                 const float predictionTime)
+{
+  BoidDescriptor result;
+  result.m_boidBeingPursued = &pursueBoid;
+  result.m_position = boidPosition;
+  result.m_pursueMagnitude = forceMagnitude;
+  result.m_purseTimePrediction = predictionTime;
+  return result;
+}
+
+BoidDescriptor 
+Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
+                                     const Vec2 boidPosition,
+                                     const float forceMagnitude)
+{
+  BoidDescriptor result;
+  result.m_pathNodes = path;
+  result.m_position = boidPosition;
+  result.m_followPathMagnitude = forceMagnitude;
+  return result;
 }
 
 

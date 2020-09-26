@@ -55,10 +55,7 @@ private:
   mainLoop()override;
   
 private:
-
-  Boid m_mousePosition;
-
-  std::unique_ptr<Boid> m_boid;
+  std::unique_ptr<Boid> m_mousePosition;
 
   std::unique_ptr<sf::RenderWindow> m_window;
 
