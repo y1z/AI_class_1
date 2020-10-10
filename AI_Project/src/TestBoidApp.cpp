@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 #include "GameManager.h"
+#include "GlobalValues.h"
 
 #include <iostream>
 #include <random>
@@ -25,8 +26,17 @@ TestBoidApp::init()
 
   m_deltaTime = 0.0f;
 
-  m_screenHeight = 720;
-  m_screenWidth = 1200;
+  m_screenHeight = 1920;
+  m_screenWidth = 1080;
+
+
+  const float tennthOfPi = 10 / gvar::pi;
+  for(int i = 1; i < 10 ; ++i)
+  {
+    const FollowPathNode node(Vec2(tennthOfPi * i * 1, tennthOfPi * i * 1));
+    m_path.push_back(node);
+  }
+
 
   try
   {
@@ -64,15 +74,16 @@ TestBoidApp::init()
       m_groupBoids.emplace_back(Boid(fleeDesc));
       m_groupBoids.emplace_back(Boid(arriveBoidDesc));
 
-      const BoidDescriptor pursueDesc = Boid::createPursueBoidDescriptor
-      (
-        m_groupBoids.at(0),
-        Vec2(static_cast< float >(m_screenWidth), static_cast< float >(m_screenHeight) * .6f),
-        1.5f,
-        0.45f
-      );
+      for(int i = 0; i < 10; ++i )
+      {
+        const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
+        (m_path,
+         Vec2((i * 30),1000),
+         0.05
+        );
 
-      m_groupBoids.emplace_back(Boid(pursueDesc));
+        m_groupBoids.emplace_back(Boid(followBoid));
+      }
 
     }
 

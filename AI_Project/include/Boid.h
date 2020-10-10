@@ -265,7 +265,7 @@ public:
   /** @returns A descriptor for creating a boid that follows a path.*/
   static BoidDescriptor
   createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
-                                 const Vec2 boidPosition,
+                                 const Vec2& boidPosition,
                                  const float forceMagnitude = 1.0f);
 
 public:

@@ -8,13 +8,13 @@
 Boid::Boid(const BoidDescriptor& descriptor)
   :m_data(descriptor)
 {
-  m_data.m_shape.setFillColor(sf::Color::Blue);
+   m_data.m_shape.setFillColor(m_data.m_color);
 }
 
 Boid::Boid(BoidDescriptor&& descriptor)
   : m_data(std::forward<BoidDescriptor>( descriptor))
 {
-  m_data.m_shape.setFillColor(sf::Color::Blue);
+   m_data.m_shape.setFillColor(m_data.m_color);
 }
 
 void
@@ -79,8 +79,7 @@ void
 Boid::init(const BoidDescriptor& descriptor)
 {
   m_data = descriptor;
-
-  m_data.m_shape.setFillColor(sf::Color::Blue);
+  m_data.m_shape.setFillColor(m_data.m_color);
 }
 
 Vec2
@@ -386,6 +385,14 @@ Boid::patrolPath(const Boid& patrolBoid,
   }
 
   auto const previousNode = (indexTracker.getIncrementAmount() * -1);
+
+  if( previousNode < 0 )
+  {
+    return this->seek(patrolBoid.m_data.m_position, nextNode->m_position, strength);
+  }
+
+
+
   const FollowPathNode* prevNode = &path.at(indexTracker.getCurrentIndex() + previousNode);
 
   const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
@@ -432,6 +439,8 @@ Boid::createSeekingBoidDescriptor(const Vec2& targetPosition,
   result.m_seekTargetPosition = &targetPosition;
   result.m_position = boidPosition;
   result.m_seekMagnitude = forceMagnitude;
+
+  result.m_color = sf::Color::White;
   return result;
 }
 
@@ -446,6 +455,8 @@ Boid::createFleeBoidDescriptor(const Vec2& targetPosition,
   result.m_position = boidPosition;
   result.m_fleeMagnitude = forceMagnitude;
   result.m_fleeRadius = fleeRadius;
+
+  result.m_color = sf::Color::Yellow;
   return result;
 }
 
@@ -460,6 +471,8 @@ Boid::createArrivingBoidDescriptor(const Vec2& targetPosition,
   result.m_position = boidPosition;
   result.m_arriveMagnitude = forceMagnitude;
   result.m_arriveRadius = arriveRadius;
+
+  result.m_color = sf::Color::Magenta;
   return result;
 }
 
@@ -475,18 +488,20 @@ Boid::createPursueBoidDescriptor(const Boid& pursueBoid,
   result.m_position = boidPosition;
   result.m_pursueMagnitude = forceMagnitude;
   result.m_purseTimePrediction = predictionTime;
+  result.m_color = sf::Color::Red;
   return result;
 }
 
 BoidDescriptor 
 Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
-                                     const Vec2 boidPosition,
+                                     const Vec2& boidPosition,
                                      const float forceMagnitude)
 {
   BoidDescriptor result;
   result.m_pathNodes = path;
   result.m_position = boidPosition;
   result.m_followPathMagnitude = forceMagnitude;
+  result.m_isFollowingPath = true;
   return result;
 }
 
