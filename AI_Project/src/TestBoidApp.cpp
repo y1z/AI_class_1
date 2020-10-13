@@ -26,14 +26,14 @@ TestBoidApp::init()
 
   m_deltaTime = 0.0f;
 
-  m_screenHeight = 1920;
-  m_screenWidth = 1080;
+  m_screenHeight = 1080;
+  m_screenWidth = 1920;
 
 
-  const float tennthOfPi = 10 / gvar::pi;
+  const float tennthOfPi = 10.0f / gvar::pi;
   for(int i = 1; i < 10 ; ++i)
   {
-    const FollowPathNode node(Vec2(tennthOfPi * i * 1, tennthOfPi * i * 1));
+    const FollowPathNode node(Vec2((m_screenWidth/2 + i,(m_screenHeight/(2+ i) )) /*(std::sin(gvar::eighthPi * i) * 400) + (m_screenWidth / 2u)*/, std::cos(gvar::eighthPi * i) * 500 + (m_screenHeight / 2u)));
     m_path.push_back(node);
   }
 
@@ -79,7 +79,7 @@ TestBoidApp::init()
         const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
         (m_path,
          Vec2((i * 30),1000),
-         0.05
+         0.35
         );
 
         m_groupBoids.emplace_back(Boid(followBoid));

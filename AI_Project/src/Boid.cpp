@@ -330,7 +330,7 @@ Boid::followPath(const Boid& pathFollower,
     {
       indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
     }
-    else if( currentIndex + 1 <= path.size() - 1 )
+    else if( currentIndex + 1 < path.size() - 1 )
     {
       indexTracker.incrementIndex();
     }
@@ -502,6 +502,7 @@ Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
   result.m_position = boidPosition;
   result.m_followPathMagnitude = forceMagnitude;
   result.m_isFollowingPath = true;
+  result.m_cycleFollowPath = true;
   return result;
 }
 
