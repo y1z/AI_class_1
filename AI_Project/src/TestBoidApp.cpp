@@ -14,6 +14,7 @@ TestBoidApp::run()
   if( -1 == init() )
     return -1;
 
+
   return mainLoop();
 }
 
@@ -29,11 +30,10 @@ TestBoidApp::init()
   m_screenHeight = 1080;
   m_screenWidth = 1920;
 
-
-  const float tennthOfPi = 10.0f / gvar::pi;
   for(int i = 1; i < 10 ; ++i)
   {
-    const FollowPathNode node(Vec2((m_screenWidth/2 + i,(m_screenHeight/(2+ i) )) /*(std::sin(gvar::eighthPi * i) * 400) + (m_screenWidth / 2u)*/, std::cos(gvar::eighthPi * i) * 500 + (m_screenHeight / 2u)));
+    const FollowPathNode node(Vec2(m_screenWidth / (1 + i), m_screenHeight / (1 + i)),
+                              std::cos(gvar::eighthPi * static_cast<float> (i)) * 500 + (m_screenHeight / 2u));
     m_path.push_back(node);
   }
 
@@ -173,5 +173,8 @@ TestBoidApp::mainLoop()
   }
 
 
+  GameManager::ShutDown();
   return 0;
 }
+
+

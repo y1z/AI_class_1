@@ -75,25 +75,25 @@ GameManager::getBoidPtr(const size_t index)
   return &m_groupBoids[index];
 }
 
-std::deque<Boid>::iterator 
+GameManager::containerType::iterator
 GameManager::begin()
 {
   return m_groupBoids.begin();
 }
 
-std::deque<Boid>::iterator 
+GameManager::containerType::iterator
 GameManager::end()
 {
   return m_groupBoids.end();
 }
 
-std::deque<Boid>::const_iterator
+GameManager::containerType::const_iterator
 GameManager::cbegin() const 
 {
   return m_groupBoids.cbegin();
 }
 
-std::deque<Boid>::const_iterator
+GameManager::containerType::const_iterator
 GameManager::cend() const
 {
   return m_groupBoids.cend(); 

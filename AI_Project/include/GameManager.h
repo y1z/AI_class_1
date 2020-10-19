@@ -11,6 +11,8 @@
 */
 class GameManager final : public soModule<GameManager>
 {
+public:
+  using containerType = std::deque<Boid>;
 public: // constructors 
 
   GameManager() = default;
@@ -83,21 +85,21 @@ public:// functions
   /**
   * @returns a iterator to the underlying container.
   */
-  std::deque<Boid>::iterator
+  containerType::iterator
   begin();
 
   /**
   * @returns a iterator to the underlying container.
   */
-  std::deque<Boid>::iterator
+  containerType::iterator
   end();
 
   /** @returns a const iterator to the underlying container. */
-  std::deque<Boid>::const_iterator
+  containerType::const_iterator
   cbegin() const;
 
   /** @returns a const iterator to the underlying container. */
-  std::deque<Boid>::const_iterator
+  containerType::const_iterator
   cend() const;
 
 private:
