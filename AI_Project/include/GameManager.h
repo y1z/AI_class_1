@@ -32,7 +32,7 @@ public: // operators
 public:// functions
 
   /**
-  * @brief For uninitializing the game-manager.
+  * @brief For de-initializing the game-manager.
   */
 	void 
   OnShutDown() override;
@@ -47,14 +47,21 @@ public:// functions
   * @brief Adds a boid to the game.
   */
   size_t 
-  addBoidToGame(BoidDescriptor& descriptor);
+  addBoidToGame(const BoidDescriptor& descriptor);
 
   /**
   * @brief For initializing the game-manger.
   * @returns the index for that boid.
   */
   size_t 
-  addBoidToGame(Boid& newBoid);
+  addBoidToGame(const Boid& newBoid);
+  
+  /**
+   * @brief add a node to the global path.
+   * 
+   */
+  void 
+  addNodeToGlobalPath(const FollowPathNode& node);
 
   /**
   * @brief removes a boid from the game.
@@ -81,16 +88,11 @@ public:// functions
   Boid*
   getBoidPtr(const size_t index);
 
-
-  /**
-  * @returns a iterator to the underlying container.
-  */
+  /** @returns a iterator to the underlying container. */
   containerType::iterator
   begin();
 
-  /**
-  * @returns a iterator to the underlying container.
-  */
+  /** @returns a iterator to the underlying container. */
   containerType::iterator
   end();
 
@@ -101,6 +103,9 @@ public:// functions
   /** @returns a const iterator to the underlying container. */
   containerType::const_iterator
   cend() const;
+
+  void
+  drawPath(sf::RenderWindow& window) ;
 
 private:
 
@@ -116,5 +121,9 @@ public:
   * @brief contains the path that every boid can use.
   */
   std::vector<FollowPathNode> m_globalPath;
+
+  /** @brief This is used to draw the path.*/
+  sf::VertexArray m_vertexArray;
+
 };
 

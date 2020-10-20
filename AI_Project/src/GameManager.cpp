@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "util.h"
 
 #include <cassert>
 
@@ -31,17 +32,22 @@ GameManager::OnStartUp(void* _Desc)
 }
 
 size_t
-GameManager::addBoidToGame(BoidDescriptor& descriptor)
+GameManager::addBoidToGame(const BoidDescriptor& descriptor)
 {
-  Boid newBoid(descriptor);
-  return addBoidToGame(newBoid);
+  return addBoidToGame(Boid(descriptor));
 }
 
 size_t
-GameManager::addBoidToGame(Boid& newBoid)
+GameManager::addBoidToGame(const Boid& newBoid)
 {
   m_groupBoids.emplace_back(newBoid);
   return m_groupBoids.size();
+}
+
+void 
+GameManager::addNodeToGlobalPath(const FollowPathNode& node)
+{
+  m_globalPath.emplace_back(node); 
 }
 
 bool 
@@ -98,3 +104,17 @@ GameManager::cend() const
 {
   return m_groupBoids.cend(); 
 }
+
+void 
+GameManager::drawPath(sf::RenderWindow& window) 
+{
+  for( auto& node : m_globalPath )
+  {
+    sf::Vertex point(util::vec2ToVector2f( node.m_position),sf::Color::Red);
+    //sf::VertexArray
+    //window.
+  }
+  
+}
+
+

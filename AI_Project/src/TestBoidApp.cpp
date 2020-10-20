@@ -22,6 +22,7 @@ int
 TestBoidApp::init()
 {
   GameManager::StartUp(nullptr);
+  GameManager& gameMan = GameManager::getInstance();
   std::random_device rd{};
   std::srand(rd());
 
@@ -34,7 +35,8 @@ TestBoidApp::init()
   {
     const FollowPathNode node(Vec2(m_screenWidth / (1 + i), m_screenHeight / (1 + i)),
                               std::cos(gvar::eighthPi * static_cast<float> (i)) * 500 + (m_screenHeight / 2u));
-    m_path.push_back(node);
+
+    gameMan.addNodeToGlobalPath(node);
   }
 
 
@@ -58,31 +60,17 @@ TestBoidApp::init()
         Vec2(static_cast< float >(m_screenWidth) * .6f, static_cast< float >(m_screenHeight) * .3f)
       );
 
-      const BoidDescriptor fleeDesc = Boid::createFleeBoidDescriptor
-      (
-        m_mousePosition->m_data.m_position,
-        Vec2(static_cast< float >(m_screenWidth) * .5f, static_cast< float >(m_screenHeight) * .4f)
-      );
-
-      const BoidDescriptor arriveBoidDesc = Boid::createArrivingBoidDescriptor
-      (
-        m_mousePosition->m_data.m_position,
-        Vec2(static_cast< float >(m_screenWidth) * 0.55f, static_cast< float >(m_screenHeight) * .6f)
-      );
-
-      m_groupBoids.emplace_back(Boid(seekDesc));
-      m_groupBoids.emplace_back(Boid(fleeDesc));
-      m_groupBoids.emplace_back(Boid(arriveBoidDesc));
+      gameMan.addBoidToGame(seekDesc);
 
       for(int i = 0; i < 10; ++i )
       {
         const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
-        (m_path,
+        (gameMan.m_globalPath,
          Vec2((i * 30),1000),
          0.35
         );
 
-        m_groupBoids.emplace_back(Boid(followBoid));
+        gameMan.addBoidToGame(followBoid);
       }
 
     }
@@ -100,6 +88,7 @@ TestBoidApp::init()
 void
 TestBoidApp::handleInput()
 {
+  GameManager& gm = GameManager::getInstance();
   sf::Event event;
   while( m_window->pollEvent(event) )
   {
@@ -110,9 +99,10 @@ TestBoidApp::handleInput()
     }
     if( sf::Keyboard::D == event.key.code )
     {
-      for( auto& boid : m_groupBoids )
+
+      for(auto& boid : gm )
       {
-        boid.destroy();
+        boid.destroy(); 
       }
 
     }
@@ -138,17 +128,21 @@ TestBoidApp::handleInput()
 void
 TestBoidApp::handleBoids()
 {
-  for(auto &boid : m_groupBoids )
+  GameManager& gm = GameManager::getInstance();
+
+  for( auto& boid : gm )
   {
-    boid.update(m_deltaTime); 
+    boid.update(m_deltaTime);
   }
+
 }
 
 void 
 TestBoidApp::handleRendering()
 {
+  GameManager& gm = GameManager::getInstance();
   m_window->clear();
-  for(auto &boid : m_groupBoids )
+  for(auto &boid : gm )
   {
     boid.draw(*m_window);
   }
