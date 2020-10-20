@@ -1,9 +1,10 @@
 #include "IndexTracker.h"
 
-void 
+int64_t 
 IndexTracker::incrementIndex()
 {
   m_currentIndex += m_incrementAmount;
+  return m_currentIndex;
 }
 
 void

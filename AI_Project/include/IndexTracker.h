@@ -8,7 +8,12 @@ class IndexTracker
 {
 public:
 
-  void
+  /**
+   * @brief increments the index.
+   * @returns the index after the increment.
+   * @Note It's possible to increment by a negative number.
+   */
+  int64_t 
   incrementIndex();
 
   /**
