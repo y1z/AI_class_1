@@ -20,13 +20,13 @@ public:
   /**
   * @brief The current index.
   */
-  int64_t 
+  [[nodiscard]] int64_t
   getCurrentIndex()const;
 
   /**
   * @returns The amount the index is incremented by.
   */
-  int64_t 
+  [[nodiscard]] int64_t 
   getIncrementAmount()const;
 
   /**

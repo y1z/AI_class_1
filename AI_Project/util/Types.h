@@ -34,19 +34,6 @@ using uint64 = uint64_t;
 /**
  * ENUMS
  */
-enum class BoidBehavior : uint32
-{
-  Seek = 1 << 0,
-  Flee = 1 << 1,
-  Pursue = 1 << 2,
-  Evade = 1 << 3,
-
-
-  ALL_BEHAVIORS = Seek | Flee | Pursue | Evade,
-
-  COUNT,
-};
-
 enum class StateType : uint32
 {
   Idle = 0,
@@ -56,6 +43,10 @@ enum class StateType : uint32
   COUNT
 };
 
+
+/**
+ * @biref .
+ */ 
 struct FollowPathNode
 {
   FollowPathNode(const Vec2 position, const float radius = 100.0f)
@@ -65,6 +56,10 @@ struct FollowPathNode
   float m_radius;
 };
 
+
+/**
+ * @brife controls how a boid will act.
+ */
 struct BoidDescriptor
 {
   BoidDescriptor()
@@ -317,9 +312,13 @@ struct BoidDescriptor
 };
 
 
+/** @brief used for initializing the game manager */
 struct GameManagerDescriptor
 {
+  /** @brief tell the game manager how each boid behaves. */
   std::vector<BoidDescriptor> m_boidDescriptors;
+
+  /** @brief give the boids a path to use in the game.*/
   std::vector<FollowPathNode> m_path;
 };
 
