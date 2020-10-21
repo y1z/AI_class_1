@@ -65,7 +65,7 @@ TestBoidApp::init()
       for(int i = 0; i < 10; ++i )
       {
         const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
-        (gameMan.m_globalPath,
+        (gameMan.getPathContainerRef(),
          Vec2((i * 30),1000),
          0.35
         );
@@ -142,6 +142,7 @@ TestBoidApp::handleRendering()
 {
   GameManager& gm = GameManager::getInstance();
   m_window->clear();
+  gm.drawPath(*m_window);
   for(auto &boid : gm )
   {
     boid.draw(*m_window);

@@ -2,6 +2,7 @@
 #include "soModule.h"
 #include "Boid.h"
 #include "Types.h"
+
 #include <vector>
 #include <deque>
 
@@ -88,6 +89,30 @@ public:// functions
   Boid*
   getBoidPtr(const size_t index);
 
+  /**
+   * @returns A reference to the container.
+   */
+  const containerType&
+  getBoidContainerRef()const;
+
+  /**
+   * @returns A reference to the container.
+   */
+  containerType&
+  getBoidContainerRef();
+
+  /**
+   * @returns A reference to the container.
+   */
+  const FollowPath::PathContainer&
+  getPathContainerRef()const;
+
+  /**
+   * @returns A reference to the container.
+   */
+  FollowPath::PathContainer
+  getPathContainerRef();
+
   /** @returns a iterator to the underlying container. */
   containerType::iterator
   begin();
@@ -105,7 +130,7 @@ public:// functions
   cend() const;
 
   void
-  drawPath(sf::RenderWindow& window) ;
+  drawPath(sf::RenderWindow& window) const ;
 
 private:
 
@@ -114,13 +139,14 @@ private:
   * @note It's a deque because I want to have to ability to
   * get pointers and references to the individual Boids.
   */
-  std::deque<Boid> m_groupBoids;
+  containerType  m_groupBoids;
 
 public:
-  /**
-  * @brief contains the path that every boid can use.
-  */
-  std::vector<FollowPathNode> m_globalPath;
+
+  /** 
+   * @brief contains the path current used by the game.
+   */
+  FollowPath m_path;
 
   /** @brief This is used to draw the path.*/
   sf::VertexArray m_vertexArray;

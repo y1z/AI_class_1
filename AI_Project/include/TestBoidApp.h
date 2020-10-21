@@ -11,7 +11,13 @@ class TestBoidApp final : public BaseApp
 {
 public:
   TestBoidApp() = default;
+  TestBoidApp(const TestBoidApp&) = delete;
+  TestBoidApp(TestBoidApp&&) = delete;
   ~TestBoidApp() = default;
+public:
+  TestBoidApp& operator=(const TestBoidApp&) = delete;
+  TestBoidApp& operator=(TestBoidApp&&) = delete;
+public:
   
   int
   run() override;
@@ -55,10 +61,11 @@ private:
   mainLoop()override;
   
 private:
+
+  /** @brief controls the mouse position. */
   std::unique_ptr<Boid> m_mousePosition;
 
+  /** @brief is where the window is drawn. */
   std::unique_ptr<sf::RenderWindow> m_window;
-
-  //std::vector<Boid> m_groupBoids;
 };
 

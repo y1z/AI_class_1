@@ -45,15 +45,29 @@ enum class StateType : uint32
 
 
 /**
- * @biref .
+ * @brief a individual node of a path.
  */ 
 struct FollowPathNode
 {
+public:
   FollowPathNode(const Vec2 position, const float radius = 100.0f)
     :m_position(position), m_radius(radius) {}
 
   Vec2 m_position;
   float m_radius;
+};
+
+/** 
+ * @brief a representation of the path.
+ */
+struct FollowPath
+{
+  using PathContainer = std::vector< FollowPathNode >;
+  using ShapeContainer = std::vector< sf::CircleShape >;
+
+  ShapeContainer  m_pointsInPath;
+  PathContainer  m_pathData;
+  sf::VertexArray m_vertexArray;
 };
 
 
@@ -319,6 +333,7 @@ struct GameManagerDescriptor
   std::vector<BoidDescriptor> m_boidDescriptors;
 
   /** @brief give the boids a path to use in the game.*/
-  std::vector<FollowPathNode> m_path;
+  std::vector<FollowPathNode> m_pathData;
 };
+
 

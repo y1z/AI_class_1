@@ -4,9 +4,9 @@
 void 
 FollowCourseState::OnEnter(Boid& boid)
 {
-  if(boid.m_data.m_pathNodes.empty())
+  if( boid.m_data.m_pathNodes.empty() )
   {
-    boid.m_data.m_pathNodes = GameManager::getInstance().m_globalPath;
+    boid.m_data.m_pathNodes = GameManager::getInstance().getPathContainerRef();
   }
   boid.m_data.m_followPathMagnitude = 2.5f;
   boid.m_data.m_cycleFollowPath = true;

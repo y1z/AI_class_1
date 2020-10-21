@@ -28,7 +28,7 @@ StateMachineTestApp::init()
   {
     Vec2 Position = Vec2(std::cosf(i * gvar::eighthPi) * 200.0f, std::sinf(i * gvar::eighthPi) * 200.0f);
     Position += Vec2(halfScreenWidth, halfScreenHeight);
-    descriptor.m_path.emplace_back(FollowPathNode(Position));
+    descriptor.m_pathData.emplace_back(FollowPathNode(Position));
   }
 
   for( int i = 0; i < 8; ++i )
@@ -36,7 +36,7 @@ StateMachineTestApp::init()
     auto boidDesc = BoidDescriptor();
     boidDesc.m_followPathMagnitude = 2.0f;
     boidDesc.m_cycleFollowPath = true;
-    boidDesc.m_pathNodes = descriptor.m_path;
+    boidDesc.m_pathNodes = descriptor.m_pathData;
     descriptor.m_boidDescriptors.emplace_back(boidDesc);
   }
 
