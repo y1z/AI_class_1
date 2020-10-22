@@ -4,7 +4,7 @@
 #include <cassert>
 
 
-void 
+void
 GameManager::OnShutDown()
 {
   m_groupBoids.clear();
@@ -15,7 +15,7 @@ int
 GameManager::OnStartUp(void* _Desc)
 {
 
-  m_vertexArray.setPrimitiveType(sf::PrimitiveType::LineStrip);
+  m_path.m_vertexArray.setPrimitiveType(sf::PrimitiveType::LineStrip);
   if( nullptr != _Desc )
   {
     GameManagerDescriptor* descriptor = reinterpret_cast< GameManagerDescriptor* >(_Desc);
@@ -23,11 +23,11 @@ GameManager::OnStartUp(void* _Desc)
 
     auto& nodeContainer = m_path.m_pathData;
     nodeContainer = std::move(descriptor->m_pathData);
-    m_vertexArray.resize(nodeContainer.size());
+    m_path.m_vertexArray.resize(nodeContainer.size());
 
     for( const auto& pathNode : nodeContainer )
     {
-      m_vertexArray.append(util::vec2ToVector2f(pathNode.m_position));
+      m_path.m_vertexArray.append(util::vec2ToVector2f(pathNode.m_position));
     }
 
     for( auto& boidDesc : descriptor->m_boidDescriptors )
@@ -53,17 +53,17 @@ GameManager::addBoidToGame(const Boid& newBoid)
   return m_groupBoids.size();
 }
 
-void 
+void
 GameManager::addNodeToGlobalPath(const FollowPathNode& node)
 {
 
   auto& nodeContainer = m_path.m_pathData;
-  nodeContainer.emplace_back(node); 
+  nodeContainer.emplace_back(node);
   m_path.m_vertexArray.append(sf::Vertex(util::vec2ToVector2f(node.m_position),
                               sf::Color::Red));
 }
 
-bool 
+bool
 GameManager::removeBoidFromGame(const size_t index)
 {
   auto& nodeContainer = m_path.m_pathData;
@@ -95,25 +95,25 @@ GameManager::getBoidPtr(const size_t index)
   return &m_groupBoids[index];
 }
 
-const GameManager::containerType& 
+const GameManager::containerType&
 GameManager::getBoidContainerRef() const
 {
   return m_groupBoids;
 }
 
-GameManager::containerType& 
+GameManager::containerType&
 GameManager::getBoidContainerRef()
 {
   return m_groupBoids;
 }
 
-const FollowPath::PathContainer& 
+const FollowPath::PathContainer&
 GameManager::getPathContainerRef() const
 {
   return m_path.m_pathData;
 }
 
-FollowPath::PathContainer 
+FollowPath::PathContainer
 GameManager::getPathContainerRef()
 {
   return m_path.m_pathData;
@@ -132,7 +132,7 @@ GameManager::end()
 }
 
 GameManager::containerType::const_iterator
-GameManager::cbegin() const 
+GameManager::cbegin() const
 {
   return m_groupBoids.cbegin();
 }
@@ -140,13 +140,13 @@ GameManager::cbegin() const
 GameManager::containerType::const_iterator
 GameManager::cend() const
 {
-  return m_groupBoids.cend(); 
+  return m_groupBoids.cend();
 }
 
-void 
+void
 GameManager::drawPath(sf::RenderWindow& window) const
 {
-  window.draw(m_vertexArray);
+  window.draw(m_path.m_vertexArray);
 }
 
 

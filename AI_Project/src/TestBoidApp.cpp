@@ -31,7 +31,7 @@ TestBoidApp::init()
   m_screenHeight = 1080;
   m_screenWidth = 1920;
 
-  for(int i = 1; i < 10 ; ++i)
+  for( int i = 1; i < 10; ++i )
   {
     const FollowPathNode node(Vec2(m_screenWidth / (1 + i), m_screenHeight / (1 + i)),
                               std::cos(gvar::eighthPi * static_cast<float> (i)) * 500 + (m_screenHeight / 2u));

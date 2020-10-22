@@ -148,8 +148,5 @@ public:
    */
   FollowPath m_path;
 
-  /** @brief This is used to draw the path.*/
-  sf::VertexArray m_vertexArray;
-
 };
 
