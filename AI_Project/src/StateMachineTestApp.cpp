@@ -88,7 +88,7 @@ StateMachineTestApp::handleRender()
   GameManager& gm = GameManager::getInstance();
   m_window->clear();
 
-  for( auto& Boid : gm )
+  for( auto& Boid : gm.getBoidContainerRef() )
   {
     m_window->draw(Boid.m_data.m_shape);
   }

@@ -31,10 +31,12 @@ TestBoidApp::init()
   m_screenHeight = 1080;
   m_screenWidth = 1920;
 
+  const unsigned int one10thOfWidth = m_screenWidth / 10;
+  const unsigned int one10thOfHeight = m_screenHeight / 10;
   for( int i = 1; i < 10; ++i )
   {
-    const FollowPathNode node(Vec2(m_screenWidth / (1 + i), m_screenHeight / (1 + i)),
-                              std::cos(gvar::eighthPi * static_cast<float> (i)) * 500 + (m_screenHeight / 2u));
+    const FollowPathNode node(Vec2( one10thOfWidth * i , one10thOfHeight * i),
+                              50.0f);
 
     gameMan.addNodeToGlobalPath(node);
   }
@@ -54,19 +56,19 @@ TestBoidApp::init()
 
     {
 
-      const BoidDescriptor seekDesc = Boid::createSeekingBoidDescriptor
-      (
-        m_mousePosition->m_data.m_position,
-        Vec2(static_cast< float >(m_screenWidth) * .6f, static_cast< float >(m_screenHeight) * .3f)
-      );
+      //const BoidDescriptor seekDesc = Boid::createSeekingBoidDescriptor
+      //(
+      //  m_mousePosition->m_data.m_position,
+      //  Vec2(static_cast< float >(m_screenWidth) * .6f, static_cast< float >(m_screenHeight) * .3f)
+      //);
 
-      gameMan.addBoidToGame(seekDesc);
+      //gameMan.addBoidToGame(seekDesc);
 
-      for(int i = 0; i < 10; ++i )
+      for( int i = 0; i < 10; ++i )
       {
         const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
         (gameMan.getPathContainerRef(),
-         Vec2((i * 30),1000),
+         Vec2((i * 30), 500),
          0.35
         );
 
@@ -100,9 +102,9 @@ TestBoidApp::handleInput()
     if( sf::Keyboard::D == event.key.code )
     {
 
-      for(auto& boid : gm )
+      for( auto& boid : gm.getBoidContainerRef() )
       {
-        boid.destroy(); 
+        boid.destroy();
       }
 
     }
@@ -130,20 +132,20 @@ TestBoidApp::handleBoids()
 {
   GameManager& gm = GameManager::getInstance();
 
-  for( auto& boid : gm )
+  for( auto& boid : gm.getBoidContainerRef() )
   {
     boid.update(m_deltaTime);
   }
 
 }
 
-void 
+void
 TestBoidApp::handleRendering()
 {
   GameManager& gm = GameManager::getInstance();
   m_window->clear();
   gm.drawPath(*m_window);
-  for(auto &boid : gm )
+  for( auto& boid : gm.getBoidContainerRef() )
   {
     boid.draw(*m_window);
   }

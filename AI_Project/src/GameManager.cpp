@@ -14,11 +14,10 @@ GameManager::OnShutDown()
 int
 GameManager::OnStartUp(void* _Desc)
 {
-
   m_path.m_vertexArray.setPrimitiveType(sf::PrimitiveType::LineStrip);
   if( nullptr != _Desc )
   {
-    GameManagerDescriptor* descriptor = reinterpret_cast< GameManagerDescriptor* >(_Desc);
+    GameManagerDescriptor* descriptor = static_cast<GameManagerDescriptor *>(_Desc);
     assert(nullptr != descriptor);
 
     auto& nodeContainer = m_path.m_pathData;
@@ -54,11 +53,15 @@ GameManager::addBoidToGame(const Boid& newBoid)
 }
 
 void
-GameManager::addNodeToGlobalPath(const FollowPathNode& node)
+GameManager::addNodeToGlobalPath(const FollowPathNode& node )
 {
 
   auto& nodeContainer = m_path.m_pathData;
   nodeContainer.emplace_back(node);
+  sf::CircleShape circle(node.m_radius);
+  circle.setPosition(node.m_position.x, node.m_position.y);
+  circle.setFillColor(sf::Color::Yellow);
+  m_path.m_pointsInPath.emplace_back(circle);
   m_path.m_vertexArray.append(sf::Vertex(util::vec2ToVector2f(node.m_position),
                               sf::Color::Red));
 }
@@ -119,34 +122,14 @@ GameManager::getPathContainerRef()
   return m_path.m_pathData;
 }
 
-GameManager::containerType::iterator
-GameManager::begin()
-{
-  return m_groupBoids.begin();
-}
-
-GameManager::containerType::iterator
-GameManager::end()
-{
-  return m_groupBoids.end();
-}
-
-GameManager::containerType::const_iterator
-GameManager::cbegin() const
-{
-  return m_groupBoids.cbegin();
-}
-
-GameManager::containerType::const_iterator
-GameManager::cend() const
-{
-  return m_groupBoids.cend();
-}
-
 void
 GameManager::drawPath(sf::RenderWindow& window) const
 {
   window.draw(m_path.m_vertexArray);
+  for( const auto& shape : m_path.m_pointsInPath )
+  {
+    window.draw(shape);
+  }
 }
 
 

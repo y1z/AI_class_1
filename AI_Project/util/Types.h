@@ -12,10 +12,13 @@
 */
 
 /**
- * FORWARD DECLARE
+ * FORWARD DECLARATIONS
  */
 
 class Boid;
+namespace sf {
+  class RenderTarget;
+}
 
 /**
  * integer types
@@ -88,6 +91,12 @@ struct BoidDescriptor
     m_evadeTargetPosition(nullptr),
     m_boidBeingPursued(nullptr),
     m_boidToEvade(nullptr),
+  #if !NDEBUG
+
+    m_renderTargetDebug(nullptr),
+
+  #endif // !NDEBUG
+
 
     m_color(sf::Color::Blue),
 
@@ -194,6 +203,12 @@ struct BoidDescriptor
   * @brief the boid Being pursued.
   */
   const Boid* m_boidToEvade;
+
+#if !NDEBUG
+
+  sf::RenderTarget * m_renderTargetDebug;
+
+#endif // !NDEBUG
 
   /**
   * @brief The color of the boid.
@@ -329,11 +344,35 @@ struct BoidDescriptor
 /** @brief used for initializing the game manager */
 struct GameManagerDescriptor
 {
+
+  [[nodiscard]] sf::RenderTarget* 
+  getDebugRenderTarget()
+  {
+
+  #if !NDEBUG
+
+    return m_debugRenderTarget;
+
+  #endif // !NDEBUG
+    return nullptr;
+  }
+
+  void
+  setDebugRenderTarget(sf::RenderTarget* renderTarget)
+  {
+  #if !NDEBUG
+    m_debugRenderTarget = renderTarget;
+  #endif // !NDEBUG
+  };
+
   /** @brief tell the game manager how each boid behaves. */
   std::vector<BoidDescriptor> m_boidDescriptors;
 
   /** @brief give the boids a path to use in the game.*/
   std::vector<FollowPathNode> m_pathData;
+private:
+  sf::RenderTarget* m_debugRenderTarget;
+
 };
 
 

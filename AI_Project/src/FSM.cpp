@@ -29,7 +29,7 @@ FSM::run(const float deltaTime)
 {
   GameManager& gm = GameManager::getInstance();
 
-  for(auto &boid : gm )
+  for(auto &boid : gm.getBoidContainerRef() )
   {
     const StateType currentStateType = boid.getStateType();
     BaseState* currentState = m_states.at(static_cast< int >(currentStateType));

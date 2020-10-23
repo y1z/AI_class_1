@@ -59,6 +59,7 @@ public:// functions
   
   /**
    * @brief add a node to the global path.
+   * @param node : the node to be added.
    * 
    */
   void 
@@ -113,22 +114,6 @@ public:// functions
   FollowPath::PathContainer
   getPathContainerRef();
 
-  /** @returns a iterator to the underlying container. */
-  containerType::iterator
-  begin();
-
-  /** @returns a iterator to the underlying container. */
-  containerType::iterator
-  end();
-
-  /** @returns a const iterator to the underlying container. */
-  containerType::const_iterator
-  cbegin() const;
-
-  /** @returns a const iterator to the underlying container. */
-  containerType::const_iterator
-  cend() const;
-
   void
   drawPath(sf::RenderWindow& window) const ;
 
@@ -149,4 +134,5 @@ public:
   FollowPath m_path;
 
 };
+
 
