@@ -211,6 +211,13 @@ public: // member functions
              const float strength = 1.0f);
 
 
+  Vec2
+  separation(const Boid& separationBoid,
+             const float separationRadius,
+             const BoidContainer& groupOfBoids,
+             const float strength = 1.0f);
+
+
   /**
    * @brief draws the boid on a render target.
    */

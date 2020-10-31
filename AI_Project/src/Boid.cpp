@@ -40,6 +40,9 @@ Boid::update(float deltaTime)
   if( !m_data.m_pathNodes.empty() && !m_data.m_isFollowingPath )
     force += this->patrolPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cyclePatrolPath, m_data.m_patrolPathMagnitude);
 
+  if( nullptr != m_data.m_groupOfBoids )
+    force += this->separation(*this, m_data.m_shape.getRadius(), *m_data.m_groupOfBoids);
+
   if( force.length() > std::numeric_limits<float>::epsilon() )
   {
     m_data.m_timeInMotion += deltaTime;
@@ -56,8 +59,12 @@ Boid::update(float deltaTime)
   }
 
   Vec2 const Dir = getDir();
-  Vec2 const SteerDir = ((force * m_data.m_mass).normalize() - Dir).normalize();
+
+  Vec2 const SteerDir = ((force * m_data.m_mass).normalize() - Dir);
   Vec2 const ResultDir = (SteerDir + Dir);
+#if !NDEBUG
+  util::drawDebugLine(m_data.m_position, m_data.m_position + ResultDir);
+#endif // !NDEBUG
 
   Vec2 const TempPrevPosition = m_data.m_position;
 
@@ -319,6 +326,7 @@ Boid::followPath(const Boid& pathFollower,
                  const bool cyclePath,
                  const float strength)
 {
+
   const FollowPathNode* nextNode = &path.at(indexTracker.getCurrentIndex());
 
   const float distanceSquared = (nextNode->m_position - pathFollower.m_data.m_position).lengthSqr();
@@ -333,6 +341,7 @@ Boid::followPath(const Boid& pathFollower,
     else if( currentIndex + 1 < path.size() - 1 )
     {
       indexTracker.incrementIndex();
+      std::cout << "incremented index  " << this << '\n';
     }
     nextNode = &path.at(indexTracker.getCurrentIndex());
   }
@@ -344,17 +353,16 @@ Boid::followPath(const Boid& pathFollower,
                 strength);
   }
 
-  auto const previousNode = (indexTracker.getIncrementAmount() * -1);
-
-  const FollowPathNode* const prevNode = &path.at(indexTracker.getCurrentIndex() + previousNode);
+  const FollowPathNode* const prevNode = &path.at(m_data.m_indexTracker.getPrevIndex());
 
   const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
-  const Vec2 pathToBoid = pathFollower.m_data.m_position - prevNode->m_position;
+  const Vec2 pathToBoid = prevNode->m_position - pathFollower.m_data.m_position;
 
   const Vec2 pointOnTheLine = pathToBoid.projectOnTo(pathToNextNode) + prevNode->m_position;
 
-  return seek(pathFollower.m_data.m_position, pointOnTheLine, strength) +
-    seek(pathFollower.m_data.m_position, nextNode->m_position, strength);
+  const Vec2 result = (pointOnTheLine + nextNode->m_position) * 0.5f;
+  return seek(pathFollower.m_data.m_position, result, strength) +
+    seek(pathFollower.m_data.m_position, nextNode->m_position, strength * 1.01f);
 }
 
 Vec2
@@ -368,7 +376,7 @@ Boid::patrolPath(const Boid& patrolBoid,
 
   const float distanceSquared = nextNode->m_position.distanceFromVectorSqr(patrolBoid.m_data.m_position);
 
-  if( distanceSquared < nextNode->m_position * nextNode->m_position )
+  if( distanceSquared < nextNode->m_radius * nextNode->m_radius)
   {
     auto const currentIndex = indexTracker.getCurrentIndex();
     if( 1 > currentIndex )
@@ -391,8 +399,6 @@ Boid::patrolPath(const Boid& patrolBoid,
     return this->seek(patrolBoid.m_data.m_position, nextNode->m_position, strength);
   }
 
-
-
   const FollowPathNode* prevNode = &path.at(indexTracker.getCurrentIndex() + previousNode);
 
   const Vec2 pathToNextNode = nextNode->m_position - prevNode->m_position;
@@ -402,6 +408,29 @@ Boid::patrolPath(const Boid& patrolBoid,
 
   return seek(patrolBoid.m_data.m_position, pointOnTheLine, strength) +
     seek(patrolBoid.m_data.m_position, nextNode->m_position, strength);
+}
+
+Vec2
+Boid::separation(const Boid& separationBoid,
+                 const float separationRadius,
+                 const BoidContainer& groupOfBoids,
+                 const float strength )
+{
+  Vec2 result(0.0f, 0.0f);
+
+  const Vec2 position = separationBoid.m_data.m_position;
+  for( const auto& boid : groupOfBoids )
+  {
+    const Vec2 otherBoid = boid.m_data.m_position;
+    if( (otherBoid - position).magnitude() < separationRadius )
+    {
+      result += this->flee(position,
+                           otherBoid,
+                           strength,
+                           separationRadius);
+    }
+  }
+  return result;
 }
 
 void
@@ -500,7 +529,8 @@ Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
   BoidDescriptor result;
   result.m_pathNodes = path;
   result.m_position = boidPosition;
-  result.m_indexTracker
+  result.m_indexTracker.setIncrementAmount(1ll);
+  result.m_indexTracker.setCurrentIndex(0ll);
   result.m_followPathMagnitude = forceMagnitude;
   result.m_isFollowingPath = true;
   result.m_cycleFollowPath = true;

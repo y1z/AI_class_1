@@ -1,7 +1,13 @@
 #include "Edge2D.h"
+#include "util.h"
+#include "GlobalValues.h"
+
+Edge2D::Edge2D()
+  : Edge2D(Vec2(0, 0), Vec2(0, 1))
+{}
 
 Edge2D::Edge2D(const Vec2& Start, const Vec2& End)
-:m_startOfEdge(Start),m_endOfEdge(End)
+  : m_startOfEdge(Start), m_endOfEdge(End)
 {}
 
 Edge2D 
@@ -27,10 +33,21 @@ Edge2D::isIntersecting(const Edge2D& otherEdges) const
   const Edge2D::Orientation dir3 = calculateRotation(otherEdges.m_startOfEdge, otherEdges.m_endOfEdge, this->m_startOfEdge);
   const Edge2D::Orientation dir4 = calculateRotation(otherEdges.m_startOfEdge, otherEdges.m_endOfEdge, this->m_endOfEdge);
 
-  if( dir1 != dir2 && dir3 != dir4 )
-    return true; 
+  return ( dir1 != dir2 && dir3 != dir4 );
+}
 
-  return false;
+Edge2D 
+Edge2D::getNormal(Edge2D::Orientation orientation) const
+{
+  assert(orientation != Edge2D::Orientation::collinear && " invalid orientation ");
+
+  const float rotationAngle = 
+    (Edge2D::Orientation::counterClockwise == orientation) ? gvar::halfPi : -gvar::halfPi;
+
+  const Vec2 edgeCenter = (m_endOfEdge - m_startOfEdge) * 0.5f;
+  const Vec2 normalDir = (edgeCenter * 2.0f).normalize().rotate(rotationAngle);
+
+  return Edge2D(edgeCenter, edgeCenter + normalDir);
 }
 
 Edge2D::Orientation 
@@ -38,9 +55,10 @@ Edge2D::calculateRotation(const Vec2& edge1Point1,
                           const Vec2& edge1Point2,
                           const Vec2& edge2PointAny) const
 {
- const int val = 
+  const int val =
    (edge1Point2.y - edge1Point1.y) *
    (edge2PointAny.x - edge1Point2.x) -
+
    (edge1Point1.x - edge1Point2.x) *
    (edge2PointAny.y - edge1Point2.y);
 

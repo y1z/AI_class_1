@@ -42,11 +42,13 @@ TestBoidApp::init()
   }
 
 
+
   try
   {
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                   "Boid test",
                                                   sf::Style::Default);
+
 
     m_window->setVerticalSyncEnabled(true);
     m_window->setFramerateLimit(1060u);
@@ -68,15 +70,15 @@ TestBoidApp::init()
       {
         const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
         (gameMan.getPathContainerRef(),
-         Vec2((i * 30), 500),
-         0.35
+         Vec2((i * 35), 500),
+         0.75
         );
 
         gameMan.addBoidToGame(followBoid);
       }
-
     }
 
+    gameMan.setupGroup();
   }
   catch( const std::exception& e )
   {
@@ -145,6 +147,11 @@ TestBoidApp::handleRendering()
   GameManager& gm = GameManager::getInstance();
   m_window->clear();
   gm.drawPath(*m_window);
+
+#if !NDEBUG
+  gm.drawAndClearDebug(*m_window);
+#endif // !NDEBUG
+
   for( auto& boid : gm.getBoidContainerRef() )
   {
     boid.draw(*m_window);

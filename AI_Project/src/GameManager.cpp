@@ -15,6 +15,10 @@ int
 GameManager::OnStartUp(void* _Desc)
 {
   m_path.m_vertexArray.setPrimitiveType(sf::PrimitiveType::LineStrip);
+#if !NDEBUG
+  m_debugLines.setPrimitiveType(sf::PrimitiveType::LineStrip);
+#endif // !NDEBUG
+
   if( nullptr != _Desc )
   {
     GameManagerDescriptor* descriptor = static_cast<GameManagerDescriptor *>(_Desc);
@@ -37,6 +41,16 @@ GameManager::OnStartUp(void* _Desc)
   }
 
   return -1;
+}
+
+void
+GameManager::setupGroup()
+{
+  for(auto& boid : m_groupBoids )
+  {
+    boid.m_data.m_groupOfBoids = &m_groupBoids;
+  }
+
 }
 
 size_t
@@ -132,4 +146,28 @@ GameManager::drawPath(sf::RenderWindow& window) const
   }
 }
 
+void
+GameManager::addDebugVertexLine(const Vec2& start,
+                                const Vec2& end)
+{
+  const sf::Vertex lineStart(util::vec2ToVector2f(start), sf::Color::White);
+  const sf::Vertex lineEnd(util::vec2ToVector2f(end), sf::Color::White);
+
+  addDebugVertexLine(lineStart, lineEnd);
+}
+
+void 
+GameManager::addDebugVertexLine(const sf::Vertex& startOfLine,
+                                const sf::Vertex& endOfLine)
+{
+  m_debugLines.append(startOfLine);
+  m_debugLines.append(endOfLine);
+}
+
+void
+GameManager::drawAndClearDebug(sf::RenderWindow& window)
+{
+  window.draw(m_debugLines);
+  m_debugLines.clear();
+}
 

@@ -6,6 +6,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <deque>
 /**
 * @file Types.h
 * It contains many common types use in the project.
@@ -33,6 +34,14 @@ using uint8 = uint8_t;
 using uint16 = uint16_t;
 using uint32 = uint32_t;
 using uint64 = uint64_t;
+
+
+/**
+ * Types defs
+ */
+using BoidContainer = std::deque<Boid>;
+
+
 
 /**
  * ENUMS
@@ -91,12 +100,7 @@ struct BoidDescriptor
     m_evadeTargetPosition(nullptr),
     m_boidBeingPursued(nullptr),
     m_boidToEvade(nullptr),
-  #if !NDEBUG
-
-    m_renderTargetDebug(nullptr),
-
-  #endif // !NDEBUG
-
+    m_groupOfBoids(nullptr),
 
     m_color(sf::Color::Blue),
 
@@ -204,9 +208,14 @@ struct BoidDescriptor
   */
   const Boid* m_boidToEvade;
 
+  /**
+  * @brief the pointer to the group of the boid.
+  */
+  const BoidContainer* m_groupOfBoids;
+
 #if !NDEBUG
 
-  sf::RenderTarget * m_renderTargetDebug;
+  // sf::RenderWindow * m_renderTargetDebug;
 
 #endif // !NDEBUG
 
@@ -345,7 +354,7 @@ struct BoidDescriptor
 struct GameManagerDescriptor
 {
 
-  [[nodiscard]] sf::RenderTarget* 
+  [[nodiscard]] sf::RenderWindow*
   getDebugRenderTarget()
   {
 
@@ -358,7 +367,7 @@ struct GameManagerDescriptor
   }
 
   void
-  setDebugRenderTarget(sf::RenderTarget* renderTarget)
+  setDebugRenderTarget(sf::RenderWindow* renderTarget)
   {
   #if !NDEBUG
     m_debugRenderTarget = renderTarget;
@@ -371,7 +380,7 @@ struct GameManagerDescriptor
   /** @brief give the boids a path to use in the game.*/
   std::vector<FollowPathNode> m_pathData;
 private:
-  sf::RenderTarget* m_debugRenderTarget;
+  sf::RenderWindow* m_debugRenderTarget;
 
 };
 

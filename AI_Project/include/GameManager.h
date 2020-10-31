@@ -13,7 +13,7 @@
 class GameManager final : public soModule<GameManager>
 {
 public:
-  using containerType = std::deque<Boid>;
+  using containerType = BoidContainer;
 public: // constructors 
 
   GameManager() = default;
@@ -43,6 +43,9 @@ public:// functions
   */
 	int
   OnStartUp(void* _Desc) override;
+
+  void
+  setupGroup();
 
   /**
   * @brief Adds a boid to the game.
@@ -114,8 +117,23 @@ public:// functions
   FollowPath::PathContainer
   getPathContainerRef();
 
+  /** @brief draws the path on to a window. */
   void
   drawPath(sf::RenderWindow& window) const ;
+
+  void
+  addDebugVertexLine(const Vec2 & start,
+                     const Vec2 & end);
+
+  /**
+   * @brief 
+   */
+  void
+  addDebugVertexLine(const sf::Vertex& startOfLine,
+                     const sf::Vertex& endOfLine);
+
+  void
+  drawAndClearDebug(sf::RenderWindow& window);
 
 private:
 
@@ -133,6 +151,8 @@ public:
    */
   FollowPath m_path;
 
+public:
+  sf::VertexArray m_debugLines;
 };
 
 

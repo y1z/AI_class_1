@@ -3,12 +3,13 @@
 #include "FollowCourse.h"
 #include "GameManager.h"
 
+
 FSM::FSM()
 {
   m_states.fill(nullptr);
 
-  m_states.at(static_cast< int >(StateType::Idle)) = new IdleState();
-  m_states.at(static_cast< int >(StateType::FollowCourse)) = new FollowCourseState();
+  m_states.at(static_cast< enumIndex >(StateType::Idle)) = new IdleState();
+  m_states.at(static_cast< enumIndex >(StateType::FollowCourse)) = new FollowCourseState();
 }
 
 FSM::~FSM()
@@ -32,7 +33,7 @@ FSM::run(const float deltaTime)
   for(auto &boid : gm.getBoidContainerRef() )
   {
     const StateType currentStateType = boid.getStateType();
-    BaseState* currentState = m_states.at(static_cast< int >(currentStateType));
+    BaseState* currentState = m_states.at(static_cast< enumIndex >(currentStateType));
     if( nullptr != currentState )
     {
       const StateType stateTypeAfterUpdate = currentState->OnUpdate(deltaTime, boid);
@@ -40,7 +41,7 @@ FSM::run(const float deltaTime)
       if(stateTypeAfterUpdate != currentStateType )
       {
         currentState->OnExit(boid);
-        currentState = m_states.at(static_cast< int >(currentStateType));
+        currentState = m_states.at(static_cast< enumIndex >(currentStateType));
         currentState->OnEnter(boid);
       }
     }

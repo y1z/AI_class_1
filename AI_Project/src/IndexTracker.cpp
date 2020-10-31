@@ -20,6 +20,12 @@ IndexTracker::getCurrentIndex() const
 }
 
 int64_t 
+IndexTracker::getPrevIndex() const
+{
+  return m_currentIndex + (m_incrementAmount * -1);
+}
+
+int64_t 
 IndexTracker::getIncrementAmount() const
 {
   return m_incrementAmount;

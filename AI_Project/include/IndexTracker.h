@@ -6,8 +6,6 @@
 */
 class IndexTracker 
 {
-public:// constructor
-
 public:
 
   /**
@@ -29,6 +27,10 @@ public:
   */
   [[nodiscard]] int64_t
   getCurrentIndex()const;
+
+  /** @returns a previous index. */
+  [[nodiscard]] int64_t
+  getPrevIndex() const;
 
   /**
   * @returns The amount the index is incremented by.
