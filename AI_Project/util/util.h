@@ -72,6 +72,30 @@ namespace util
 
   }
 
+
+  /**
+   * @brief changes the scale of a vector to a different scale.
+   * @param currentValues : the vector with the raw values.
+   * @param currentScale : the scale 'currentVector'
+   * @param newDesiredValue : what the values should be changed to.
+   */
+  sf::Vector2f static
+  rescaleVector(const sf::Vector2f& currentValues,
+                const sf::Vector2f& currentScale,
+                const sf::Vector2f& newDesiredValue)
+  {
+    const sf::Vector2f inverseValue(1.0f / currentValues.x,
+                                    1.0f / currentValues.y);
+
+    const sf::Vector2f percentageValue(inverseValue.x * newDesiredValue.x,
+                                       inverseValue.y * newDesiredValue.y);
+                                       
+    return sf::Vector2f(currentScale.x * percentageValue.x,
+                        currentScale.y * percentageValue.y);
+  }
+
+
+
 }
 
 

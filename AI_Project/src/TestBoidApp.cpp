@@ -23,6 +23,8 @@ TestBoidApp::init()
 {
   GameManager::StartUp(nullptr);
   GameManager& gameMan = GameManager::getInstance();
+
+  GameManagerDescriptor gameDesc ;
   std::random_device rd{};
   std::srand(rd());
 
@@ -56,26 +58,16 @@ TestBoidApp::init()
     m_mousePosition = std::make_unique<Boid>();
     m_mousePosition->init(BoidDescriptor());
 
+
+    for( int i = 0; i < 10; ++i )
     {
+      const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
+      (gameMan.getPathContainerRef(),
+       Vec2((i * 35), 500),
+       0.75f
+      );
 
-      //const BoidDescriptor seekDesc = Boid::createSeekingBoidDescriptor
-      //(
-      //  m_mousePosition->m_data.m_position,
-      //  Vec2(static_cast< float >(m_screenWidth) * .6f, static_cast< float >(m_screenHeight) * .3f)
-      //);
-
-      //gameMan.addBoidToGame(seekDesc);
-
-      for( int i = 0; i < 10; ++i )
-      {
-        const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
-        (gameMan.getPathContainerRef(),
-         Vec2((i * 35), 500),
-         0.75
-        );
-
-        gameMan.addBoidToGame(followBoid);
-      }
+      gameMan.addBoidToGame(followBoid);
     }
 
     gameMan.setupGroup();
