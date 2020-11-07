@@ -337,6 +337,7 @@ Boid::followPath(const Boid& pathFollower,
     if( cyclePath )
     {
       indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
+      m_data.m_lapCount.checkPoints += 1;
     }
     else if( currentIndex + 1 < path.size() - 1 )
     {
@@ -524,7 +525,8 @@ Boid::createPursueBoidDescriptor(const Boid& pursueBoid,
 BoidDescriptor
 Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
                                      const Vec2& boidPosition,
-                                     const float forceMagnitude)
+                                     const float forceMagnitude,
+                                     const bool isCycle)
 {
   BoidDescriptor result;
   result.m_pathNodes = path;
@@ -533,7 +535,7 @@ Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
   result.m_indexTracker.setCurrentIndex(0ll);
   result.m_followPathMagnitude = forceMagnitude;
   result.m_isFollowingPath = true;
-  result.m_cycleFollowPath = true;
+  result.m_cycleFollowPath = isCycle;
   return result;
 }
 

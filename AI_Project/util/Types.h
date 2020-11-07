@@ -82,6 +82,28 @@ struct FollowPath
   sf::VertexArray m_vertexArray;
 };
 
+struct LapCount 
+{
+  bool operator <( const LapCount& other ) const
+  {
+    const bool moreLaps = (m_fullLap < other.m_fullLap);
+    const bool moreCheckPoint = (checkPoints < other.checkPoints);
+
+    return  moreLaps || moreCheckPoint;
+  }
+
+  bool operator >( const LapCount& other ) const
+  {
+    const bool moreLaps = (m_fullLap > other.m_fullLap);
+    const bool moreCheckPoint = (checkPoints > other.checkPoints);
+
+    return  moreLaps || moreCheckPoint;
+  }
+
+  uint32 m_fullLap = 0u;
+  uint32 checkPoints = 0u;
+};
+
 
 /**
  * @brife controls how a boid will act.
@@ -154,6 +176,8 @@ struct BoidDescriptor
   * @brief used to keep track of what index the boid is following.
   */
   IndexTracker m_indexTracker;
+
+  LapCount m_lapCount;
 
   /**
   * @brief Where the current boid is located.

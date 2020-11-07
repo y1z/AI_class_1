@@ -273,7 +273,8 @@ public:
   static BoidDescriptor
   createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
                                  const Vec2& boidPosition,
-                                 const float forceMagnitude = 1.0f);
+                                 const float forceMagnitude = 1.0f,
+                                 const bool isCycle = true);
 
 public:
 

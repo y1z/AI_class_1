@@ -7,6 +7,7 @@
 
 UiRectangle::UiRectangle(const UIRectangleDesc &desc)
   : m_rect(sf::Vector2f(desc.width, desc.height)),
+  m_ptrBoid(nullptr),
   m_texture(std::make_shared<sf::Texture>())
 {
   const sf::Vector2f currentSize = m_rect.getSize();
@@ -21,6 +22,12 @@ UiRectangle::UiRectangle(const UIRectangleDesc &desc)
 }
 
 bool 
+UiRectangle::operator<(const UiRectangle& other) const
+{
+  return this->m_ptrBoid->m_data.m_lapCount < other.m_ptrBoid->m_data.m_lapCount;
+}
+
+bool
 UiRectangle::init(const UIRectangleDesc& desc)
 {
   m_rect.setSize(sf::Vector2f(desc.width, desc.height));
@@ -70,6 +77,12 @@ UiRectangle::getPosition() const
   return m_rect.getPosition(); 
 }
 
+void 
+UiRectangle::setPosition(const sf::Vector2f& newPos)
+{
+  m_rect.setPosition(newPos);
+}
+
 sf::Vector2f 
 UiRectangle::resizeRectangle(const sf::Vector2f& newSize)
 {
@@ -80,5 +93,13 @@ UiRectangle::resizeRectangle(const sf::Vector2f& newSize)
   m_rect.setScale(newScale);
 
   return  newScale;
+}
+
+void 
+UiRectangle::SwapPosition(UiRectangle& otherUI)
+{
+  auto myPos = m_rect.getPosition();
+  m_rect.setPosition(otherUI.getPosition());
+  otherUI.setPosition(myPos);
 }
 

@@ -11,7 +11,7 @@ UiManager::init(const std::vector< UIRectangleDesc >& descriptors)
   {
     for( const auto& des : descriptors )
     {
-      m_rectangles.emplace_back(UiRectangle(des));
+      addRectangle(des);
     }
 
   }
@@ -23,4 +23,56 @@ UiManager::init(const std::vector< UIRectangleDesc >& descriptors)
 
   return true;
 }
+
+void 
+UiManager::addRectangle(const UIRectangleDesc& desc)
+{
+  m_rectangles.emplace_back(UiRectangle(desc));
+}
+
+void 
+UiManager::resizeAllRectangle(const sf::Vector2f& newSize)
+{
+  for(auto& rect : m_rectangles )
+  {
+    rect.resizeRectangle(newSize);
+  }
+  
+}
+
+UiRectangle&
+UiManager::getRectangle(const uint32 index)
+{
+  return m_rectangles.at(index);
+}
+
+uint32 
+UiManager::getRectangleCount() const
+{
+  return m_rectangles.size();
+}
+
+void 
+UiManager::draw(sf::RenderTarget& target)
+{
+  for(const auto& rect : m_rectangles )
+  {
+    rect.draw(target);
+  }
+
+}
+
+UiManager::RectangleContainer::iterator 
+UiManager::begin()
+{
+  return m_rectangles.begin();
+}
+
+UiManager::RectangleContainer::iterator 
+UiManager::end()
+{
+  return m_rectangles.end();
+}
+
+
 

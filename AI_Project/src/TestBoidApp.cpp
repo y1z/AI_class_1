@@ -24,7 +24,6 @@ TestBoidApp::init()
   GameManager::StartUp(nullptr);
   GameManager& gameMan = GameManager::getInstance();
 
-  GameManagerDescriptor gameDesc ;
   std::random_device rd{};
   std::srand(rd());
 

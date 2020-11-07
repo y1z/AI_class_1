@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include "Boid.h"
 
 #include <string>
 #include <filesystem>
@@ -8,6 +9,22 @@
 
 struct UIRectangleDesc 
 {
+  UIRectangleDesc() = default;
+  UIRectangleDesc(const int32 _width,
+                  const int32 _height,
+                  const sf::Vector2f& _position,
+                  const std::string_view path)
+    :width(_width),
+    height(_height),
+    position(_position),
+    pathToSprite(path)
+  {}
+  UIRectangleDesc(const UIRectangleDesc& ) = default;
+  UIRectangleDesc(UIRectangleDesc&& ) noexcept = default;
+
+  UIRectangleDesc& operator = (const UIRectangleDesc&) = default;
+  UIRectangleDesc& operator = (UIRectangleDesc&&) noexcept = default;
+
   int32 width;
   int32 height;
   sf::Vector2f position;
@@ -22,6 +39,9 @@ class UiRectangle
 {
 public:
   explicit UiRectangle(const UIRectangleDesc& desc);
+
+
+  bool operator< ( const UiRectangle &other  ) const;
 
   bool
   init(const UIRectangleDesc& desc);
@@ -47,11 +67,20 @@ public:
   sf::Vector2f
   getPosition()const;
 
+  void
+  setPosition(const sf::Vector2f& newPos);
+
   sf::Vector2f
   resizeRectangle(const sf::Vector2f& newSize);
 
+  void
+  SwapPosition(UiRectangle& otherUI);
 
+
+public:
   sf::RectangleShape m_rect;
+
+  Boid* m_ptrBoid;
 private:
   std::shared_ptr<sf::Texture> m_texture;
 };
