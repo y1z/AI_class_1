@@ -27,6 +27,35 @@ UiRectangle::operator<(const UiRectangle& other) const
   return this->m_ptrBoid->m_data.m_lapCount < other.m_ptrBoid->m_data.m_lapCount;
 }
 
+bool 
+UiRectangle::operator>(const UiRectangle& other) const
+{
+  return this->m_ptrBoid->m_data.m_lapCount > other.m_ptrBoid->m_data.m_lapCount;
+}
+
+bool 
+UiRectangle::operator==(const UiRectangle& other) const
+{
+  return this->m_ptrBoid->m_data.m_lapCount == other.m_ptrBoid->m_data.m_lapCount;
+}
+
+bool 
+UiRectangle::operator<(const UiRectangle& other)
+{
+  return this->m_ptrBoid->m_data.m_lapCount < other.m_ptrBoid->m_data.m_lapCount;
+}
+
+bool UiRectangle::operator>(const UiRectangle& other)
+{
+  return this->m_ptrBoid->m_data.m_lapCount > other.m_ptrBoid->m_data.m_lapCount;
+}
+
+bool 
+UiRectangle::operator==(const UiRectangle& other)
+{
+  return this->m_ptrBoid->m_data.m_lapCount == other.m_ptrBoid->m_data.m_lapCount;
+}
+
 bool
 UiRectangle::init(const UIRectangleDesc& desc)
 {
@@ -77,7 +106,20 @@ UiRectangle::getPosition() const
   return m_rect.getPosition(); 
 }
 
-void 
+sf::Vector2f 
+UiRectangle::getCenter() const
+{
+  const sf::FloatRect bounds = m_rect.getLocalBounds();
+  const sf::Vector2f centerPosition 
+  {
+    bounds.left + (bounds.width * .5f),
+    bounds.top - (bounds.height * .5f)
+  };
+
+  return centerPosition;
+}
+
+void
 UiRectangle::setPosition(const sf::Vector2f& newPos)
 {
   m_rect.setPosition(newPos);
@@ -96,9 +138,9 @@ UiRectangle::resizeRectangle(const sf::Vector2f& newSize)
 }
 
 void 
-UiRectangle::SwapPosition(UiRectangle& otherUI)
+UiRectangle::swapPosition(UiRectangle& otherUI)
 {
-  auto myPos = m_rect.getPosition();
+  const auto myPos = m_rect.getPosition();
   m_rect.setPosition(otherUI.getPosition());
   otherUI.setPosition(myPos);
 }

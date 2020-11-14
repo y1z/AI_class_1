@@ -337,12 +337,12 @@ Boid::followPath(const Boid& pathFollower,
     if( cyclePath )
     {
       indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
-      m_data.m_lapCount.checkPoints += 1;
+      m_data.m_lapCount.m_currentCheckPoints += 1;
+      m_data.m_lapCount.m_totalCheckPoint += 1;
     }
     else if( currentIndex + 1 < path.size() - 1 )
     {
       indexTracker.incrementIndex();
-      std::cout << "incremented index  " << this << '\n';
     }
     nextNode = &path.at(indexTracker.getCurrentIndex());
   }

@@ -6,6 +6,9 @@
 
 class FSMScoreBord {
 public:
+  FSMScoreBord();
+  ~FSMScoreBord();
+public:
 
   void
   init(UiManager& UI);

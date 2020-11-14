@@ -11,15 +11,15 @@ namespace fs = std::filesystem;
 using namespace std::literals::string_literals;
 
 ExamApp::ExamApp()
-:BaseApp()
+  :BaseApp()
 {
   m_path = fs::current_path();
 }
 
-int 
+int
 ExamApp::run()
 {
-  if( -1 == init(1920,1080) )
+  if( -1 == init(1920, 1080) )
   {
     return -1;
   }
@@ -39,7 +39,7 @@ ExamApp::init(unsigned int width,
   std::random_device rd{};
   std::srand(rd());
 
-  const std::string characterNames[] = 
+  const std::string characterNames[] =
   {
     std::string(R"(resources\char_blue.png)") ,
     std::string(R"(resources\char_bluffy.png)") ,
@@ -52,10 +52,10 @@ ExamApp::init(unsigned int width,
     std::string(R"(resources\char_xzjiors.png)") ,
   };
 
-  const size_t stringSize = sizeof( std::string );
+  const size_t stringSize = sizeof(std::string);
   const size_t nameTotal = sizeof(characterNames) / stringSize;
 
-  for(size_t i = 0u; i < nameTotal; ++i  )
+  for( size_t i = 0u; i < nameTotal; ++i )
   {
     const UIRectangleDesc characterDescriptor
     (
@@ -73,6 +73,7 @@ ExamApp::init(unsigned int width,
                                                   "Boid test",
                                                   sf::Style::Default);
 
+    m_mousePos = std::make_unique<Boid>();
 
     const unsigned int one10thOfWidth = m_screenWidth / 10;
     const unsigned int one10thOfHeight = m_screenHeight / 10;
@@ -92,17 +93,20 @@ ExamApp::init(unsigned int width,
 
     for( int i = 0; i < 10; ++i )
     {
-      const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
+      BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
       (gameMan.getPathContainerRef(),
        Vec2((i * 35), 500),
        0.75f + (i * 0.09f)
       );
+      followBoid.m_fleeTargetPosition = &m_mousePos->m_data.m_position;
+      followBoid.m_fleeMagnitude = 7.0f;
+      followBoid.m_fleeRadius = m_mousePos->m_data.m_shape.getRadius() + 50.0f;
 
       gameMan.addBoidToGame(followBoid);
     }
 
   }
-  catch (std::exception& e)
+  catch( std::exception& e )
   {
     std::cerr << e.what() << "\n\n";
   }
@@ -111,7 +115,7 @@ ExamApp::init(unsigned int width,
   return 0;
 }
 
-void 
+void
 ExamApp::handleInput()
 {
   sf::Event event;
@@ -121,6 +125,12 @@ ExamApp::handleInput()
        sf::Keyboard::Escape == event.key.code )
     {
       m_window->close();
+    }
+
+
+    if( sf::Event::MouseMoved == event.type )
+    {
+      m_mousePos->m_data.m_position = Vec2(event.mouseMove.x, event.mouseMove.y);
     }
     //if( sf::Keyboard::D == event.key.code )
     //{
@@ -143,7 +153,7 @@ ExamApp::handleInput()
   }
 }
 
-void 
+void
 ExamApp::handleBoid()
 {
   GameManager& gm = GameManager::getInstance();
@@ -154,14 +164,32 @@ ExamApp::handleBoid()
   }
 }
 
-int 
+void
+ExamApp::handleDraw()
+{
+
+  GameManager& gameMan = GameManager::getInstance();
+  m_window->clear();
+  gameMan.drawPath(*m_window);
+
+  for( auto& boid : gameMan.getBoidContainerRef() )
+  {
+    boid.draw(*m_window);
+  }
+
+
+  m_manager.draw(*m_window);
+  m_window->display();
+}
+
+int
 ExamApp::mainLoop()
 {
   GameManager& gameMan = GameManager::getInstance();
   gameMan.setupGroup();
   FSMScoreBord stateMachine;
   stateMachine.init(m_manager);
-  while (m_window->isOpen())
+  while( m_window->isOpen() )
   {
     m_timer.StartTiming();
     handleBoid();
@@ -169,17 +197,7 @@ ExamApp::mainLoop()
 
     handleInput();
 
-    m_window->clear();
-    gameMan.drawPath(*m_window);
-
-    for(auto& boid : gameMan.getBoidContainerRef() )
-    {
-      boid.draw(*m_window);
-    }
-
-
-    m_manager.draw(*m_window);
-    m_window->display();
+    handleDraw();
 
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();

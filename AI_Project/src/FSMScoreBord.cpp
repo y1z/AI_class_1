@@ -1,7 +1,25 @@
 #include "FSMScoreBord.h"
 #include "GameManager.h"
 
-void 
+FSMScoreBord::FSMScoreBord()
+:m_states(4,nullptr)
+{
+}
+
+//board
+FSMScoreBord::~FSMScoreBord()
+{
+  for(auto& state : m_states )
+  {
+    if( nullptr != state )
+    {
+      delete state;
+    }
+  }
+  
+}
+
+void
 FSMScoreBord::init(UiManager& UI)
 {
   GameManager& gm = GameManager::getInstance();
@@ -16,8 +34,7 @@ FSMScoreBord::init(UiManager& UI)
     ++i;
   }
 
-  m_lapCount.checkPoints = gm.getPathContainerRef().size();
-  m_states.push_back(new StateScoreCheck);
+  m_lapCount.m_currentCheckPoints = gm.getPathContainerRef().size();
 
 }
 

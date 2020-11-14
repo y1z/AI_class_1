@@ -86,27 +86,35 @@ struct LapCount
 {
   bool operator <( const LapCount& other ) const
   {
-    const bool moreLaps = (m_fullLap < other.m_fullLap);
-    const bool moreCheckPoint = (checkPoints < other.checkPoints);
+    const bool IsALapAhead = m_fullLap < other.m_fullLap;
+    const bool IsACheckpointAhead = !(IsALapAhead) && (m_totalCheckPoint < other.m_totalCheckPoint);
+    return IsALapAhead || IsACheckpointAhead;
+  }
 
-    return  moreLaps || moreCheckPoint;
+  bool operator ==( const LapCount& other ) const
+  {
+    const bool sameLaps = (m_fullLap == other.m_fullLap);
+    const bool sameCheckPoints = m_totalCheckPoint == other.m_totalCheckPoint;
+
+    return  sameLaps && sameCheckPoints;
   }
 
   bool operator >( const LapCount& other ) const
   {
-    const bool moreLaps = (m_fullLap > other.m_fullLap);
-    const bool moreCheckPoint = (checkPoints > other.checkPoints);
-
-    return  moreLaps || moreCheckPoint;
+    const bool isALapBehind = (m_fullLap > other.m_fullLap);
+    const bool isACheckpointBehind = (!isALapBehind) && m_totalCheckPoint > other.m_totalCheckPoint;
+    return isALapBehind || isACheckpointBehind;
   }
 
+
   uint32 m_fullLap = 0u;
-  uint32 checkPoints = 0u;
+  uint32 m_totalCheckPoint = 0u;
+  uint32 m_currentCheckPoints = 0u;
 };
 
 
 /**
- * @brife controls how a boid will act.
+ * @brief controls how a boid will act.
  */
 struct BoidDescriptor
 {

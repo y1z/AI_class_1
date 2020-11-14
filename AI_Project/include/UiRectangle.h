@@ -41,7 +41,17 @@ public:
   explicit UiRectangle(const UIRectangleDesc& desc);
 
 
-  bool operator< ( const UiRectangle &other  ) const;
+  bool operator< (const UiRectangle& other) const;
+
+  bool operator> (const UiRectangle& other) const;
+
+  bool operator == (const UiRectangle& other) const;
+
+  bool operator< (const UiRectangle& other);
+
+  bool operator> (const UiRectangle& other);
+
+  bool operator == (const UiRectangle& other);
 
   bool
   init(const UIRectangleDesc& desc);
@@ -67,14 +77,19 @@ public:
   sf::Vector2f
   getPosition()const;
 
+  /** @returns the center of the rectangle*/
+  sf::Vector2f
+  getCenter()const;
+
   void
   setPosition(const sf::Vector2f& newPos);
 
+  /** @returns the new scale of the Rectangle*/
   sf::Vector2f
   resizeRectangle(const sf::Vector2f& newSize);
 
   void
-  SwapPosition(UiRectangle& otherUI);
+  swapPosition(UiRectangle& otherUI);
 
 
 public:

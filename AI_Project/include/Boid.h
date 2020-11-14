@@ -31,7 +31,6 @@ public: // member functions
 
   /**
   * @brief Updates the position, forceSum of the boid, should be called every frame.
-  * @bug
   */
   void
   update(float deltaTime);
