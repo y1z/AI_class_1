@@ -84,14 +84,14 @@ struct FollowPath
 
 struct LapCount 
 {
-  bool operator <( const LapCount& other ) const
+  bool operator <(const LapCount& other) const
   {
     const bool IsALapAhead = m_fullLap < other.m_fullLap;
     const bool IsACheckpointAhead = !(IsALapAhead) && (m_totalCheckPoint < other.m_totalCheckPoint);
     return IsALapAhead || IsACheckpointAhead;
   }
 
-  bool operator ==( const LapCount& other ) const
+  bool operator ==(const LapCount& other) const
   {
     const bool sameLaps = (m_fullLap == other.m_fullLap);
     const bool sameCheckPoints = m_totalCheckPoint == other.m_totalCheckPoint;
@@ -99,7 +99,7 @@ struct LapCount
     return  sameLaps && sameCheckPoints;
   }
 
-  bool operator >( const LapCount& other ) const
+  bool operator >(const LapCount& other) const
   {
     const bool isALapBehind = (m_fullLap > other.m_fullLap);
     const bool isACheckpointBehind = (!isALapBehind) && m_totalCheckPoint > other.m_totalCheckPoint;
@@ -185,7 +185,7 @@ struct BoidDescriptor
   */
   IndexTracker m_indexTracker;
 
-  LapCount m_lapCount;
+  // LapCount m_lapCount;
 
   /**
   * @brief Where the current boid is located.
