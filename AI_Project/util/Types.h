@@ -17,6 +17,7 @@
  */
 
 class Boid;
+class Racer;
 namespace sf {
   class RenderTarget;
 }
@@ -40,7 +41,7 @@ using uint64 = uint64_t;
  * Types defs
  */
 using BoidContainer = std::deque<Boid>;
-
+using RacerContainer = std::deque<Racer>;
 
 
 /**
@@ -87,7 +88,7 @@ struct LapCount
   bool operator <(const LapCount& other) const
   {
     const bool IsALapAhead = m_fullLap < other.m_fullLap;
-    const bool IsACheckpointAhead = !(IsALapAhead) && (m_totalCheckPoint < other.m_totalCheckPoint);
+    const bool IsACheckpointAhead = (m_totalCheckPoint < other.m_totalCheckPoint);
     return IsALapAhead || IsACheckpointAhead;
   }
 
@@ -102,7 +103,7 @@ struct LapCount
   bool operator >(const LapCount& other) const
   {
     const bool isALapBehind = (m_fullLap > other.m_fullLap);
-    const bool isACheckpointBehind = (!isALapBehind) && m_totalCheckPoint > other.m_totalCheckPoint;
+    const bool isACheckpointBehind = m_totalCheckPoint > other.m_totalCheckPoint;
     return isALapBehind || isACheckpointBehind;
   }
 
@@ -130,7 +131,7 @@ struct BoidDescriptor
     m_evadeTargetPosition(nullptr),
     m_boidBeingPursued(nullptr),
     m_boidToEvade(nullptr),
-    m_groupOfBoids(nullptr),
+    m_groupOfRacers(nullptr),
 
     m_color(sf::Color::Blue),
 
@@ -160,6 +161,7 @@ struct BoidDescriptor
     m_mass(0.0005f),
     m_boidSize(30.0f),
     m_state(StateType::Idle),
+    m_nodesReached(0u),
     m_isWandering(false),
     m_isFollowingPath(false),
     m_cycleFollowPath(false),
@@ -243,7 +245,7 @@ struct BoidDescriptor
   /**
   * @brief the pointer to the group of the boid.
   */
-  const BoidContainer* m_groupOfBoids;
+  const RacerContainer* m_groupOfRacers;
 
 #if !NDEBUG
 
@@ -359,6 +361,11 @@ struct BoidDescriptor
   * @brief keeps track of the state of the boid.
   */
   StateType m_state;
+
+  /**
+   * @brief count the amount of nodes reached.
+   */
+  uint32 m_nodesReached;
 
   /**
   * @brief keeps track if the boid is wandering.

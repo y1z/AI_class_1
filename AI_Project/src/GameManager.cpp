@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "util.h"
+#include "Racer.h"
 
 #include <cassert>
 
@@ -7,7 +8,7 @@
 void
 GameManager::OnShutDown()
 {
-  m_groupBoids.clear();
+  m_groupAgents.clear();
   m_path.m_pathData.clear();
 }
 
@@ -35,7 +36,7 @@ GameManager::OnStartUp(void* _Desc)
 
     for( auto& boidDesc : descriptor->m_boidDescriptors )
     {
-      m_groupBoids.emplace_back(Boid(boidDesc));
+      m_groupAgents.emplace_back(Boid(boidDesc));
     }
     return 0;
   }
@@ -46,24 +47,30 @@ GameManager::OnStartUp(void* _Desc)
 void
 GameManager::setupGroup()
 {
-  for(auto& boid : m_groupBoids )
+  for( auto& agents : m_groupAgents )
   {
-    boid.m_data.m_groupOfBoids = &m_groupBoids;
+    agents.getBoid().m_data.m_groupOfRacers = &m_groupAgents;
   }
 
 }
 
 size_t
-GameManager::addBoidToGame(const BoidDescriptor& descriptor)
+GameManager::addRacerToGame(const BoidDescriptor& descriptor)
 {
-  return addBoidToGame(Boid(descriptor));
+  return addRacerToGame(Racer(descriptor));
 }
 
 size_t
-GameManager::addBoidToGame(const Boid& newBoid)
+GameManager::addRacerToGame(const Boid& newBoid)
 {
-  m_groupBoids.emplace_back(newBoid);
-  return m_groupBoids.size();
+  return addRacerToGame(Racer(newBoid));
+}
+
+size_t 
+GameManager::addRacerToGame(const Racer& racer)
+{
+  m_groupAgents.emplace_back(racer);
+  return m_groupAgents.size();
 }
 
 void
@@ -78,6 +85,14 @@ GameManager::addNodeToGlobalPath(const FollowPathNode& node )
   m_path.m_pointsInPath.emplace_back(circle);
   m_path.m_vertexArray.append(sf::Vertex(util::vec2ToVector2f(node.m_position),
                               sf::Color::Red));
+
+  m_lapRequirements.m_currentCheckPoints += 1u;
+}
+
+void 
+GameManager::setLapTotal(const uint32 requiredLapCount)
+{
+  m_lapRequirements.m_fullLap = requiredLapCount; 
 }
 
 bool
@@ -92,36 +107,42 @@ GameManager::removeBoidFromGame(const size_t index)
   return false;
 }
 
+LapCount 
+GameManager::getLapRequirements() const
+{
+  return m_lapRequirements;
+}
+
 size_t
 GameManager::getTotalBoids() const
 {
   return m_path.m_pathData.size();
 }
 
-Boid&
-GameManager::getBoidRef(const size_t index)
+GameManager::AgentType&
+GameManager::getAgentRef(const size_t index)
 {
-  assert(m_groupBoids.size() - 1 >= index);
-  return m_groupBoids[index];
+  assert(m_groupAgents.size() - 1 >= index);
+  return m_groupAgents[index];
 }
 
-Boid*
-GameManager::getBoidPtr(const size_t index)
+GameManager::AgentType*
+GameManager::getAgentPtr(const size_t index)
 {
-  assert(m_groupBoids.size() - 1 >= index);
-  return &m_groupBoids[index];
+  assert(m_groupAgents.size() - 1 >= index);
+  return &m_groupAgents[index];
 }
 
 const GameManager::containerType&
-GameManager::getBoidContainerRef() const
+GameManager::getAgentContainerRef() const
 {
-  return m_groupBoids;
+  return m_groupAgents;
 }
 
 GameManager::containerType&
-GameManager::getBoidContainerRef()
+GameManager::getAgentContainerRef()
 {
-  return m_groupBoids;
+  return m_groupAgents;
 }
 
 const FollowPath::PathContainer&
@@ -160,14 +181,22 @@ void
 GameManager::addDebugVertexLine(const sf::Vertex& startOfLine,
                                 const sf::Vertex& endOfLine)
 {
+#if !NDEBUG
   m_debugLines.append(startOfLine);
   m_debugLines.append(endOfLine);
+#endif // !NDEBUG
+
 }
 
 void
 GameManager::drawAndClearDebug(sf::RenderWindow& window)
 {
+#if !NDEBUG
+
   window.draw(m_debugLines);
   m_debugLines.clear();
+
+#endif // !NDEBUG
+
 }
 

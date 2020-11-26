@@ -18,14 +18,15 @@ FollowCourseState::OnUpdate(float deltaTime, Boid& boid)
   GameManager& gm = GameManager::getInstance();
   boid.update(deltaTime);
 
-  auto beginningIter = gm.getBoidContainerRef().begin();
-  auto endingIter = gm.getBoidContainerRef().end();
-  for( ; beginningIter != endingIter; ++beginningIter )
+  auto beginningIter = gm.getAgentContainerRef().begin();
+  const auto endIter = gm.getAgentContainerRef().end();
+  for( ; beginningIter != endIter; ++beginningIter )
   {
-    if( boid.m_data.m_mass < beginningIter->m_data.m_mass &&
-       (boid.m_data.m_position - beginningIter->m_data.m_position).length() < 100.0f )
+    auto& boidRef = beginningIter->getBoid();
+    if( boid.m_data.m_mass < boidRef.m_data.m_mass &&
+       (boid.m_data.m_position - boidRef.m_data.m_position).length() < 100.0f )
     {
-      boid.m_data.m_seekTargetPosition = &beginningIter->m_data.m_position;
+      boid.m_data.m_seekTargetPosition = &boidRef.m_data.m_position;
       boid.m_data.m_seekMagnitude = 2.5f;
 
       return StateType::RunOver;

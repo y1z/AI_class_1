@@ -9,7 +9,9 @@
 class Racer 
 {
 public:
-  Racer(const BoidDescriptor& desc );
+  Racer(const BoidDescriptor& desc);
+
+  Racer(const Boid& boid);
 
   /** @returns a reference to the descriptor */
   BoidDescriptor&
@@ -28,9 +30,12 @@ public:
   const Boid&
   getBoid() const;
 
+  uint32
+  getTotalLap()const;
+
   /** @returns the total amount of laps. */
-  uint32 
-  getLapCount()const;
+  LapCount
+  getLapRequirements()const;
 
   /** @returns the total amount of checkpoints passed.*/
   uint32 
@@ -43,6 +48,16 @@ public:
 
   void
   update(float deltaTime);
+
+  void
+  draw(sf::RenderTarget& target);
+
+  void
+  destroy();
+private:
+
+  void
+  updateLapCount();
 
 private:
   Boid m_boid;

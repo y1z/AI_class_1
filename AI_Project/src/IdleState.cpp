@@ -12,12 +12,13 @@ StateType
 IdleState::OnUpdate(float deltaTime, class Boid &boid)
 {
   GameManager& gm = GameManager::getInstance();
-  auto firstIter = gm.getBoidContainerRef().begin();
-  auto endingIter = gm.getBoidContainerRef().end();
+  auto beginIter = gm.getAgentContainerRef().begin();
+  const auto endInter = gm.getAgentContainerRef().end();
 
-  for(; firstIter != endingIter; ++firstIter )
+  for(; beginIter != endInter; ++beginIter )
   {
-    if ((boid.m_data.m_position - firstIter->m_data.m_position).length() < 100.0f )
+    auto& boidRef = beginIter->getBoid();
+    if ((boid.m_data.m_position - boidRef.m_data.m_position).length() < 100.0f )
     {
       return StateType::FollowCourse;
     }

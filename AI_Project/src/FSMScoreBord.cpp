@@ -1,9 +1,12 @@
 #include "FSMScoreBord.h"
 #include "GameManager.h"
+#include "StateScoreCheck.h"
+#include <cassert>
 
 FSMScoreBord::FSMScoreBord()
-:m_states(4,nullptr)
 {
+  m_states.reserve(4);
+  m_states.push_back(new StateScoreCheck);
 }
 
 //board
@@ -25,16 +28,14 @@ FSMScoreBord::init(UiManager& UI)
   GameManager& gm = GameManager::getInstance();
   size_t i = 0u;
 
-  m_positions.resize(gm.getBoidContainerRef().size());
   for(auto& elem : UI )
   {
-    elem.m_ptrBoid = &gm.getBoidContainerRef().at(i);
-    m_positions.at(i) = elem.getPosition();
+    elem.m_ptrRacer = &gm.getAgentContainerRef().at(i);
     
     ++i;
   }
 
-  m_lapCount.m_currentCheckPoints = gm.getPathContainerRef().size();
+  m_currentLapCount.m_currentCheckPoints = gm.getPathContainerRef().size();
 
 }
 
@@ -45,10 +46,15 @@ FSMScoreBord::run(UiManager& UI)
   for(auto& elem:  UI )
   {
     m_currentState = m_states[0];
-    m_currentState->run(UI, elem, m_lapCount);
+    if( nullptr != m_currentState )
+    {
+      m_currentState->run(UI, elem, m_currentLapCount);
+    }
+    else
+    {
+      assert( nullptr != m_currentState && "State pointer is pointing to null, check container");
+    }
   }
-
-
  
   return 0;
 }

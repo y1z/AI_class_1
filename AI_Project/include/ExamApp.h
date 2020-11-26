@@ -27,7 +27,7 @@ protected:
   handleInput();
 
   void
-  handleBoid();
+  handleRacers();
 
 
   void

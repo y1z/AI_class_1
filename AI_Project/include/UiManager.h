@@ -4,6 +4,7 @@
 #include "UiRectangle.h"
 
 /**
+ * @file
  * @class UiManager : controls the UI.
  */
 class UiManager 

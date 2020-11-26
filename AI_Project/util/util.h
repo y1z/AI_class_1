@@ -16,7 +16,7 @@ namespace util
    * @param minimum : the smallest value the function can return.
    * @param maximum : the biggest value the function can return.
    */
-  static float
+  static inline float
   randomRangeFloat(const float minimum,
                    const float maximum)
   {
@@ -31,13 +31,21 @@ namespace util
    * @returns a sf::Vector2f vector.
    * @param Vector : the vector that going to be converted.
    */
-  static sf::Vector2f
+  static inline sf::Vector2f
   vec2ToVector2f(const Vec2& Vector)
   {
     return sf::Vector2f(Vector.x, Vector.y);
   }
 
-  static std::array<sf::Vertex, 2 >
+  /** @retruns a sf::Vector2i vector. */
+  static inline sf::Vector2i
+  vec2ToVector2i(const Vec2& Vector)
+  {
+    return sf::Vector2i(static_cast<int>(Vector.x), static_cast<int>(Vector.y));
+  }
+
+  /** @brief create a line  */
+  static inline std::array<sf::Vertex, 2 >
   createLineVertex(const Vec2& startPoint,
                    const Vec2& endPoint,
                    const sf::Color& startColor = sf::Color::White,
@@ -48,6 +56,31 @@ namespace util
       sf::Vertex(vec2ToVector2f(startPoint), startColor),
       sf::Vertex(vec2ToVector2f(endPoint), endColor),
     };
+  }
+
+  /** @returns the points in the four corner. */
+  static inline std::array< Vec2 , 4>
+  getPointsOfIntRect(const sf::IntRect& rect)
+  {
+    return
+    {
+      Vec2(rect.left,rect.top) ,
+      Vec2(rect.left + rect.width,rect.top) ,
+      Vec2(rect.left + rect.width , rect.top - rect.height) ,
+      Vec2(rect.left, rect.top - rect.height)
+    };
+  }
+
+
+  /** @return a rectangle after being moved*/
+  static inline sf::IntRect
+  moveIntRect(const sf::IntRect& rect,
+              const Vec2& offset)
+  {
+    return sf::IntRect(rect.left + offset.x,
+                       rect.top + offset.y,
+                       rect.width,
+                       rect.height);
   }
 
 

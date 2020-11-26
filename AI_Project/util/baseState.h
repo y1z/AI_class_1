@@ -1,6 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Boid.h"
+#include "Racer.h"
 
 class BaseState
 {

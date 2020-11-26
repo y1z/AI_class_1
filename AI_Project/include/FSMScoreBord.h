@@ -1,6 +1,6 @@
 #pragma once
 #include "UiManager.h"
-#include  "StateScoreCheck.h"
+#include "StateScoreBase.h"
 #include "Types.h"
 
 
@@ -22,9 +22,7 @@ public:
 
   UiManager *ptr_man = nullptr;
 
-  LapCount m_lapCount;
-
-  std::vector<sf::Vector2f> m_positions;
+  LapCount m_currentLapCount;
 
 
   std::vector<StateScoreBase *> m_states;

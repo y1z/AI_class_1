@@ -1,6 +1,6 @@
 #pragma once
 #include "soModule.h"
-#include "Boid.h"
+#include "Racer.h"
 #include "Types.h"
 
 #include <vector>
@@ -13,7 +13,8 @@
 class GameManager final : public soModule<GameManager>
 {
 public:
-  using containerType = BoidContainer;
+  using containerType = RacerContainer;
+  using AgentType = Racer;
 public: // constructors 
 
   GameManager() = default;
@@ -48,17 +49,21 @@ public:// functions
   setupGroup();
 
   /**
-  * @brief Adds a boid to the game.
+  * @brief adds a racer to the game.
   */
   size_t 
-  addBoidToGame(const BoidDescriptor& descriptor);
+  addRacerToGame(const BoidDescriptor& descriptor);
 
   /**
   * @brief For initializing the game-manger.
   * @returns the index for that boid.
   */
   size_t 
-  addBoidToGame(const Boid& newBoid);
+  addRacerToGame(const Boid& newBoid);
+
+
+  size_t
+  addRacerToGame(const Racer& racer);
   
   /**
    * @brief add a node to the global path.
@@ -68,12 +73,23 @@ public:// functions
   void 
   addNodeToGlobalPath(const FollowPathNode& node);
 
+
+  void
+  setLapTotal(const uint32 requiredLapCount);
+
   /**
   * @brief removes a boid from the game.
   * @returns If the Boid was removed.
   */
   bool
   removeBoidFromGame(const size_t index);
+
+
+  /**
+   * @return the current lap requirement for the race.
+   */
+  LapCount
+  getLapRequirements()const;
 
   /**
   * @returns The total amount of boids in the game.
@@ -82,28 +98,28 @@ public:// functions
   getTotalBoids()const;
 
   /**
-  * @returns A references to a Boid.
+  * @returns A references to the Agent.
   */
-  Boid&
-  getBoidRef(const size_t index);
+  AgentType&
+  getAgentRef(const size_t index);
 
   /**
-  * @returns A pointer to a Boid.
+  * @returns A pointer to the Agent.
   */
-  Boid*
-  getBoidPtr(const size_t index);
+  AgentType*
+  getAgentPtr(const size_t index);
 
   /**
    * @returns A reference to the container.
    */
   const containerType&
-  getBoidContainerRef()const;
+  getAgentContainerRef()const;
 
   /**
    * @returns A reference to the container.
    */
   containerType&
-  getBoidContainerRef();
+  getAgentContainerRef();
 
   /**
    * @returns A reference to the container.
@@ -121,19 +137,26 @@ public:// functions
   void
   drawPath(sf::RenderWindow& window) const ;
 
+  /**
+   * @brief used to create lines that only appear during debugging.
+   */
   void
   addDebugVertexLine(const Vec2 & start,
                      const Vec2 & end);
 
   /**
-   * @brief 
+   * @brief used to create lines that only appear during debugging.
    */
   void
   addDebugVertexLine(const sf::Vertex& startOfLine,
                      const sf::Vertex& endOfLine);
 
+  /**
+   * @brief draws the lines used for debugging then remove them from the container.
+   */
   void
   drawAndClearDebug(sf::RenderWindow& window);
+
 
 private:
 
@@ -142,7 +165,7 @@ private:
   * @note It's a deque because I want to have to ability to
   * get pointers and references to the individual Boids.
   */
-  containerType  m_groupBoids;
+  containerType  m_groupAgents;
 
 public:
 
@@ -151,6 +174,11 @@ public:
    */
   FollowPath m_path;
 
+private:
+  /**
+   * @brief controls how many laps are required to finish a race.
+   */
+  LapCount m_lapRequirements;
 public:
   sf::VertexArray m_debugLines;
 };

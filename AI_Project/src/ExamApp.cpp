@@ -41,19 +41,18 @@ ExamApp::init(unsigned int width,
 
   const std::string characterNames[] =
   {
-    std::string(R"(resources\char_blue.png)") ,
-    std::string(R"(resources\char_bluffy.png)") ,
-    std::string(R"(resources\char_cha-ching.png)") ,
-    std::string(R"(resources\char_just-m.png)") ,
+    std::string(R"(resources/char_blue.png)"),
+    std::string(R"(resources/char_bluffy.png)"),
+    std::string(R"(resources/char_cha-ching.png)"),
+    std::string(R"(resources/char_just-m.png)"),
 
-    std::string(R"(resources\char_liario.png)") ,
-    std::string(R"(resources\char_lumi.png)") ,
-    std::string(R"(resources\char_red.png)") ,
-    std::string(R"(resources\char_xzjiors.png)") ,
+    std::string(R"(resources/char_liario.png)"),
+    std::string(R"(resources/char_lumi.png)"),
+    std::string(R"(resources/char_red.png)"),
+    std::string(R"(resources/char_xzjiors.png)"),
   };
 
-  const size_t stringSize = sizeof(std::string);
-  const size_t nameTotal = sizeof(characterNames) / stringSize;
+  const size_t nameTotal = sizeof(characterNames) / sizeof(std::string);
 
   for( size_t i = 0u; i < nameTotal; ++i )
   {
@@ -102,7 +101,7 @@ ExamApp::init(unsigned int width,
       followBoid.m_fleeMagnitude = 7.0f;
       followBoid.m_fleeRadius = m_mousePos->m_data.m_shape.getRadius() + 50.0f;
 
-      gameMan.addBoidToGame(followBoid);
+      gameMan.addRacerToGame(followBoid);
     }
 
   }
@@ -110,7 +109,6 @@ ExamApp::init(unsigned int width,
   {
     std::cerr << e.what() << "\n\n";
   }
-
 
   return 0;
 }
@@ -135,9 +133,9 @@ ExamApp::handleInput()
     //if( sf::Keyboard::D == event.key.code )
     //{
 
-    //  for( auto& boid : gm.getBoidContainerRef() )
+    //  for( auto& agent : gm.getAgentContainerRef() )
     //  {
-    //    boid.destroy();
+    //    agent.destroy();
     //  }
 
     //}
@@ -154,29 +152,27 @@ ExamApp::handleInput()
 }
 
 void
-ExamApp::handleBoid()
+ExamApp::handleRacers()
 {
   GameManager& gm = GameManager::getInstance();
 
-  for( auto& boid : gm.getBoidContainerRef() )
+  for( auto& agent : gm.getAgentContainerRef() )
   {
-    boid.update(m_deltaTime);
+    agent.update(m_deltaTime);
   }
 }
 
 void
 ExamApp::handleDraw()
 {
-
   GameManager& gameMan = GameManager::getInstance();
   m_window->clear();
   gameMan.drawPath(*m_window);
 
-  for( auto& boid : gameMan.getBoidContainerRef() )
+  for( auto& Agent : gameMan.getAgentContainerRef() )
   {
-    boid.draw(*m_window);
+    Agent.draw(*m_window);
   }
-
 
   m_manager.draw(*m_window);
   m_window->display();
@@ -192,7 +188,7 @@ ExamApp::mainLoop()
   while( m_window->isOpen() )
   {
     m_timer.StartTiming();
-    handleBoid();
+    handleRacers();
     stateMachine.run(m_manager);
 
     handleInput();

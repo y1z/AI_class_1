@@ -1,5 +1,6 @@
 #include "Boid.h"
 #include "util.h"
+#include "Racer.h"
 
 #include "SFML/Graphics/RenderTarget.hpp"
 
@@ -40,8 +41,8 @@ Boid::update(float deltaTime)
   if( !m_data.m_pathNodes.empty() && !m_data.m_isFollowingPath )
     force += this->patrolPath(*this, m_data.m_indexTracker, m_data.m_pathNodes, m_data.m_cyclePatrolPath, m_data.m_patrolPathMagnitude);
 
-  if( nullptr != m_data.m_groupOfBoids )
-    force += this->separation(*this, m_data.m_shape.getRadius(), *m_data.m_groupOfBoids);
+  if( nullptr != m_data.m_groupOfRacers )
+    force += this->separation(*this, m_data.m_shape.getRadius(), *m_data.m_groupOfRacers);
 
   if( force.length() > std::numeric_limits<float>::epsilon() )
   {
@@ -329,16 +330,16 @@ Boid::followPath(const Boid& pathFollower,
 
   const FollowPathNode* nextNode = &path.at(indexTracker.getCurrentIndex());
 
-  const float distanceSquared = (nextNode->m_position - pathFollower.m_data.m_position).lengthSqr();
+  const float distance = (nextNode->m_position - pathFollower.m_data.m_position).length();
 
-  if( distanceSquared <= nextNode->m_radius * nextNode->m_radius )
+  if( distance <= nextNode->m_radius )
   {
     const auto currentIndex = indexTracker.getCurrentIndex();
     if( cyclePath )
     {
       indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
-      m_data.m_lapCount.m_currentCheckPoints += 1;
-      m_data.m_lapCount.m_totalCheckPoint += 1;
+      m_data.m_nodesReached += 1u;
+      printf("Reached node");
     }
     else if( currentIndex + 1 < path.size() - 1 )
     {
@@ -423,6 +424,31 @@ Boid::separation(const Boid& separationBoid,
   for( const auto& boid : groupOfBoids )
   {
     const Vec2 otherBoid = boid.m_data.m_position;
+    if( (otherBoid - position).magnitude() < separationRadius )
+    {
+      result += this->flee(position,
+                           otherBoid,
+                           strength,
+                           separationRadius);
+    }
+  }
+  return result;
+}
+
+Vec2
+Boid::separation(const Boid& separationBoid,
+                 const float separationRadius,
+                 const RacerContainer& otherRacers,
+                 const float strength)
+{
+
+  Vec2 result(0.0f, 0.0f);
+
+  const Vec2 position = separationBoid.m_data.m_position;
+  for( const auto& agent : otherRacers )
+  {
+    const auto& boidRef = agent.getBoid();
+    const Vec2 otherBoid = boidRef.m_data.m_position;
     if( (otherBoid - position).magnitude() < separationRadius )
     {
       result += this->flee(position,

@@ -1,6 +1,5 @@
 #pragma once
-#include "Types.h"
-#include "Boid.h"
+#include "Racer.h"
 
 #include <string>
 #include <filesystem>
@@ -9,26 +8,33 @@
 
 struct UIRectangleDesc 
 {
-  UIRectangleDesc() = default;
+  UIRectangleDesc()
+    :pathToSprite({}),
+    position(sf::Vector2f(0.0f, 0.0f)),
+    width(100),
+    height(100)
+  {}
   UIRectangleDesc(const int32 _width,
                   const int32 _height,
                   const sf::Vector2f& _position,
                   const std::string_view path)
-    :width(_width),
-    height(_height),
+    :pathToSprite(path),
     position(_position),
-    pathToSprite(path)
+    width(_width),
+    height(_height)
   {}
-  UIRectangleDesc(const UIRectangleDesc& ) = default;
-  UIRectangleDesc(UIRectangleDesc&& ) noexcept = default;
+  UIRectangleDesc(const UIRectangleDesc&) = default;
+  UIRectangleDesc(UIRectangleDesc&&) noexcept = default;
+  ~UIRectangleDesc() = default;
 
   UIRectangleDesc& operator = (const UIRectangleDesc&) = default;
   UIRectangleDesc& operator = (UIRectangleDesc&&) noexcept = default;
 
+  
+  std::string pathToSprite;
+  sf::Vector2f position;
   int32 width;
   int32 height;
-  sf::Vector2f position;
-  std::string pathToSprite;
 };
 
 
@@ -41,17 +47,14 @@ public:
   explicit UiRectangle(const UIRectangleDesc& desc);
 
 
-  bool operator< (const UiRectangle& other) const;
+  bool 
+  operator<(const UiRectangle& other) const;
 
-  bool operator> (const UiRectangle& other) const;
+  bool
+  operator>(const UiRectangle& other) const;
 
-  bool operator == (const UiRectangle& other) const;
-
-  bool operator< (const UiRectangle& other);
-
-  bool operator> (const UiRectangle& other);
-
-  bool operator == (const UiRectangle& other);
+  bool
+  operator==(const UiRectangle& other) const;
 
   bool
   init(const UIRectangleDesc& desc);
@@ -95,7 +98,7 @@ public:
 public:
   sf::RectangleShape m_rect;
 
-  Boid* m_ptrBoid;
+  Racer* m_ptrRacer;
 private:
   std::shared_ptr<sf::Texture> m_texture;
 };

@@ -1,21 +1,20 @@
 #include "UiRectangle.h"
 #include "util.h"
 
-
-#include <fstream>
+#include <SFML/System/FileInputStream.hpp>
 
 
 UiRectangle::UiRectangle(const UIRectangleDesc &desc)
   : m_rect(sf::Vector2f(desc.width, desc.height)),
-  m_ptrBoid(nullptr),
+  m_ptrRacer(nullptr),
   m_texture(std::make_shared<sf::Texture>())
 {
   const sf::Vector2f currentSize = m_rect.getSize();
   m_rect.setOrigin(currentSize.x * 0.5f, currentSize.y * 0.5f);
-  const std::ifstream file(desc.pathToSprite);
-  if( file.is_open() )
+  sf::FileInputStream fileStream;
+  if( fileStream.open(desc.pathToSprite) )
   {
-    m_texture->loadFromFile(desc.pathToSprite);
+    m_texture->loadFromStream(fileStream);
     m_rect.setTexture(m_texture.get());
     m_rect.setPosition(desc.position);
   }
@@ -24,36 +23,19 @@ UiRectangle::UiRectangle(const UIRectangleDesc &desc)
 bool 
 UiRectangle::operator<(const UiRectangle& other) const
 {
-  return this->m_ptrBoid->m_data.m_lapCount < other.m_ptrBoid->m_data.m_lapCount;
+  return this->m_ptrRacer->m_lapCount < other.m_ptrRacer->m_lapCount;
 }
 
 bool 
 UiRectangle::operator>(const UiRectangle& other) const
 {
-  return this->m_ptrBoid->m_data.m_lapCount > other.m_ptrBoid->m_data.m_lapCount;
+  return this->m_ptrRacer->m_lapCount > other.m_ptrRacer->m_lapCount;
 }
 
 bool 
 UiRectangle::operator==(const UiRectangle& other) const
 {
-  return this->m_ptrBoid->m_data.m_lapCount == other.m_ptrBoid->m_data.m_lapCount;
-}
-
-bool 
-UiRectangle::operator<(const UiRectangle& other)
-{
-  return this->m_ptrBoid->m_data.m_lapCount < other.m_ptrBoid->m_data.m_lapCount;
-}
-
-bool UiRectangle::operator>(const UiRectangle& other)
-{
-  return this->m_ptrBoid->m_data.m_lapCount > other.m_ptrBoid->m_data.m_lapCount;
-}
-
-bool 
-UiRectangle::operator==(const UiRectangle& other)
-{
-  return this->m_ptrBoid->m_data.m_lapCount == other.m_ptrBoid->m_data.m_lapCount;
+  return this->m_ptrRacer->m_lapCount == other.m_ptrRacer->m_lapCount;
 }
 
 bool
@@ -64,10 +46,10 @@ UiRectangle::init(const UIRectangleDesc& desc)
 
   const sf::Vector2f currentSize = m_rect.getSize();
   m_rect.setOrigin(currentSize.x * 0.5f, currentSize.y * 0.5f);
-  const std::ifstream file(desc.pathToSprite);
-  if( file.is_open() )
+  sf::FileInputStream fileStream;
+  if( fileStream.open(desc.pathToSprite) )
   {
-    m_texture->loadFromFile(desc.pathToSprite);
+    m_texture->loadFromStream(fileStream);
     m_rect.setTexture(m_texture.get());
     m_rect.setPosition(desc.position);
     return true;

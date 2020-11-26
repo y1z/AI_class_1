@@ -2,6 +2,7 @@
 #include "IdleState.h"
 #include "FollowCourse.h"
 #include "GameManager.h"
+#include "Racer.h"
 
 
 FSM::FSM()
@@ -30,19 +31,20 @@ FSM::run(const float deltaTime)
 {
   GameManager& gm = GameManager::getInstance();
 
-  for(auto &boid : gm.getBoidContainerRef() )
+  for( auto& agent : gm.getAgentContainerRef() )
   {
-    const StateType currentStateType = boid.getStateType();
+    auto& boidRef = agent.getBoid();
+    const StateType currentStateType = boidRef.getStateType();
     BaseState* currentState = m_states.at(static_cast< enumIndex >(currentStateType));
     if( nullptr != currentState )
     {
-      const StateType stateTypeAfterUpdate = currentState->OnUpdate(deltaTime, boid);
+      const StateType stateTypeAfterUpdate = currentState->OnUpdate(deltaTime, boidRef);
 
-      if(stateTypeAfterUpdate != currentStateType )
+      if( stateTypeAfterUpdate != currentStateType )
       {
-        currentState->OnExit(boid);
+        currentState->OnExit(boidRef);
         currentState = m_states.at(static_cast< enumIndex >(currentStateType));
-        currentState->OnEnter(boid);
+        currentState->OnEnter(boidRef);
       }
     }
     else

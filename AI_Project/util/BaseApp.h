@@ -1,5 +1,6 @@
 #pragma once
 #include "Timer.h"
+#include "Racer.h"
 
 /**
 * @brief Defines an interface from which many app can be run.

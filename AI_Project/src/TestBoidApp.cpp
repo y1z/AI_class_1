@@ -4,6 +4,7 @@
 #include "SFML/Window.hpp"
 #include "GameManager.h"
 #include "GlobalValues.h"
+#include "Racer.h"
 
 #include <iostream>
 #include <random>
@@ -66,7 +67,7 @@ TestBoidApp::init()
        0.75f
       );
 
-      gameMan.addBoidToGame(followBoid);
+      gameMan.addRacerToGame(followBoid);
     }
 
     gameMan.setupGroup();
@@ -95,7 +96,7 @@ TestBoidApp::handleInput()
     if( sf::Keyboard::D == event.key.code )
     {
 
-      for( auto& boid : gm.getBoidContainerRef() )
+      for( auto& boid : gm.getAgentContainerRef() )
       {
         boid.destroy();
       }
@@ -125,7 +126,7 @@ TestBoidApp::handleBoids()
 {
   GameManager& gm = GameManager::getInstance();
 
-  for( auto& boid : gm.getBoidContainerRef() )
+  for( auto& boid : gm.getAgentContainerRef() )
   {
     boid.update(m_deltaTime);
   }
@@ -143,7 +144,7 @@ TestBoidApp::handleRendering()
   gm.drawAndClearDebug(*m_window);
 #endif // !NDEBUG
 
-  for( auto& boid : gm.getBoidContainerRef() )
+  for( auto& boid : gm.getAgentContainerRef() )
   {
     boid.draw(*m_window);
   }
