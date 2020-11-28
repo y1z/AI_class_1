@@ -30,18 +30,18 @@ public:
   [[nodiscard]] Edge2D
   move(const Vec2& offSet) const;
 
-  Edge2D&
+  [[nodiscard]]Edge2D&
   moveSelf(const Vec2& offSet);
 
   /** @brief check if 2 edges are intersecting*/
-  bool
+  [[nodiscard]]bool
   isIntersecting(const Edge2D &otherEdges) const;
 
   /**
    * @returns a normal of the edge 
    * @param orientation : which side of the edge should the normal com from.
    */
-  Edge2D
+  [[nodiscard]]Edge2D
   getNormal(const Edge2D::Orientation orientation)const;
 
 

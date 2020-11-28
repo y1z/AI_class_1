@@ -65,6 +65,12 @@ AtlasSegment::getSegmentSize() const
   return Vec2(rect.width, rect.height);
 }
 
+sf::Color 
+AtlasSegment::getColorAtPos(unsigned int x, unsigned int y)
+{
+  return sf::Color();
+}
+
 bool 
 AtlasSegment::setSegmentDimension(const Vec2& topLeft,
                                   const Vec2& widthAndHeight)
@@ -121,9 +127,9 @@ AtlasSegment::internalInit()
   m_sprite.setTexture(*m_texture);
   const sf::IntRect spriteRect = m_sprite.getTextureRect();
 
-  if( nullptr == m_textureRect )
+  if( sf::IntRect() != m_textureRect )
   {
-    m_textureRect = std::make_shared<sf::IntRect>(spriteRect);
+    m_textureRect = spriteRect;
   }
    
   if( spriteRect.width < 0 || spriteRect.height < 0 )
@@ -143,7 +149,7 @@ AtlasSegment::isRectInsideOfBound(const sf::IntRect& rect) const
 
   for( const auto& point : pointsInTheRect )
   {
-    if( !m_textureRect->contains(point.x, point.y) )
+    if( !m_textureRect.contains(point.x, point.y) )
     {
       return false;
     }

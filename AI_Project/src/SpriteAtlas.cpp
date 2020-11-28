@@ -18,10 +18,12 @@ SpriteAtlas::init(const SpriteAtlasDesc& atlasDesc)
     std::cerr << '[' << atlasDesc.m_pathToFile << "] is not valid, needs to a path to a file.\n\n";
     return isPathToFile;
   }
+
   sf::FileInputStream fileStream;
   if( fileStream.open(atlasDesc.m_pathToFile.generic_string()) )
   {
-    m_atlasTexture->loadFromStream(fileStream);
+    m_pixels->loadFromStream(fileStream);
+    m_atlasTexture->loadFromImage(*m_pixels);
 
     for( const auto& segmentDimensions : atlasDesc.m_dimensionsOfEachSprite )
     {
@@ -49,6 +51,12 @@ SpriteAtlas::getAtlasSegment(const size_t index)
   return m_segments[index];
 }
 
+sf::Color
+SpriteAtlas::getColorAtPixel(const unsigned x, const unsigned y)const
+{
+  return  m_pixels->getPixel(x, y);
+}
+
 void 
 SpriteAtlas::moveSprite(const Vec2& offset,
                         const size_t index)
@@ -57,11 +65,19 @@ SpriteAtlas::moveSprite(const Vec2& offset,
   refToSegment.moveSegment(offset);
 }
 
+
 void 
 SpriteAtlas::setSpriteLocation(const Vec2& pos, const size_t index)
 {
   auto& refToSegment = getAtlasSegment(index);
   refToSegment.m_sprite.setPosition(util::vec2ToVector2f(pos));
+}
+
+
+void 
+SpriteAtlas::convertColorToAlpha(const sf::Color color)
+{
+
 }
 
 void 

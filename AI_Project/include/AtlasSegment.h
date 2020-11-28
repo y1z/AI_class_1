@@ -21,20 +21,20 @@ public:
 
 public:
   /** @retruns true if the texture is not null */
-  bool
+  [[nodiscard]]bool
   init(std::shared_ptr<sf::Texture> texture);
 
   /** @retruns true if the texture is not null */
-  bool
+  [[nodiscard]]bool
   init(std::shared_ptr<sf::Texture> texture,
        const sf::IntRect& rect);
 
   /** @retruns true if the path is valid, return false when the path is invalid */
-  bool
+  [[nodiscard]]bool
   init(const std::string_view filePath);
 
   /** @retruns true if the other segment has a texture, return false when the path is invalid */
-  bool
+  [[nodiscard]]bool
   init(const AtlasSegment& other);
 
   /** @returns the dimensions of the AtlasSegment. */
@@ -44,6 +44,7 @@ public:
   /** @returns the current size of the AtlasSegment. */
   Vec2
   getSegmentSize()const;
+
 
   /** @return false when the segment is goes out side the bound of the sprite. */
   bool
@@ -83,8 +84,9 @@ private:
 
   
 private:
+  /** @brief a pointer to the texture. */
   std::shared_ptr< sf::Texture > m_texture;
-  std::shared_ptr< sf::IntRect > m_textureRect;
+  sf::IntRect m_textureRect;
 public:
   sf::Sprite m_sprite;
 };
