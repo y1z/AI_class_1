@@ -1,6 +1,7 @@
 #include "ExamApp.h"
 #include "GameManager.h"
 #include "FSMScoreBord.h"
+#include "util.h"
 
 
 #include <iostream>
@@ -72,36 +73,18 @@ ExamApp::init(unsigned int width,
                                                   "Boid test",
                                                   sf::Style::Default);
 
+    m_atlas = std::make_unique<SpriteAtlas>(); 
+
     m_mousePos = std::make_unique<Boid>();
 
-    const unsigned int one10thOfWidth = m_screenWidth / 10;
-    const unsigned int one10thOfHeight = m_screenHeight / 10;
-    for( int i = 1; i < 10; ++i )
+    createPath();
+
+    createRacers();
+    const fs::path pathToSpriteSheet = m_path.append(R"..(resources/sprite_sheet/sprite_sheet_mario.png)..");
+    if( !createAtlas(pathToSpriteSheet) )
     {
-      const FollowPathNode node(Vec2(one10thOfWidth * i, one10thOfHeight * i),
-                                50.0f);
-
-      gameMan.addNodeToGlobalPath(node);
-    }
-
-
-    const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5,
-                                  0),
-                                  80.0f);
-    gameMan.addNodeToGlobalPath(endPoint);
-
-    for( int i = 0; i < 10; ++i )
-    {
-      BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
-      (gameMan.getPathContainerRef(),
-       Vec2((i * 35), 500),
-       0.75f + (i * 0.09f)
-      );
-      followBoid.m_fleeTargetPosition = &m_mousePos->m_data.m_position;
-      followBoid.m_fleeMagnitude = 7.0f;
-      followBoid.m_fleeRadius = m_mousePos->m_data.m_shape.getRadius() + 50.0f;
-
-      gameMan.addRacerToGame(followBoid);
+      return -1;
+      //throw std::runtime_error("cannot use path to sprite sheet");
     }
 
   }
@@ -111,6 +94,61 @@ ExamApp::init(unsigned int width,
   }
 
   return 0;
+}
+
+bool
+ExamApp::createRacers()const
+{
+
+  GameManager& gameMan = GameManager::getInstance();
+  for( int i = 0; i < 10; ++i )
+  {
+    BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
+    (gameMan.getPathContainerRef(),
+     Vec2((i * 35), 500),
+     0.75f + (i * 0.09f)
+    );
+    followBoid.m_fleeTargetPosition = &m_mousePos->m_data.m_position;
+    followBoid.m_fleeMagnitude = 7.0f;
+    followBoid.m_fleeRadius = m_mousePos->m_data.m_shape.getRadius() + 50.0f;
+
+    gameMan.addRacerToGame(followBoid);
+  }
+
+  return true;
+}
+
+void 
+ExamApp::createPath()const
+{
+
+  GameManager& gameMan = GameManager::getInstance();
+
+  const unsigned int one10thOfWidth = m_screenWidth / 10;
+  const unsigned int one10thOfHeight = m_screenHeight / 10;
+
+  for( unsigned int i = 1u; i < 10u; ++i )
+  {
+    const FollowPathNode node(Vec2(one10thOfWidth * i, one10thOfHeight * i),
+                              40.0f);
+
+    gameMan.addNodeToGlobalPath(node);
+  }
+  const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5,
+                                0),
+                                80.0f);
+
+  gameMan.addNodeToGlobalPath(endPoint);
+}
+
+bool 
+ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const
+{
+  SpriteAtlasDesc desc;
+  desc.m_pathToFile = pathToAtlas;
+  desc.m_dimensionsOfEachSprite.push_back(sf::IntRect(sf::Vector2i( 0, 0 ),
+                                          sf::Vector2i(100, 100)));
+  return m_atlas->init(desc);
 }
 
 void
@@ -160,6 +198,13 @@ ExamApp::handleRacers()
   {
     agent.update(m_deltaTime);
   }
+
+ 
+  auto& refSegment = m_atlas->getAtlasSegment(0);
+  const sf::Vector2f currentPos = refSegment.m_sprite.getPosition();
+  auto xPos = static_cast<unsigned int>(currentPos .x + 1) % m_screenWidth;
+  m_atlas->setSpriteLocation(Vec2(xPos,
+                             m_screenHeight / 2), 0);
 }
 
 void
@@ -175,6 +220,7 @@ ExamApp::handleDraw()
   }
 
   m_manager.draw(*m_window);
+  m_atlas->draw(*m_window);
   m_window->display();
 }
 
@@ -202,3 +248,5 @@ ExamApp::mainLoop()
 
   return 0;
 }
+
+

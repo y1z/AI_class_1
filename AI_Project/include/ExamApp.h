@@ -2,7 +2,7 @@
 
 #include "BaseApp.h"
 #include "UiManager.h"
-
+#include "SpriteAtlas.h"
 
 
 class ExamApp : public BaseApp 
@@ -23,12 +23,22 @@ protected:
   init(unsigned int width,
        unsigned int height);
 
+  
+  bool
+  createRacers()const;
+
+  void
+  createPath()const;
+
+  bool
+  createAtlas(const std::filesystem::path& pathToAtlas)const;
+  
+
   void
   handleInput();
 
   void
   handleRacers();
-
 
   void
   handleDraw();
@@ -43,6 +53,8 @@ private:
 
   /** @brief is where the window is drawn. */
   std::unique_ptr<sf::RenderWindow> m_window;
+
+  std::unique_ptr<SpriteAtlas> m_atlas;
 
   std::unique_ptr<Boid> m_mousePos;
 

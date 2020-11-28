@@ -14,6 +14,15 @@ AtlasSegment::init(std::shared_ptr<sf::Texture> texture)
   return false;
 }
 
+bool 
+AtlasSegment::init(std::shared_ptr<sf::Texture> texture,
+                   const sf::IntRect& rect)
+{
+  const bool result = init(std::move(texture)) && setSegmentDimension(rect);
+
+  return result;
+}
+
 bool
 AtlasSegment::init(const std::string_view filePath)
 {
@@ -74,6 +83,13 @@ AtlasSegment::setSegmentDimension(const Vec2& topLeft,
   return false;
 }
 
+bool
+AtlasSegment::setSegmentDimension(const sf::IntRect& newDimensions)
+{
+  return setSegmentDimension(Vec2(newDimensions.left, newDimensions.top),
+                             Vec2(newDimensions.width, newDimensions.height));
+}
+
 void 
 AtlasSegment::moveSegment(const Vec2& offset)
 {
@@ -93,6 +109,12 @@ AtlasSegment::offsetSegment(const Vec2& offset)
   return shouldOffsetSegment;
 }
 
+void 
+AtlasSegment::draw(sf::RenderTarget& target) const
+{
+  target.draw(m_sprite);
+}
+
 bool
 AtlasSegment::internalInit()
 {
@@ -104,7 +126,7 @@ AtlasSegment::internalInit()
     m_textureRect = std::make_shared<sf::IntRect>(spriteRect);
   }
    
-  if( spriteRect.width > 0 && spriteRect.height > 0 )
+  if( spriteRect.width < 0 || spriteRect.height < 0 )
   {
     return false;
   }

@@ -3,7 +3,6 @@
 
 #include "Types.h"
 
-
 /**
  * @file 
  * @class AtlasSegment : represent a portion of a sprite atlas.
@@ -15,14 +14,20 @@ public:
   ~AtlasSegment() = default;
   AtlasSegment(const AtlasSegment&) = default;
   AtlasSegment(AtlasSegment&&)noexcept = default;
+
 public:
   AtlasSegment& operator=(const AtlasSegment&) = default;
   AtlasSegment& operator=(AtlasSegment&&)noexcept = default;
 
 public:
-  /** @retruns true if the path is valid, return false when the path is invalid */
+  /** @retruns true if the texture is not null */
   bool
   init(std::shared_ptr<sf::Texture> texture);
+
+  /** @retruns true if the texture is not null */
+  bool
+  init(std::shared_ptr<sf::Texture> texture,
+       const sf::IntRect& rect);
 
   /** @retruns true if the path is valid, return false when the path is invalid */
   bool
@@ -45,6 +50,10 @@ public:
   setSegmentDimension(const Vec2& topLeft,
                       const Vec2& widthAndHeight);
 
+  /** @return false when the segment is goes out side the bound of the sprite. */
+  bool
+  setSegmentDimension(const sf::IntRect& newDimensions);
+
   /** @brief move the segment*/
   void
   moveSegment(const Vec2& offset);
@@ -57,6 +66,8 @@ public:
   bool
   offsetSegment(const Vec2& offset);
 
+  void
+  draw(sf::RenderTarget& target)const;
 
 
 private:

@@ -89,7 +89,7 @@ namespace util
    * @param startPoint : the starting point of the line.
    * @param endPoint : the ending point of the line.
    */
-  void static
+  void inline static
   drawDebugLine(const Vec2& startPoint,
                 const Vec2& endPoint,
                 const float scale = 30.0f)
@@ -112,7 +112,7 @@ namespace util
    * @param currentScale : the scale 'currentVector'
    * @param newDesiredValue : what the values should be changed to.
    */
-  sf::Vector2f static
+  sf::Vector2f inline static
   rescaleVector(const sf::Vector2f& currentValues,
                 const sf::Vector2f& currentScale,
                 const sf::Vector2f& newDesiredValue)
