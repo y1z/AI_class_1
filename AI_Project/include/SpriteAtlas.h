@@ -41,8 +41,6 @@ public:
   getColorOfPixel(const unsigned x,
                   const unsigned y = 0u)const;
 
-
-
   /** @brief move a individual sprite. */
   void
   moveSprite(const Vec2& offset,
@@ -53,14 +51,16 @@ public:
   setSpriteLocation(const Vec2& pos,
                     const size_t index);
 
+  /** 
+   *  @brief makes all instance of the given color transparent. 
+   *  @param color : the that will be converted to 
+   */
   void
-  convertColorToAlpha(const sf::Color color);
+  convertColorToAlpha(const sf::Color color)const;
 
+  /** @brief draws the sprites.*/
   void
   draw(sf::RenderTarget& target) const;
-
-
-
 
 public:
   /** @brief contains the texture for the atlas */

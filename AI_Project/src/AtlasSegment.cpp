@@ -65,11 +65,6 @@ AtlasSegment::getSegmentSize() const
   return Vec2(rect.width, rect.height);
 }
 
-sf::Color 
-AtlasSegment::getColorAtPos(unsigned int x, unsigned int y)
-{
-  return sf::Color();
-}
 
 bool 
 AtlasSegment::setSegmentDimension(const Vec2& topLeft,
@@ -155,6 +150,6 @@ AtlasSegment::isRectInsideOfBound(const sf::IntRect& rect) const
     }
   }
 
-  return false;
+  return true;
 }
 

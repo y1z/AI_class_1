@@ -1,7 +1,8 @@
 #pragma once
+#include "Types.h"
+
 #include <memory>
 
-#include "Types.h"
 
 /**
  * @file 

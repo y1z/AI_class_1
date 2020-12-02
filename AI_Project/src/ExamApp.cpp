@@ -84,13 +84,13 @@ ExamApp::init(unsigned int width,
     if( !createAtlas(pathToSpriteSheet) )
     {
       return -1;
-      //throw std::runtime_error("cannot use path to sprite sheet");
     }
 
   }
   catch( std::exception& e )
   {
     std::cerr << e.what() << "\n\n";
+    return -1;
   }
 
   return 0;
@@ -148,7 +148,12 @@ ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const
   desc.m_pathToFile = pathToAtlas;
   desc.m_dimensionsOfEachSprite.push_back(sf::IntRect(sf::Vector2i( 0, 0 ),
                                           sf::Vector2i(100, 100)));
-  return m_atlas->init(desc);
+  const bool isAtlasInitialized = m_atlas->init(desc);
+
+  const sf::Color backGroundColor = m_atlas->getColorOfPixel(0u,0u);
+  m_atlas->convertColorToAlpha(backGroundColor);
+
+  return isAtlasInitialized;
 }
 
 void

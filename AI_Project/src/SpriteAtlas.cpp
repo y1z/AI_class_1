@@ -52,7 +52,8 @@ SpriteAtlas::getAtlasSegment(const size_t index)
 }
 
 sf::Color
-SpriteAtlas::getColorAtPixel(const unsigned x, const unsigned y)const
+SpriteAtlas::getColorOfPixel(const unsigned x,
+                             const unsigned y)const
 {
   return  m_pixels->getPixel(x, y);
 }
@@ -67,7 +68,8 @@ SpriteAtlas::moveSprite(const Vec2& offset,
 
 
 void 
-SpriteAtlas::setSpriteLocation(const Vec2& pos, const size_t index)
+SpriteAtlas::setSpriteLocation(const Vec2& pos,
+                               const size_t index)
 {
   auto& refToSegment = getAtlasSegment(index);
   refToSegment.m_sprite.setPosition(util::vec2ToVector2f(pos));
@@ -75,9 +77,11 @@ SpriteAtlas::setSpriteLocation(const Vec2& pos, const size_t index)
 
 
 void 
-SpriteAtlas::convertColorToAlpha(const sf::Color color)
+SpriteAtlas::convertColorToAlpha(const sf::Color color) const 
 {
+  m_pixels->createMaskFromColor(color,0u);
 
+  m_atlasTexture->update(*m_pixels);
 }
 
 void 
