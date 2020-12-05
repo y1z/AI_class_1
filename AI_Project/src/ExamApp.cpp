@@ -147,7 +147,7 @@ ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const
   SpriteAtlasDesc desc;
   desc.m_pathToFile = pathToAtlas;
   desc.m_dimensionsOfEachSprite.push_back(sf::IntRect(sf::Vector2i( 0, 0 ),
-                                          sf::Vector2i(100, 100)));
+                                          sf::Vector2i(25,  25)));
   const bool isAtlasInitialized = m_atlas->init(desc);
 
   const sf::Color backGroundColor = m_atlas->getColorOfPixel(0u,0u);

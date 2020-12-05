@@ -75,6 +75,15 @@ SpriteAtlas::setSpriteLocation(const Vec2& pos,
   refToSegment.m_sprite.setPosition(util::vec2ToVector2f(pos));
 }
 
+void 
+SpriteAtlas::setSpriteScale(const Vec2& scale,
+                            const size_t index)
+{
+  auto& refToSegment = getAtlasSegment(index);
+  refToSegment.m_sprite.setScale(scale.x, scale.y);
+}
+
+
 
 void 
 SpriteAtlas::convertColorToAlpha(const sf::Color color) const 

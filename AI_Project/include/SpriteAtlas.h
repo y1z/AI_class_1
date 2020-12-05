@@ -51,6 +51,10 @@ public:
   setSpriteLocation(const Vec2& pos,
                     const size_t index);
 
+  void
+  setSpriteScale(const Vec2& scale,
+                 const size_t index);
+
   /** 
    *  @brief makes all instance of the given color transparent. 
    *  @param color : the that will be converted to 

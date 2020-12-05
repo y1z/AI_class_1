@@ -3,6 +3,7 @@
 
 #include <memory>
 
+class Racer;
 
 /**
  * @file 
