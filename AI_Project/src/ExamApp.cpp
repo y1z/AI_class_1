@@ -33,7 +33,6 @@ ExamApp::init(unsigned int width,
               unsigned int height)
 {
   GameManager::StartUp(nullptr);
-  GameManager& gameMan = GameManager::getInstance();
   m_screenWidth = width;
   m_screenHeight = height;
 
@@ -70,7 +69,7 @@ ExamApp::init(unsigned int width,
   try
   {
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
-                                                  "Boid test",
+                                                  sf::String("final app"),
                                                   sf::Style::Default);
 
     m_atlas = std::make_unique<SpriteAtlas>(); 
@@ -99,14 +98,13 @@ ExamApp::init(unsigned int width,
 bool
 ExamApp::createRacers()const
 {
-
   GameManager& gameMan = GameManager::getInstance();
   for( int i = 0; i < 10; ++i )
   {
     BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
     (gameMan.getPathContainerRef(),
      Vec2((i * 35), 500),
-     0.75f + (i * 0.09f)
+     0.75f + util::randomRangeFloat(0.01f, 1.01f)
     );
     followBoid.m_fleeTargetPosition = &m_mousePos->m_data.m_position;
     followBoid.m_fleeMagnitude = 7.0f;

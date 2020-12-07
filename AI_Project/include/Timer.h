@@ -26,30 +26,29 @@ class Timer
 	using TimePointNanoSeconds = std::chrono::time_point<std::chrono::steady_clock, TimeMeasurementNano>;
 public:// constructor
 	Timer();
-	Timer(const Timer &other) = default;
-	Timer(Timer &&other) = default;
+  explicit Timer(const std::chrono::milliseconds& startingTime);
+  Timer(const Timer& other) = default;
+  Timer(Timer&& other)noexcept = default;
 
 public: // functions 
 
 	void StartTiming();
 	void EndTiming();
 
-	int64_t GetResult();
-	int64_t GetResultMicroseconds();
-	int64_t GetResultMilliseconds();
+	uint64_t GetResult()const ;
+	int64_t GetResultMicroseconds()const;
+	int64_t GetResultMilliseconds()const;
 
-	double GetResultSecondsDouble();
-	float GetResultSecondsFloat();
-
-	float GetTimeInSecondsFloat(int64_t time);
+	double GetResultSecondsDouble()const;
+	float GetResultSecondsFloat()const;
 
 	void PrintResult();
 private:
 
 private:// variables
+	TimeMeasurementNano m_Result;
+
 	TimePointNanoSeconds m_Start;
 	TimePointNanoSeconds m_End;
-
-	TimeMeasurementNano m_Result;
 };
 

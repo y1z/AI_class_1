@@ -3,8 +3,17 @@
 
 
 Timer::Timer()
- : m_Result(std::chrono::seconds(0) )
+  : m_Result(std::chrono::seconds(0)),
+  m_Start( std::chrono::seconds(0)),
+  m_End(std::chrono::seconds(0))
 {}
+
+Timer::Timer(const std::chrono::milliseconds& startingTime)
+  : m_Result(std::chrono::duration_cast< TimeMeasurementNano >(startingTime)),
+  m_Start(std::chrono::seconds(0)),
+  m_End(std::chrono::seconds(0))
+{
+}
 
 void Timer::StartTiming()
 {
@@ -22,15 +31,14 @@ void Timer::EndTiming()
 void Timer::PrintResult()
 {
   /*! Other Representations of time*/
-  TimeMeasurementSeconds ConverstionSeconds;
-  TimeMeasurementSecondsDouble ConversionF64Seconds;
-  TimeMeasurementSecondsFloat ConversionF32Seconds;
+  const TimeMeasurementSeconds ConverstionSeconds =
+    std::chrono::duration_cast< TimeMeasurementSeconds >(m_Result);
 
+  const TimeMeasurementSecondsDouble ConversionF64Seconds =
+    std::chrono::duration_cast< TimeMeasurementSecondsDouble >(m_Result);;
 
-  // converting to respective times 
-  ConverstionSeconds = std::chrono::duration_cast<TimeMeasurementSeconds>(m_Result);
-  ConversionF64Seconds = std::chrono::duration_cast<TimeMeasurementSecondsDouble>(m_Result);
-  ConversionF32Seconds = std::chrono::duration_cast<TimeMeasurementSecondsFloat>(m_Result);
+  const TimeMeasurementSecondsFloat ConversionF32Seconds =
+    std::chrono::duration_cast< TimeMeasurementSecondsFloat >(m_Result);;
 
   printf("\n------------(TIMES)--------------\n");
   std::cout << "Seconds = [" << ConverstionSeconds.count() << "] \n ";
@@ -40,41 +48,27 @@ void Timer::PrintResult()
 
 }
 
-int64_t Timer::GetResult()
+uint64_t Timer::GetResult()const
 {
   return m_Result.count();
 }
 
-int64_t Timer::GetResultMicroseconds()
+int64_t Timer::GetResultMicroseconds()const
 {
-  std::chrono::microseconds ElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(m_Result);
-
-  return ElapsedTime.count();
+  return std::chrono::duration_cast< std::chrono::microseconds >(m_Result).count();
 }
 
-int64_t Timer::GetResultMilliseconds()
+int64_t Timer::GetResultMilliseconds()const
 {
-  std::chrono::milliseconds Milisecons = std::chrono::duration_cast<std::chrono::milliseconds>(m_Result);
-  return Milisecons.count();
+  return std::chrono::duration_cast< std::chrono::milliseconds >(m_Result).count();
 }
 
-double Timer::GetResultSecondsDouble()
+double Timer::GetResultSecondsDouble()const
 {
-  TimeMeasurementSecondsDouble ConverstionSeconds = std::chrono::duration_cast<TimeMeasurementSecondsDouble>(m_Result);
-
-  return ConverstionSeconds.count();
+  return std::chrono::duration_cast< TimeMeasurementSecondsDouble >(m_Result).count();
 }
 
-float Timer::GetResultSecondsFloat()
+float Timer::GetResultSecondsFloat()const
 {
-  TimeMeasurementSecondsFloat ConverstionSeconds = std::chrono::duration_cast< TimeMeasurementSecondsFloat>(m_Result);
-
-  return ConverstionSeconds.count();
-}
-
-float
-Timer::GetTimeInSecondsFloat(int64_t time)
-{
-  TimeMeasurementSecondsFloat result = std::chrono::seconds(time);
-  return  result.count();
+  return std::chrono::duration_cast< TimeMeasurementSecondsFloat >(m_Result).count();
 }
