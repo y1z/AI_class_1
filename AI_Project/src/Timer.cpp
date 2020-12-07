@@ -15,17 +15,17 @@ Timer::Timer(const std::chrono::milliseconds& startingTime)
 {
 }
 
-void Timer::StartTiming()
+uint64_t Timer::StartTiming()
 {
   m_Start = TimePointNanoSeconds::time_point::clock().now();
+  return m_Start.time_since_epoch().count();
 }
 
-void Timer::EndTiming()
+uint64_t Timer::EndTiming()
 {
   m_End = TimePointNanoSeconds::time_point::clock().now();
-
   m_Result = (m_End - m_Start);
-
+  return m_Result.count();
 }
 
 void Timer::PrintResult()

@@ -32,8 +32,8 @@ public:// constructor
 
 public: // functions 
 
-	void StartTiming();
-	void EndTiming();
+	uint64_t StartTiming();
+	uint64_t EndTiming();
 
 	uint64_t GetResult()const ;
 	int64_t GetResultMicroseconds()const;
