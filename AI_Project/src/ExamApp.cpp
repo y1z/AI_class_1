@@ -72,7 +72,7 @@ ExamApp::init(unsigned int width,
                                                   sf::String("final app"),
                                                   sf::Style::Default);
 
-    m_atlas = std::make_unique<SpriteAtlas>(); 
+    m_atlasPtr = std::make_unique<SpriteAtlas>(); 
 
     m_mousePos = std::make_unique<Boid>();
 
@@ -146,10 +146,10 @@ ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const
   desc.m_pathToFile = pathToAtlas;
   desc.m_dimensionsOfEachSprite.push_back(sf::IntRect(sf::Vector2i( 0, 0 ),
                                           sf::Vector2i(25,  25)));
-  const bool isAtlasInitialized = m_atlas->init(desc);
+  const bool isAtlasInitialized = m_atlasPtr->init(desc);
 
-  const sf::Color backGroundColor = m_atlas->getColorOfPixel(0u,0u);
-  m_atlas->convertColorToAlpha(backGroundColor);
+  const sf::Color backGroundColor = m_atlasPtr->getColorOfPixel(0u,0u);
+  m_atlasPtr->convertColorToAlpha(backGroundColor);
 
   return isAtlasInitialized;
 }
@@ -203,11 +203,11 @@ ExamApp::handleRacers()
   }
 
  
-  auto& refSegment = m_atlas->getAtlasSegment(0);
-  const sf::Vector2f currentPos = refSegment.m_sprite.getPosition();
-  auto xPos = static_cast<unsigned int>(currentPos .x + 1) % m_screenWidth;
-  m_atlas->setSpriteLocation(Vec2(xPos,
-                             m_screenHeight / 2), 0);
+  //auto& refSegment = m_atlasPtr->getAtlasSegment(0);
+  //const sf::Vector2f currentPos = refSegment.m_sprite.getPosition();
+  //auto xPos = static_cast<unsigned int>(currentPos .x + 1) % m_screenWidth;
+  //m_atlasPtr->setSpriteLocation(Vec2(xPos,
+  //                           m_screenHeight / 2), 0);
 }
 
 void
@@ -223,7 +223,7 @@ ExamApp::handleDraw()
   }
 
   m_manager.draw(*m_window);
-  m_atlas->draw(*m_window);
+  //m_atlasPtr->draw(*m_window);
   m_window->display();
 }
 
@@ -234,6 +234,12 @@ ExamApp::mainLoop()
   gameMan.setupGroup();
   FSMScoreBord stateMachine;
   stateMachine.init(m_manager);
+
+  for( auto& elem : gameMan.getAgentContainerRef() )
+  {
+    elem.m_atlasPtr = m_atlasPtr.get();
+  }
+
   while( m_window->isOpen() )
   {
     m_timer.StartTiming();

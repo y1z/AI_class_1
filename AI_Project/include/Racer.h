@@ -1,6 +1,6 @@
 #pragma once
 #include "Boid.h"
-
+#include "SpriteAtlas.h"
 
 /**
  * @file
@@ -60,8 +60,10 @@ private:
   updateLapCount();
 
 private:
-  Boid m_boid;
+  size_t m_currentFrame;
 public:
+  SpriteAtlas* m_atlasPtr;
+  Boid m_boid;
   LapCount m_lapCount;
 };
 

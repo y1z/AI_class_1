@@ -54,7 +54,7 @@ private:
   /** @brief is where the window is drawn. */
   std::unique_ptr<sf::RenderWindow> m_window;
 
-  std::unique_ptr<SpriteAtlas> m_atlas;
+  std::unique_ptr<SpriteAtlas> m_atlasPtr;
 
   std::unique_ptr<Boid> m_mousePos;
 
