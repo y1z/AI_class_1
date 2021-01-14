@@ -10,6 +10,12 @@
  */
 struct SpriteAtlasDesc
 {
+  SpriteAtlasDesc(const std::filesystem::path& path, 
+                  const std::vector<sf::IntRect>& dimensionOfEachSprite)
+    :m_pathToFile(path),
+    m_dimensionsOfEachSprite(dimensionOfEachSprite) 
+  {};
+
   std::filesystem::path m_pathToFile; 
   std::vector<sf::IntRect>  m_dimensionsOfEachSprite;
 };

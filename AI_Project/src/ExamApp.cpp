@@ -12,16 +12,13 @@ namespace fs = std::filesystem;
 using namespace std::literals::string_literals;
 
 ExamApp::ExamApp()
-  :BaseApp()
-{
+  :BaseApp() {
   m_path = fs::current_path();
 }
 
 int
-ExamApp::run()
-{
-  if( -1 == init(1920, 1080) )
-  {
+ExamApp::run() {
+  if (-1 == init(1920, 1080)) {
     return -1;
   }
 
@@ -30,8 +27,7 @@ ExamApp::run()
 
 int
 ExamApp::init(unsigned int width,
-              unsigned int height)
-{
+              unsigned int height) {
   GameManager::StartUp(nullptr);
   m_screenWidth = width;
   m_screenHeight = height;
@@ -54,8 +50,7 @@ ExamApp::init(unsigned int width,
 
   const size_t nameTotal = sizeof(characterNames) / sizeof(std::string);
 
-  for( size_t i = 0u; i < nameTotal; ++i )
-  {
+  for (size_t i = 0u; i < nameTotal; ++i) {
     const UIRectangleDesc characterDescriptor
     (
       100,
@@ -66,28 +61,26 @@ ExamApp::init(unsigned int width,
     m_manager.addRectangle(characterDescriptor);
   }
 
-  try
-  {
+  try {
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                                   sf::String("final app"),
                                                   sf::Style::Default);
 
-    m_atlasPtr = std::make_unique<SpriteAtlas>(); 
+    m_atlasPtr = std::make_unique<SpriteAtlas>();
 
     m_mousePos = std::make_unique<Boid>();
 
     createPath();
 
     createRacers();
+
     const fs::path pathToSpriteSheet = m_path.append(R"..(resources/sprite_sheet/sprite_sheet_mario.png)..");
-    if( !createAtlas(pathToSpriteSheet) )
-    {
+    if (!createAtlas(pathToSpriteSheet)) {
       return -1;
     }
 
   }
-  catch( std::exception& e )
-  {
+  catch (std::exception& e) {
     std::cerr << e.what() << "\n\n";
     return -1;
   }
@@ -96,11 +89,9 @@ ExamApp::init(unsigned int width,
 }
 
 bool
-ExamApp::createRacers()const
-{
+ExamApp::createRacers()const {
   GameManager& gameMan = GameManager::getInstance();
-  for( int i = 0; i < 10; ++i )
-  {
+  for (int i = 0; i < 10; ++i) {
     BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
     (gameMan.getPathContainerRef(),
      Vec2((i * 35), 500),
@@ -116,17 +107,15 @@ ExamApp::createRacers()const
   return true;
 }
 
-void 
-ExamApp::createPath()const
-{
+void
+ExamApp::createPath()const {
 
   GameManager& gameMan = GameManager::getInstance();
 
   const unsigned int one10thOfWidth = m_screenWidth / 10;
   const unsigned int one10thOfHeight = m_screenHeight / 10;
 
-  for( unsigned int i = 1u; i < 10u; ++i )
-  {
+  for (unsigned int i = 1u; i < 10u; ++i) {
     const FollowPathNode node(Vec2(one10thOfWidth * i, one10thOfHeight * i),
                               40.0f);
 
@@ -139,49 +128,35 @@ ExamApp::createPath()const
   gameMan.addNodeToGlobalPath(endPoint);
 }
 
-bool 
-ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const
-{
+bool
+ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
   SpriteAtlasDesc desc;
   desc.m_pathToFile = pathToAtlas;
-  desc.m_dimensionsOfEachSprite.push_back(sf::IntRect(sf::Vector2i( 0, 0 ),
-                                          sf::Vector2i(25,  25)));
+  desc.m_dimensionsOfEachSprite.push_back(sf::IntRect(sf::Vector2i(0, 0),
+                                          sf::Vector2i(25, 25)));
   const bool isAtlasInitialized = m_atlasPtr->init(desc);
 
-  const sf::Color backGroundColor = m_atlasPtr->getColorOfPixel(0u,0u);
+  const sf::Color backGroundColor = m_atlasPtr->getColorOfPixel(0u, 0u);
   m_atlasPtr->convertColorToAlpha(backGroundColor);
 
   return isAtlasInitialized;
 }
 
 void
-ExamApp::handleInput()
-{
+ExamApp::handleInput() {
   sf::Event event;
-  while( m_window->pollEvent(event) )
-  {
-    if( sf::Event::Closed == event.type ||
-       sf::Keyboard::Escape == event.key.code )
-    {
+  while (m_window->pollEvent(event)) {
+    if (sf::Event::Closed == event.type ||
+        sf::Keyboard::Escape == event.key.code) {
       m_window->close();
     }
 
 
-    if( sf::Event::MouseMoved == event.type )
-    {
+    if (sf::Event::MouseMoved == event.type) {
       m_mousePos->m_data.m_position = Vec2(event.mouseMove.x, event.mouseMove.y);
     }
-    //if( sf::Keyboard::D == event.key.code )
-    //{
 
-    //  for( auto& agent : gm.getAgentContainerRef() )
-    //  {
-    //    agent.destroy();
-    //  }
-
-    //}
-    if( sf::Event::Resized == event.type )
-    {
+    if (sf::Event::Resized == event.type) {
       sf::View const newView
       (
         sf::FloatRect(0, 0, event.size.width, event.size.height)
@@ -193,32 +168,21 @@ ExamApp::handleInput()
 }
 
 void
-ExamApp::handleRacers()
-{
+ExamApp::handleRacers() {
   GameManager& gm = GameManager::getInstance();
 
-  for( auto& agent : gm.getAgentContainerRef() )
-  {
+  for (auto& agent : gm.getAgentContainerRef()) {
     agent.update(m_deltaTime);
   }
-
- 
-  //auto& refSegment = m_atlasPtr->getAtlasSegment(0);
-  //const sf::Vector2f currentPos = refSegment.m_sprite.getPosition();
-  //auto xPos = static_cast<unsigned int>(currentPos .x + 1) % m_screenWidth;
-  //m_atlasPtr->setSpriteLocation(Vec2(xPos,
-  //                           m_screenHeight / 2), 0);
 }
 
 void
-ExamApp::handleDraw()
-{
+ExamApp::handleDraw() {
   GameManager& gameMan = GameManager::getInstance();
   m_window->clear();
   gameMan.drawPath(*m_window);
 
-  for( auto& Agent : gameMan.getAgentContainerRef() )
-  {
+  for (auto& Agent : gameMan.getAgentContainerRef()) {
     Agent.draw(*m_window);
   }
 
@@ -228,20 +192,17 @@ ExamApp::handleDraw()
 }
 
 int
-ExamApp::mainLoop()
-{
+ExamApp::mainLoop() {
   GameManager& gameMan = GameManager::getInstance();
   gameMan.setupGroup();
   FSMScoreBord stateMachine;
   stateMachine.init(m_manager);
 
-  for( auto& elem : gameMan.getAgentContainerRef() )
-  {
+  for (auto& elem : gameMan.getAgentContainerRef()) {
     elem.m_atlasPtr = m_atlasPtr.get();
   }
 
-  while( m_window->isOpen() )
-  {
+  while (m_window->isOpen()) {
     m_timer.StartTiming();
     handleRacers();
     stateMachine.run(m_manager);
