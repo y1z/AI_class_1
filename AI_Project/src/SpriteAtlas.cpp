@@ -11,25 +11,22 @@ namespace fsy = std::filesystem;
 bool
 SpriteAtlas::init(const SpriteAtlasDesc& atlasDesc)
 {
-  const bool isPathToFile = fsy::exists(atlasDesc.m_pathToFile) && !fsy::is_directory(atlasDesc.m_pathToFile);
+  const bool isPathToFile = 
+    fsy::exists(atlasDesc.m_pathToFile) && !fsy::is_directory(atlasDesc.m_pathToFile);
 
-  if( !isPathToFile )
-  {
+  if (!isPathToFile) {
     std::cerr << '[' << atlasDesc.m_pathToFile << "] is not valid, needs to a path to a file.\n\n";
     return isPathToFile;
   }
 
   sf::FileInputStream fileStream;
-  if( fileStream.open(atlasDesc.m_pathToFile.generic_string()) )
-  {
+  if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {
     m_pixels->loadFromStream(fileStream);
     m_atlasTexture->loadFromImage(*m_pixels);
 
-    for( const auto& segmentDimensions : atlasDesc.m_dimensionsOfEachSprite )
-    {
+    for (const auto& segmentDimensions : atlasDesc.m_dimensionsOfEachSprite) {
       AtlasSegment segment;
-      if( segment.init(m_atlasTexture, segmentDimensions) )
-      {
+      if (segment.init(m_atlasTexture, segmentDimensions)) {
         m_segments.emplace_back(segment);
       }
     }

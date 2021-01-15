@@ -427,7 +427,7 @@ public:// member functions
   float
   distanceFromVectorSqr(const Vec2& distanceFrom) const;
 
-public://variables
+ public://variables
 
   /**
   * @brief Represent the 'x' component of the vector

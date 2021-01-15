@@ -10,6 +10,10 @@
  */
 struct SpriteAtlasDesc
 {
+  SpriteAtlasDesc() = default;
+  SpriteAtlasDesc(const SpriteAtlasDesc&) = default;
+  SpriteAtlasDesc(SpriteAtlasDesc&&) noexcept = default;
+
   SpriteAtlasDesc(const std::filesystem::path& path, 
                   const std::vector<sf::IntRect>& dimensionOfEachSprite)
     :m_pathToFile(path),
