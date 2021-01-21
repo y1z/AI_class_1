@@ -35,31 +35,6 @@ ExamApp::init(unsigned int width,
   std::random_device rd{};
   std::srand(rd());
 
-  const std::string characterNames[] =
-  {
-    std::string(R"(resources/char_blue.png)"),
-    std::string(R"(resources/char_bluffy.png)"),
-    std::string(R"(resources/char_cha-ching.png)"),
-    std::string(R"(resources/char_just-m.png)"),
-
-    std::string(R"(resources/char_liario.png)"),
-    std::string(R"(resources/char_lumi.png)"),
-    std::string(R"(resources/char_red.png)"),
-    std::string(R"(resources/char_xzjiors.png)"),
-  };
-
-  const size_t nameTotal = sizeof(characterNames) / sizeof(std::string);
-
-  for (size_t i = 0u; i < nameTotal; ++i) {
-    const UIRectangleDesc characterDescriptor
-    (
-      100,
-      100,
-      sf::Vector2f(m_screenWidth - 100, 110 * (i + 1)),
-      characterNames[i]
-    );
-    m_manager.addRectangle(characterDescriptor);
-  }
 
   try {
     m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
@@ -73,6 +48,8 @@ ExamApp::init(unsigned int width,
     createPath();
 
     createRacers();
+
+    createProfilePictures();
 
     const fs::path pathToSpriteSheet = m_path.append(R"..(resources/sprite_sheet/sprite_sheet_mario.png)..");
     if (!createAtlas(pathToSpriteSheet)) {
@@ -138,6 +115,44 @@ ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
   m_atlasPtr->convertColorToAlpha(backGroundColor);
 
   return isAtlasInitialized;
+}
+
+bool 
+ExamApp::createProfilePictures() {
+  static const std::array<std::string,8> characterNames =
+  {
+    std::string(R"(resources/char_blue.png)"),
+    std::string(R"(resources/char_bluffy.png)"),
+    std::string(R"(resources/char_cha-ching.png)"),
+    std::string(R"(resources/char_just-m.png)"),
+
+    std::string(R"(resources/char_liario.png)"),
+    std::string(R"(resources/char_lumi.png)"),
+    std::string(R"(resources/char_red.png)"),
+    std::string(R"(resources/char_xzjiors.png)"),
+  };
+
+  for(const auto& name : characterNames)
+  {
+    const bool isValidPath = fs::exists(name) && !fs::is_directory(name);
+    if (!isValidPath) {
+      return false;
+    }
+  }
+
+  const size_t nameTotal = sizeof(characterNames) / sizeof(std::string);
+
+  for (size_t i = 0u; i < nameTotal; ++i) {
+    const UIRectangleDesc characterDescriptor
+    (
+      100,
+      100,
+      sf::Vector2f(m_screenWidth - 100, 110 * (i + 1)),
+      characterNames[i]
+    );
+    m_manager.addRectangle(characterDescriptor);
+  }
+  return true;
 }
 
 void
