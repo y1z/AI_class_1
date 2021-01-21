@@ -6,7 +6,7 @@
 bool
 AtlasSegment::init(std::shared_ptr<sf::Texture> texture)
 {
-  if( texture )
+  if (texture)
   {
     m_texture = std::move(texture);
     return internalInit();
@@ -20,7 +20,6 @@ AtlasSegment::init(std::shared_ptr<sf::Texture> texture,
                    const sf::IntRect& rect)
 {
   const bool result = init(std::move(texture)) && setSegmentDimension(rect);
-
   return result;
 }
 
@@ -28,7 +27,7 @@ bool
 AtlasSegment::init(const std::string_view filePath)
 {
   sf::FileInputStream file;
-  if( file.open(std::string(filePath)) )
+  if (file.open(std::string(filePath)))
   {
     m_texture = std::make_shared< sf::Texture >();
     m_texture->loadFromStream(file);

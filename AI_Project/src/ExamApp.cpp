@@ -185,7 +185,7 @@ ExamApp::handleDraw() {
   }
 
   m_manager.draw(*m_window);
-  //m_atlasPtr->draw(*m_window);
+  m_atlasPtr->draw(*m_window);
   m_window->display();
 }
 
