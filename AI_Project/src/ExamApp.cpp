@@ -47,7 +47,7 @@ ExamApp::init(unsigned int width,
 
     createPath();
 
-    createRacers();
+    const bool areRacersCorrect = createRacers();
 
     createProfilePictures();
 

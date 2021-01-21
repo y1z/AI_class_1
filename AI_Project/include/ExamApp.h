@@ -34,7 +34,7 @@ protected:
   createAtlas(const std::filesystem::path& pathToAtlas)const;
 
   bool
-  createProfilePictures();
+  createRacersPortraits();
   
 
   void
