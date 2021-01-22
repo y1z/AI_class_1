@@ -31,9 +31,9 @@ struct SpriteAtlasDesc
  */
 class SpriteAtlas 
 {
-public:
+ public:
   using containerType = std::deque<AtlasSegment>;
-public:
+ public:
   /** @returns true when the path is a valid path, returns false otherwise. */
   [[nodiscard]]bool
   init(const SpriteAtlasDesc& atlasDesc);
@@ -76,13 +76,19 @@ public:
   void
   draw(sf::RenderTarget& target) const;
 
-public:
+ private:
+  bool
+  internalInit(const SpriteAtlasDesc& atlasDesc);
+
+  sf::Image
+  makeSplitImageWithMirroredHalf(sf::Image& originalImage)const;
+ public:
   /** @brief contains the texture for the atlas */
   std::shared_ptr<sf::Texture> m_atlasTexture = std::make_shared<sf::Texture>();
   /** @brief contains the individual pixels of the image. */
   std::shared_ptr<sf::Image> m_pixels = std::make_shared<sf::Image>();
 
-private:
+ private:
   /** @brief contains the texture for the atlas */
   containerType m_segments;
 };

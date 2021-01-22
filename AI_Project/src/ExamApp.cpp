@@ -49,10 +49,13 @@ ExamApp::init(unsigned int width,
 
     const bool areRacersCorrect = createRacers();
 
-    createProfilePictures();
+    const bool arePortraitsCorrect = createRacersPortraits();
 
     const fs::path pathToSpriteSheet = m_path.append(R"..(resources/sprite_sheet/sprite_sheet_mario.png)..");
     if (!createAtlas(pathToSpriteSheet)) {
+      return -1;
+    }
+    if (!(areRacersCorrect && arePortraitsCorrect)) {
       return -1;
     }
 
@@ -117,9 +120,9 @@ ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
   return isAtlasInitialized;
 }
 
-bool 
-ExamApp::createProfilePictures() {
-  static const std::array<std::string,8> characterNames =
+bool
+ExamApp::createRacersPortraits() {
+  static const std::array<std::string, 8> characterNames =
   {
     std::string(R"(resources/char_blue.png)"),
     std::string(R"(resources/char_bluffy.png)"),
@@ -132,10 +135,10 @@ ExamApp::createProfilePictures() {
     std::string(R"(resources/char_xzjiors.png)"),
   };
 
-  for(const auto& name : characterNames)
-  {
+  for (const auto& name : characterNames) {
     const bool isValidPath = fs::exists(name) && !fs::is_directory(name);
     if (!isValidPath) {
+      std::cerr << "The path {" << name << "}\n";
       return false;
     }
   }

@@ -10,7 +10,7 @@ class ExamApp : public BaseApp
 public:
   ExamApp();
   ExamApp(const ExamApp&) = delete;
-  ExamApp(ExamApp&&) = default;
+  ExamApp(ExamApp&&) noexcept = default;
   ~ExamApp() = default;
 
   int

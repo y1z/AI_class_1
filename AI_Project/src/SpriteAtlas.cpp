@@ -18,23 +18,10 @@ SpriteAtlas::init(const SpriteAtlasDesc& atlasDesc) {
       << "] is not valid, needs to a path to a file.\n\n";
     return isPathToFile;
   }
-
-  sf::FileInputStream fileStream;
-  if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {
-    m_pixels->loadFromStream(fileStream);
-    const sf::Vector2u imageSize = m_pixels->getSize();
-
-    m_atlasTexture->loadFromImage(*m_pixels);
-
-    for (const auto& segmentDimensions : atlasDesc.m_dimensionsOfEachSprite) {
-      AtlasSegment segment;
-      if (segment.init(m_atlasTexture, segmentDimensions)) {
-        m_segments.emplace_back(segment);
-      }
-    }
+  else
+  {
+    return internalInit(atlasDesc);
   }
-
-  return isPathToFile;
 }
 
 size_t
@@ -90,6 +77,43 @@ SpriteAtlas::draw(sf::RenderTarget& target) const {
     sprite.draw(target);
   }
 
+}
+
+bool 
+SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
+  sf::FileInputStream fileStream;
+  if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {
+    m_pixels->loadFromStream(fileStream);
+
+    *m_pixels = makeSplitImageWithMirroredHalf(*m_pixels);
+
+    m_atlasTexture->loadFromImage(*m_pixels);
+
+    for (const auto& segmentDimensions : atlasDesc.m_dimensionsOfEachSprite) {
+      AtlasSegment segment;
+      if (segment.init(m_atlasTexture, segmentDimensions)) {
+        m_segments.emplace_back(segment);
+      }
+      else {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+sf::Image
+SpriteAtlas::makeSplitImageWithMirroredHalf(sf::Image& originalImage)const {
+  sf::Image doubleWidthImage;
+  const sf::Vector2u originalSize = originalImage.getSize();
+  doubleWidthImage.create(originalSize.x * 2, originalSize.y, sf::Color(0, 0, 0));
+  doubleWidthImage.copy(originalImage, 0, 0);
+
+  originalImage.flipHorizontally();
+  doubleWidthImage.copy(originalImage, originalSize.x, 0);
+  originalImage.flipHorizontally();
+
+  return doubleWidthImage; 
 }
 
 
