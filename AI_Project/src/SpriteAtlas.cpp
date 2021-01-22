@@ -84,8 +84,7 @@ SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
   sf::FileInputStream fileStream;
   if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {
     m_pixels->loadFromStream(fileStream);
-
-    *m_pixels = makeSplitImageWithMirroredHalf(*m_pixels);
+    *m_pixels = util::makeSplitImageWithMirroredHalf(*m_pixels);
 
     m_atlasTexture->loadFromImage(*m_pixels);
 
@@ -102,19 +101,6 @@ SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
   return true;
 }
 
-sf::Image
-SpriteAtlas::makeSplitImageWithMirroredHalf(sf::Image& originalImage)const {
-  sf::Image doubleWidthImage;
-  const sf::Vector2u originalSize = originalImage.getSize();
-  doubleWidthImage.create(originalSize.x * 2, originalSize.y, sf::Color(0, 0, 0));
-  doubleWidthImage.copy(originalImage, 0, 0);
-
-  originalImage.flipHorizontally();
-  doubleWidthImage.copy(originalImage, originalSize.x, 0);
-  originalImage.flipHorizontally();
-
-  return doubleWidthImage; 
-}
 
 
 

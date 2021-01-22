@@ -79,9 +79,6 @@ class SpriteAtlas
  private:
   bool
   internalInit(const SpriteAtlasDesc& atlasDesc);
-
-  sf::Image
-  makeSplitImageWithMirroredHalf(sf::Image& originalImage)const;
  public:
   /** @brief contains the texture for the atlas */
   std::shared_ptr<sf::Texture> m_atlasTexture = std::make_shared<sf::Texture>();
