@@ -15,47 +15,47 @@ namespace util {
    * @param minimum : the smallest value the function can return.
    * @param maximum : the biggest value the function can return.
    */
-static inline float
-randomRangeFloat(const float minimum,
-                 const float maximum) {
-  assert(maximum > minimum);
-  constexpr static float inverseMaximum = 1.0f / RAND_MAX;
-  const float delta = maximum - minimum;
+  static inline float
+  randomRangeFloat(const float minimum,
+                   const float maximum) {
+   assert(maximum > minimum);
+   constexpr static float inverseMaximum = 1.0f / RAND_MAX;
+   const float delta = maximum - minimum;
 
-  return  minimum + (inverseMaximum * std::rand() * delta);
-}
+    return  minimum + (inverseMaximum * std::rand() * delta);
+  }
 
 /**
  * @returns a sf::Vector2f vector.
  * @param Vector : the vector that going to be converted.
  */
-static inline sf::Vector2f
-vec2ToVector2f(const Vec2& Vector) {
+  static inline sf::Vector2f
+  vec2ToVector2f(const Vec2& Vector) {
   return sf::Vector2f(Vector.x, Vector.y);
-}
+  }
 
 /** @retruns a sf::Vector2i vector. */
-static inline sf::Vector2i
-vec2ToVector2i(const Vec2& Vector) {
-  return sf::Vector2i(static_cast<int>(Vector.x), static_cast<int>(Vector.y));
-}
+  static inline sf::Vector2i
+  vec2ToVector2i(const Vec2& Vector) {
+    return sf::Vector2i(static_cast<int>(Vector.x), static_cast<int>(Vector.y));
+  }
 
 /** @brief create a line  */
-static inline std::array<sf::Vertex, 2 >
-createLineVertex(const Vec2& startPoint,
-                 const Vec2& endPoint,
-                 const sf::Color& startColor = sf::Color::White,
-                 const sf::Color& endColor = sf::Color::White) {
-  return std::array< sf::Vertex, 2>
-  {
-    sf::Vertex(vec2ToVector2f(startPoint), startColor),
-      sf::Vertex(vec2ToVector2f(endPoint), endColor),
-  };
-}
+  static inline std::array<sf::Vertex, 2 >
+  createLineVertex(const Vec2& startPoint,
+                   const Vec2& endPoint,
+                   const sf::Color& startColor = sf::Color::White,
+                   const sf::Color& endColor = sf::Color::White) {
+    return std::array< sf::Vertex, 2>
+    {
+      sf::Vertex(vec2ToVector2f(startPoint), startColor),
+        sf::Vertex(vec2ToVector2f(endPoint), endColor),
+    };
+  }
 
 /** @returns the points in the four corner. */
-static inline std::array< Vec2, 4>
-getPointsOfIntRect(const sf::IntRect& rect) {
+  static inline std::array< Vec2, 4>
+  getPointsOfIntRect(const sf::IntRect& rect) {
   return
   {
     Vec2(rect.left,rect.top) ,
@@ -67,14 +67,14 @@ getPointsOfIntRect(const sf::IntRect& rect) {
 
 
 /** @return a rectangle after being moved*/
-static inline sf::IntRect
-moveIntRect(const sf::IntRect& rect,
-            const Vec2& offset) {
-  return sf::IntRect(rect.left + offset.x,
-                     rect.top + offset.y,
-                     rect.width,
-                     rect.height);
-}
+  static inline sf::IntRect
+  moveIntRect(const sf::IntRect& rect,
+              const Vec2& offset) {
+    return sf::IntRect(rect.left + offset.x,
+                       rect.top + offset.y,
+                       rect.width,
+                       rect.height);
+  }
 
 
 /**
@@ -82,21 +82,21 @@ moveIntRect(const sf::IntRect& rect,
  * @param startPoint : the starting point of the line.
  * @param endPoint : the ending point of the line.
  */
-void inline static
-drawDebugLine(const Vec2& startPoint,
-              const Vec2& endPoint,
-              const float scale = 30.0f)
+  void inline static
+  drawDebugLine(const Vec2& startPoint,
+                const Vec2& endPoint,
+                const float scale = 30.0f)
 
-{
-  #if !NDEBUG
-  GameManager& gm = GameManager::getInstance();
+  {
+    #if !NDEBUG
+    GameManager& gm = GameManager::getInstance();
 
-  const Vec2 delta = (endPoint - startPoint).normalize() * scale;
+    const Vec2 delta = (endPoint - startPoint).normalize() * scale;
 
-  gm.addDebugVertexLine(startPoint, endPoint + delta);
-  #endif // !NDEBUG
+    gm.addDebugVertexLine(startPoint, endPoint + delta);
+    #endif // !NDEBUG
 
-}
+  }
 
 
 /**
@@ -152,7 +152,18 @@ drawDebugLine(const Vec2& startPoint,
     return result;
   }
 
+  /**
+   * @returns the center point of the rect.
+   */
+  inline Vec2
+  getCenterOfIntRect(const sf::IntRect& rect) {
+    const Vec2 topLeft(rect.left, rect.top);
+    const Vec2 buttomRight(rect.left + rect.width, rect.top - rect.height);
 
+    const Vec2 halfDistance = (buttomRight - topLeft) * 0.5f;
+
+    return topLeft + halfDistance;
+  }
 
 }
 
