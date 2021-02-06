@@ -21,8 +21,9 @@ public:// constructors
   * @brief The interface of the app.
   * @bug no known bugs.
   */
-  virtual int run() = 0;
-private:
+  virtual int run(unsigned int screenWith = 1280u, 
+                  unsigned int screenHeight =720u) = 0;
+protected:
 
   /**
   * @brief where the main loop occurs
