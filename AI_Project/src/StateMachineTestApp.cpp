@@ -3,7 +3,8 @@
 #include "GlobalValues.h"
 
 int
-StateMachineTestApp::run()
+StateMachineTestApp::run(unsigned int screenWith,
+                         unsigned int screenHeight)
 {
   if( -1 == init() )
     return -1;

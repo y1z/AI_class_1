@@ -10,7 +10,8 @@
 #include <random>
 
 int
-TestBoidApp::run()
+TestBoidApp::run(unsigned int screenWith,
+                 unsigned int screenHeight)
 {
   if( -1 == init() )
     return -1;

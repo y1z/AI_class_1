@@ -14,8 +14,9 @@ public:
   /**
   * @brief The function that starts the app.
   */
-  int 
-  run() override;
+  int
+  run(unsigned int screenWith,
+      unsigned int screenHeight) override;
 private:
 
   int 

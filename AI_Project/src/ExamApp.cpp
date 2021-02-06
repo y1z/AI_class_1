@@ -17,8 +17,9 @@ ExamApp::ExamApp()
 }
 
 int
-ExamApp::run() {
-  if (-1 == init(1920, 1080)) {
+ExamApp::run(unsigned int screenWith,
+             unsigned int screenHeight) {
+  if (-1 == init(screenWith, screenHeight)) {
     return -1;
   }
 

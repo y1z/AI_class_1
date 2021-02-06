@@ -14,7 +14,8 @@ public:
   ~ExamApp() = default;
 
   int
-  run() override;
+  run(unsigned int screenWith,
+      unsigned int screenHeight) override;
 
 
 protected:

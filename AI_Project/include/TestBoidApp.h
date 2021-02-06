@@ -19,7 +19,8 @@ public:
 public:
   
   int
-  run() override;
+  run(unsigned int screenWith,
+      unsigned int screenHeight) override;
  
 private:
 

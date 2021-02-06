@@ -6,6 +6,6 @@
 int main()
 {
   std::unique_ptr<BaseApp> app = std::make_unique<ExamApp>();
-  return app->run();
+  return app->run(1080u, 1920u);
 }
 
