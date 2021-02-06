@@ -1,5 +1,4 @@
 #pragma once
-
 #include <memory> // std::unique_ptr
 #include <filesystem> // std::filesystem::path
 #include "BaseApp.h"
@@ -16,8 +15,24 @@ class EditorApp : public BaseApp
   EditorApp(EditorApp&& other) noexcept = delete;
   ~EditorApp() = default;
 
+  /**
+   * Runs the app.
+   */
+  int
+  run(unsigned int screenWidth,
+      unsigned int screenHeight) override;
+
+
+protected:
+  int
+  mainLoop()override;
+
+  int
+  init();
+
  private:
   std::filesystem::path m_path;
+  std::unique_ptr<sf::RenderWindow> m_window;
 
 };
 
