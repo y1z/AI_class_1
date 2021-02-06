@@ -165,6 +165,45 @@ namespace util {
     return topLeft + halfDistance;
   }
 
+  /**
+   * @param [in] topLeft : Where the most top left portion of the image is.
+   * @param [in] widthAndHeight : The width and height of each image.
+   * @param [in] totalRects : How many rectangles to generate.
+   * @param [in] createMirroredSequence : Create another sequence but mirrored.
+   * 
+   */
+  inline std::vector<sf::IntRect>
+  generateHorizontalIntRectSequence(const sf::Vector2i& topLeft,
+                                    const sf::Vector2i& widthAndHeight,
+                                    const uint32 totalRects,
+                                    const bool createMirroredSequence = true) {
+    std::vector<sf::IntRect> result;
+    const uint32 multiplier = (createMirroredSequence) ? 2u : 1u;
+    const size_t realTotalImages = static_cast<size_t>(totalRects * multiplier);
+
+    result.reserve(realTotalImages);
+
+    sf::IntRect currentRectangle(topLeft, widthAndHeight);
+
+    for (uint32 i = 0u; i < totalRects; ++i) {
+      result.emplace_back(currentRectangle);
+      currentRectangle = moveIntRect(currentRectangle, Vec2(widthAndHeight.x, 0.0f));
+    }
+
+    if (createMirroredSequence) {
+
+      currentRectangle = sf::IntRect(topLeft.x, topLeft.y, -widthAndHeight.x, widthAndHeight.y);
+
+      for (uint32 i = 0u; i < totalRects; ++i) {
+        result.emplace_back(currentRectangle);
+        currentRectangle = moveIntRect(currentRectangle, Vec2(-widthAndHeight.x, 0.0f));
+      }
+
+    }
+
+    return result;
+  }
+    
 }
 
 
