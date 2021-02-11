@@ -2,6 +2,8 @@
 #include <random> // for std::rand
 #include <cassert> // for assert 
 #include <array> // for std::array
+#include <sstream>
+#include <fstream>
 
 #include "SFML/Graphics/VertexArray.hpp"
 #include "SFML/System/Vector2.hpp"
@@ -202,6 +204,31 @@ namespace util {
     }
 
     return result;
+  
+  }
+
+  /**
+   *
+   */
+  static std::string
+  loadFileToString(std::string_view filePath)
+  {
+    std::string Result{ "Error" };
+    std::ifstream File(filePath.data());
+
+    if( File.is_open() )
+    {
+      std::stringstream SStream;
+      SStream << File.rdbuf();
+      Result = SStream.str();
+      File.close();
+      return Result;
+    }
+    else
+    {
+      std::cerr << "Error with path {" << filePath << "}\n";
+    }
+    return Result;
   }
     
 }

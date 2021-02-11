@@ -33,6 +33,7 @@ protected:
  private:
   std::filesystem::path m_path;
   std::unique_ptr<sf::RenderWindow> m_window;
+  std::string m_file;
 
 };
 
