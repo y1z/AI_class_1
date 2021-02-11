@@ -29,12 +29,7 @@ EditorApp::run(unsigned int screenWidth,
 int 
 EditorApp::mainLoop() {
 
-
-
-  while (m_window->isOpen())
-  {
-
-  }
+  std::cout << m_file;
 
   return 0;
 }
