@@ -2,6 +2,8 @@
 #include <memory> // std::unique_ptr
 #include <filesystem> // std::filesystem::path
 #include "BaseApp.h"
+#include "SpriteAtlas.h"
+
 
 namespace RESULT_APP_STAGES {
   enum E {
@@ -57,13 +59,17 @@ class EditorApp final : public BaseApp
   RESULT_APP_STAGES::E
   handleRacers();
 
+  bool
+  createAtlas(const std::filesystem::path& pathToAtlas) const;
+
 
  private:
   std::filesystem::path m_path;
   std::string m_file;
+
   std::unique_ptr<sf::RenderWindow> m_window;
+  std::unique_ptr<SpriteAtlas> m_spriteAtlas;
 
   Vec2 m_mousePos;
-
 };
 

@@ -70,7 +70,7 @@ class SpriteAtlas
    *  @param color : the that will be converted to 
    */
   void
-  convertColorToAlpha(const sf::Color color)const;
+  makeColorTransparent(const sf::Color color)const;
 
   /** @brief draws the sprites.*/
   void

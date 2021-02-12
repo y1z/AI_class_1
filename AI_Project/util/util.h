@@ -175,10 +175,10 @@ namespace util {
    * 
    */
   inline std::vector<sf::IntRect>
-  generateHorizontalIntRectSequence(const sf::Vector2i& topLeft,
-                                    const sf::Vector2i& widthAndHeight,
-                                    const uint32 totalRects,
-                                    const bool createMirroredSequence = true) {
+  createHorizontalIntRectSequence(const sf::Vector2i& topLeft,
+                                  const sf::Vector2i& widthAndHeight,
+                                  const uint32 totalRects,
+                                  const bool createMirroredSequence = true) {
     std::vector<sf::IntRect> result;
     const uint32 multiplier = (createMirroredSequence) ? 2u : 1u;
     const size_t realTotalImages = static_cast<size_t>(totalRects * multiplier);

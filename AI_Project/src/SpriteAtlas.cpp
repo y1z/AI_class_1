@@ -65,7 +65,7 @@ SpriteAtlas::setSpriteScale(const Vec2& scale,
 
 
 void
-SpriteAtlas::convertColorToAlpha(const sf::Color color) const {
+SpriteAtlas::makeColorTransparent(const sf::Color color) const {
   m_pixels->createMaskFromColor(color, 0u);
 
   m_atlasTexture->update(*m_pixels);

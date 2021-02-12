@@ -116,7 +116,7 @@ ExamApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
   const bool isAtlasInitialized = m_atlasPtr->init(desc);
 
   const sf::Color backGroundColor = m_atlasPtr->getColorOfPixel(0u, 0u);
-  m_atlasPtr->convertColorToAlpha(backGroundColor);
+  m_atlasPtr->makeColorTransparent(backGroundColor);
 
   return isAtlasInitialized;
 }

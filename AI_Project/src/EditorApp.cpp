@@ -63,10 +63,13 @@ EditorApp::init() {
       return -1;
     }
 
-    m_mousePos = Vec2(1200.0f, 1200.0f);
+    m_mousePos = Vec2(1200.0f, -1200.0f);
 
     GameManager::StartUp(nullptr);
     GameManager::getInstance().addRacerToGame(Boid::createSeekingBoidDescriptor(m_mousePos, Vec2(0, 0)));
+
+
+
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
@@ -108,4 +111,20 @@ EditorApp::handleRacers() {
   }
 
   return RESULT_APP_STAGES::E::MISSING_IMPL;
+}
+
+bool
+EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
+
+  const std::vector<sf::IntRect> rectSequence = 
+    util::createHorizontalIntRectSequence(sf::Vector2i(0, 0), sf::Vector2i(25, 25), 2);
+
+  const SpriteAtlasDesc desc(pathToAtlas, rectSequence);
+
+  const bool isAtlasInitialized = m_spriteAtlas->init(desc);
+
+  const sf::Color backGroundColor = m_spriteAtlas->getColorOfPixel(0u, 0u);
+  m_spriteAtlas->makeColorTransparent(backGroundColor);
+
+  return isAtlasInitialized;
 }
