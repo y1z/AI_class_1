@@ -43,7 +43,7 @@ EditorApp::mainLoop() {
 
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();
-
+    m_window->display();
   }
 
   return 0;
@@ -63,8 +63,10 @@ EditorApp::init() {
       return -1;
     }
 
-    GameManager::StartUp(nullptr);
+    m_mousePos = Vec2(1200.0f, 1200.0f);
 
+    GameManager::StartUp(nullptr);
+    GameManager::getInstance().addRacerToGame(Boid::createSeekingBoidDescriptor(m_mousePos, Vec2(0, 0)));
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
@@ -76,7 +78,9 @@ EditorApp::init() {
 
 RESULT_APP_STAGES::E
 EditorApp::handleDraw() {
-  return RESULT_APP_STAGES::MISSING_IMPL;
+  auto& gm = GameManager::getInstance();
+  gm.drawRacers(*m_window);
+  return RESULT_APP_STAGES::NO_ERROR;
 }
 
 RESULT_APP_STAGES::E
@@ -96,6 +100,12 @@ EditorApp::handleInput() {
 
 RESULT_APP_STAGES::E
 EditorApp::handleRacers() {
+  auto& gm = GameManager::getInstance();
+  auto Container = gm.getAgentContainerRef();
+
+  for (auto& racer : Container) {
+    racer.update(m_deltaTime);
+  }
 
   return RESULT_APP_STAGES::E::MISSING_IMPL;
 }

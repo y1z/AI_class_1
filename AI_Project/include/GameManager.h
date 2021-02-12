@@ -137,6 +137,9 @@ public:// functions
   void
   drawPath(sf::RenderWindow& window) const ;
 
+  void
+  drawRacers(sf::RenderWindow& window);
+
   /**
    * @brief used to create lines that only appear during debugging.
    */

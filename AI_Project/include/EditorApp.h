@@ -63,5 +63,7 @@ class EditorApp final : public BaseApp
   std::string m_file;
   std::unique_ptr<sf::RenderWindow> m_window;
 
+  Vec2 m_mousePos;
+
 };
 

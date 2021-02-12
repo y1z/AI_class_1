@@ -22,20 +22,18 @@ GameManager::OnStartUp(void* _Desc)
 
   if( nullptr != _Desc )
   {
-    GameManagerDescriptor* descriptor = static_cast<GameManagerDescriptor *>(_Desc);
+    auto descriptor = reinterpret_cast<GameManagerDescriptor*>(_Desc);
     assert(nullptr != descriptor);
 
-    auto& nodeContainer = m_path.m_pathData;
-    nodeContainer = std::move(descriptor->m_pathData);
+    auto nodeContainer = std::move(descriptor->m_pathData);
+
     m_path.m_vertexArray.resize(nodeContainer.size());
 
-    for( const auto& pathNode : nodeContainer )
-    {
+    for (const auto& pathNode : nodeContainer) {
       m_path.m_vertexArray.append(util::vec2ToVector2f(pathNode.m_position));
     }
 
-    for( auto& boidDesc : descriptor->m_boidDescriptors )
-    {
+    for (auto& boidDesc : descriptor->m_boidDescriptors) {
       m_groupAgents.emplace_back(Boid(boidDesc));
     }
     return 0;
@@ -164,6 +162,13 @@ GameManager::drawPath(sf::RenderWindow& window) const
   for( const auto& shape : m_path.m_pointsInPath )
   {
     window.draw(shape);
+  }
+}
+
+void
+GameManager::drawRacers(sf::RenderWindow& window) {
+  for (auto& boid : m_groupAgents) {
+    boid.draw(window);
   }
 }
 

@@ -9,7 +9,6 @@ FSMScoreBord::FSMScoreBord()
   m_states.push_back(new StateScoreCheck);
 }
 
-//board
 FSMScoreBord::~FSMScoreBord()
 {
   for(auto& state : m_states )
@@ -43,18 +42,16 @@ int
 FSMScoreBord::run(UiManager& UI)
 {
 
-  for(auto& elem:  UI )
-  {
+  for (auto& elem : UI) {
     m_currentState = m_states[0];
-    if( nullptr != m_currentState )
-    {
+
+    if (nullptr != m_currentState) {
       m_currentState->run(UI, elem, m_currentLapCount);
     }
-    else
-    {
-      assert( nullptr != m_currentState && "State pointer is pointing to null, check container");
+    else {
+      assert(nullptr != m_currentState && "State pointer is pointing to null, check container");
     }
   }
- 
+
   return 0;
 }
