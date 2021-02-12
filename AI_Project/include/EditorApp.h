@@ -3,10 +3,18 @@
 #include <filesystem> // std::filesystem::path
 #include "BaseApp.h"
 
+namespace RESULT_APP_STAGES {
+  enum E {
+    kERROR = -1,
+    NO_ERROR = 0, 
+    MISSING_IMPL, 
+  };
+}
+
 /**
  * Is an editor for manipulating AI agents (Boids)
  */
-class EditorApp : public BaseApp
+class EditorApp final : public BaseApp
 {
 
  public:
@@ -23,17 +31,37 @@ class EditorApp : public BaseApp
       unsigned int screenHeight) override;
 
 
-protected:
+ protected:
+   /**
+    * The main process of the Game
+    */
   int
   mainLoop()override;
 
+  /**
+   * For creation of resources
+   */
   int
   init();
 
+
+  RESULT_APP_STAGES::E
+  handleDraw();
+
+  RESULT_APP_STAGES::E
+  handleInput();
+
+  /**
+   * The update logic for the racers is here.
+   */
+  RESULT_APP_STAGES::E
+  handleRacers();
+
+
  private:
   std::filesystem::path m_path;
-  std::unique_ptr<sf::RenderWindow> m_window;
   std::string m_file;
+  std::unique_ptr<sf::RenderWindow> m_window;
 
 };
 

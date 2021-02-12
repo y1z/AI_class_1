@@ -208,7 +208,7 @@ namespace util {
   }
 
   /**
-   *
+   * load a file then converts it to a string.
    */
   static std::string
   loadFileToString(std::string_view filePath)
