@@ -1,4 +1,5 @@
 #include "EditorApp.h"
+#include "ExamApp.h"
 #include <memory>
 
 int main()

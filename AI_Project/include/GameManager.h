@@ -6,6 +6,8 @@
 #include <vector>
 #include <deque>
 
+class SpriteAtlas;
+
 /**
 * @brief keeps track of manages global data related with the game must be initialized(start up)
 * and ended (shut down) manually.
@@ -15,7 +17,7 @@ class GameManager final : public soModule<GameManager>
 public:
   using containerType = RacerContainer;
   using AgentType = Racer;
-public: // constructors 
+public: // constructors
 
   GameManager() = default;
 
@@ -25,7 +27,7 @@ public: // constructors
   ~GameManager() = default;
 public: // operators
 
-  GameManager& 
+  GameManager&
   operator=(const GameManager&) = delete;
 
   GameManager&
@@ -36,7 +38,7 @@ public:// functions
   /**
   * @brief For de-initializing the game-manager.
   */
-	void 
+	void
   OnShutDown() override;
 
   /**
@@ -51,26 +53,33 @@ public:// functions
   /**
   * @brief adds a racer to the game.
   */
-  size_t 
+  size_t
   addRacerToGame(const BoidDescriptor& descriptor);
+
+  /**
+  * @brief adds a racer to the game.
+  */
+  size_t
+  addRacerToGame(const BoidDescriptor& descriptor,
+                 SpriteAtlas* atlas);
 
   /**
   * @brief For initializing the game-manger.
   * @returns the index for that boid.
   */
-  size_t 
+  size_t
   addRacerToGame(const Boid& newBoid);
 
 
   size_t
   addRacerToGame(const Racer& racer);
-  
+
   /**
    * @brief add a node to the global path.
    * @param node : the node to be added.
-   * 
+   *
    */
-  void 
+  void
   addNodeToGlobalPath(const FollowPathNode& node);
 
 
@@ -172,7 +181,7 @@ private:
 
 public:
 
-  /** 
+  /**
    * @brief contains the path current used by the game.
    */
   FollowPath m_path;

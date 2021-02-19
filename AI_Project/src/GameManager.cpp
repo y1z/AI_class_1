@@ -25,7 +25,7 @@ GameManager::OnStartUp(void* _Desc)
     auto descriptor = reinterpret_cast<GameManagerDescriptor*>(_Desc);
     assert(nullptr != descriptor);
 
-    auto nodeContainer = std::move(descriptor->m_pathData);
+    auto& nodeContainer = descriptor->m_pathData;
 
     m_path.m_vertexArray.resize(nodeContainer.size());
 
@@ -58,6 +58,16 @@ GameManager::addRacerToGame(const BoidDescriptor& descriptor)
   return addRacerToGame(Racer(descriptor));
 }
 
+size_t 
+GameManager::addRacerToGame(const BoidDescriptor& descriptor,
+                            SpriteAtlas* atlas) {
+  const size_t boidIndex = addRacerToGame(descriptor) - 1u;
+  auto& agent = m_groupAgents[boidIndex];
+  agent.m_atlasPtr = atlas;
+
+  return boidIndex;
+}
+
 size_t
 GameManager::addRacerToGame(const Boid& newBoid)
 {
@@ -72,14 +82,14 @@ GameManager::addRacerToGame(const Racer& racer)
 }
 
 void
-GameManager::addNodeToGlobalPath(const FollowPathNode& node )
-{
+GameManager::addNodeToGlobalPath(const FollowPathNode& node) {
 
-  auto& nodeContainer = m_path.m_pathData;
-  nodeContainer.emplace_back(node);
+  m_path.m_pathData.emplace_back(node);
   sf::CircleShape circle(node.m_radius);
+
   circle.setPosition(node.m_position.x, node.m_position.y);
   circle.setFillColor(sf::Color::Yellow);
+
   m_path.m_pointsInPath.emplace_back(circle);
   m_path.m_vertexArray.append(sf::Vertex(util::vec2ToVector2f(node.m_position),
                               sf::Color::Red));
