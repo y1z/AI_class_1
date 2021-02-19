@@ -12,11 +12,13 @@ GameMap::loadMap(const std::filesystem::path& pathToMap) {
   if (isValidPath) {
     const std::string data = util::loadFileToString(pathToMap.generic_string());
 
-    std::array<char, 128 * 3> buffer{ 0 };
-    const size_t offset = sizeof(buffer) / 3;
     size_t index = data.find('[');
     while (std::string::npos != index) {
       const float nodeRadius = extractRadiusFrom(data, index);
+
+      index = data.find('<', index);
+
+      const Vec2 nodePosition = extractPositionFrom(data, index);
 
       index = data.find('[', index);
     }
@@ -107,4 +109,23 @@ GameMap::extractRadiusFrom(const std::string& data,
     = std::from_chars(data.data() + currentIndex + 1, data.data() + rightBracketIndex, result);
 
   return result;
+}
+
+Vec2
+GameMap::extractPositionFrom(const std::string& data,
+                             const size_t currentIndex) const {
+
+  const size_t separatorPos = data.find(',', currentIndex);
+  const size_t secondValueEnd = data.find('>', currentIndex);
+
+  float resultX;
+  const std::from_chars_result xValueExtraction
+    = std::from_chars(data.data() + currentIndex + 1, data.data() + separatorPos, resultX);
+
+  float resultY;
+  const std::from_chars_result yValueExtraction
+    = std::from_chars(data.data() + separatorPos + 1, data.data() + (secondValueEnd - 1), resultY);
+
+
+  return Vec2(resultX, resultY);
 }

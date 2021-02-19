@@ -78,6 +78,10 @@ private:
   extractRadiusFrom(const std::string& data,
                     const size_t currentIndex)const;
 
+  Vec2
+  extractPositionFrom(const std::string& data,
+                      const size_t currentIndex)const;
+
 public:
 
   mapPathContainer m_positionData; /**< Contains the data for the shape of the map.*/
