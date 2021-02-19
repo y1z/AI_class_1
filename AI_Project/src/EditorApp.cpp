@@ -12,6 +12,9 @@ s_pathToTextDefault = "resources/test_doc.txt";
 constexpr static const char*
 s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario.png";
 
+constexpr static const char*
+s_pathToSaveFileDefault = "resources/saves/test.txt";
+
 
 EditorApp::EditorApp()
   : BaseApp(), m_mousePos(Vec2(0.0f, 0.0f))
@@ -35,8 +38,9 @@ int
 EditorApp::mainLoop() {
   auto& gameMan = GameManager::getInstance();
   gameMan.setupGroup();
+  auto& container = gameMan.getAgentContainerRef();
 
-  for (auto& elem : gameMan.getAgentContainerRef()) {
+  for (auto& elem : container) {
     elem.m_atlasPtr = m_spriteAtlas.get();
   }
 
@@ -102,11 +106,11 @@ RESULT_APP_STAGES::E
 EditorApp::handleDraw() {
   m_window->clear();
   auto& gm = GameManager::getInstance();
-  gm.drawRacers(*m_window);
   m_spriteAtlas->draw(*m_window);
-  gm.drawPath(*m_window);
+  m_gameMap->draw(*m_window);
+  gm.drawRacers(*m_window);
   m_window->display();
-  return RESULT_APP_STAGES::NO_ERROR;
+  return RESULT_APP_STAGES::E::NO_ERROR;
 }
 
 RESULT_APP_STAGES::E
@@ -128,7 +132,12 @@ EditorApp::handleInput() {
     {
       if(sf::Keyboard::S == event.key.code)
       {
+        m_gameMap->saveMap(s_pathToSaveFileDefault);
+      }
 
+      if(sf::Keyboard::L == event.key.code)
+      {
+        m_gameMap->loadMap(s_pathToSaveFileDefault);
       }
 
     }
@@ -181,7 +190,6 @@ EditorApp::createPath(const std::filesystem::path& pathToFile) {
                                 40.0f);
 
       path.emplace_back(node);
-      //gameMan.addNodeToGlobalPath(node);
     }
     const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5,
                                   0),
@@ -196,7 +204,7 @@ EditorApp::createRacer() {
   GameManager& gameMan = GameManager::getInstance();
   for (int i = 0; i < 10; ++i) {
     BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
-    (   gameMan.getPathContainerRef(),
+    (m_gameMap->m_positionData,
      Vec2((i * 35), 500),
      0.75f + util::randomRangeFloat(0.01f, 1.01f)
     );
