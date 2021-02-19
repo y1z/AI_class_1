@@ -10,18 +10,32 @@ bool
 GameMap::loadMap(const std::filesystem::path& pathToMap) {
   bool const isValidPath = !fs::is_directory(pathToMap);
   if (isValidPath) {
+
+    if (!m_positionData.empty()) {
+      m_positionData.clear();
+      m_visuals.clear();
+    }
+
     const std::string data = util::loadFileToString(pathToMap.generic_string());
 
     size_t index = data.find('[');
-    while (std::string::npos != index) {
-      const float nodeRadius = extractRadiusFrom(data, index);
+    {
+      std::vector<FollowPathNode> newPath;
 
-      index = data.find('<', index);
+      while (std::string::npos != index) {
+        const float nodeRadius = extractRadiusFrom(data, index);
 
-      const Vec2 nodePosition = extractPositionFrom(data, index);
+        index = data.find('<', index);
 
-      index = data.find('[', index);
+        const Vec2 nodePosition = extractPositionFrom(data, index);
+
+        index = data.find('[', index);
+        newPath.emplace_back(FollowPathNode(nodePosition, nodeRadius));
+      }
+
+      createMap(newPath);
     }
+
 
 
     return true;
@@ -76,7 +90,6 @@ GameMap::createMap(const std::vector<FollowPathNode>& mapData) {
     m_visuals.emplace_back(std::move(temp));
   }
 
-
 }
 
 GameMap::mapPathContainer::iterator
@@ -124,7 +137,7 @@ GameMap::extractPositionFrom(const std::string& data,
 
   float resultY;
   const std::from_chars_result yValueExtraction
-    = std::from_chars(data.data() + separatorPos + 1, data.data() + (secondValueEnd - 1), resultY);
+    = std::from_chars(data.data() + separatorPos + 2, data.data() + (secondValueEnd), resultY);
 
 
   return Vec2(resultX, resultY);
