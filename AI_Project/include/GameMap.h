@@ -73,7 +73,14 @@ public:
   mapPathContainer::const_iterator
   cend()const;
 
-  mapPathContainer m_positionData;
+private:
+  float
+  extractRadiusFrom(const std::string& data,
+                    const size_t currentIndex)const;
+
+public:
+
+  mapPathContainer m_positionData; /**< Contains the data for the shape of the map.*/
 private:
 
   visualsContainer m_visuals; /**< Contains the data for drawing the Map*/
