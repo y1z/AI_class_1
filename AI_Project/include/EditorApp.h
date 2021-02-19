@@ -3,13 +3,14 @@
 #include <filesystem> // std::filesystem::path
 #include "BaseApp.h"
 #include "SpriteAtlas.h"
+#include "GameMap.h"
 
 
 namespace RESULT_APP_STAGES {
   enum E {
     kERROR = -1,
-    NO_ERROR = 0, 
-    MISSING_IMPL, 
+    NO_ERROR = 0,
+    MISSING_IMPL,
   };
 }
 
@@ -24,6 +25,13 @@ class EditorApp final : public BaseApp
   EditorApp(const EditorApp& other) = delete;
   EditorApp(EditorApp&& other) noexcept = delete;
   ~EditorApp() = default;
+
+  EditorApp&
+  operator=(const EditorApp& other) = delete;
+
+  EditorApp&
+  operator=(EditorApp&& other) noexcept = delete;
+
 
   /**
    * Runs the app.
@@ -62,14 +70,20 @@ class EditorApp final : public BaseApp
   bool
   createAtlas(const std::filesystem::path& pathToAtlas) const;
 
+  void
+  createPath(const std::filesystem::path& pathToFile = "");
+
+  bool
+  createRacer();
+
 
  private:
-  std::filesystem::path m_path;
+  const std::filesystem::path m_initialPath = std::filesystem::current_path();
   std::string m_file;
 
   std::unique_ptr<sf::RenderWindow> m_window;
   std::unique_ptr<SpriteAtlas> m_spriteAtlas;
-
+  std::unique_ptr<GameMap> m_gameMap;
   Vec2 m_mousePos;
 };
 
