@@ -1,6 +1,6 @@
 #pragma once
 #include <random> // for std::rand
-#include <cassert> // for assert 
+#include <cassert> // for assert
 #include <array> // for std::array
 #include <sstream>
 #include <fstream>
@@ -8,7 +8,7 @@
 #include "SFML/Graphics/VertexArray.hpp"
 #include "SFML/System/Vector2.hpp"
 
-#include "GameManager.h" 
+#include "GameManager.h"
 
 namespace util {
 
@@ -60,10 +60,10 @@ namespace util {
   getPointsOfIntRect(const sf::IntRect& rect) {
   return
   {
-    Vec2(rect.left,rect.top) ,
-    Vec2(rect.left + rect.width,rect.top) ,
-    Vec2(rect.left + rect.width , rect.top - rect.height) ,
-    Vec2(rect.left, rect.top - rect.height)
+    Vec2(static_cast<float>(rect.left),static_cast<float>(rect.top)),
+    Vec2(static_cast<float>(rect.left + rect.width),static_cast<float>(rect.top)),
+    Vec2(static_cast<float>(rect.left + rect.width),static_cast<float>(rect.top - rect.height)),
+    Vec2(static_cast<float>(rect.left), static_cast<float>(rect.top - rect.height))
   };
 }
 
@@ -110,7 +110,7 @@ namespace util {
   sf::Vector2f inline static
   rescaleVector(const sf::Vector2f& currentValues,
                 const sf::Vector2f& currentScale,
-                const sf::Vector2f& newDesiredValue) 
+                const sf::Vector2f& newDesiredValue)
   {
     const sf::Vector2f inverseValue(1.0f / currentValues.x,
                                     1.0f / currentValues.y);
@@ -125,15 +125,15 @@ namespace util {
   /**
    * creates a image that twice the width of the original and the other half
    * is mirrored
-   * 
+   *
    * Here is a example of what happens with the image
-   * 
+   *
    * Before:
    *  1 0
-   *  1 0  
+   *  1 0
    * After:
-   *  0 1 1 0 
-   *  0 1 1 0 
+   *  0 1 1 0
+   *  0 1 1 0
    */
   inline sf::Image
   makeSplitImageWithMirroredHalf(sf::Image& originalImage) {
@@ -172,7 +172,7 @@ namespace util {
    * @param [in] widthAndHeight : The width and height of each image.
    * @param [in] totalRects : How many rectangles to generate.
    * @param [in] createMirroredSequence : Create another sequence but mirrored.
-   * 
+   *
    */
   inline std::vector<sf::IntRect>
   createHorizontalIntRectSequence(const sf::Vector2i& topLeft,
@@ -181,7 +181,7 @@ namespace util {
                                   const bool createMirroredSequence = true) {
     std::vector<sf::IntRect> result;
     const uint32 multiplier = (createMirroredSequence) ? 2u : 1u;
-    const size_t realTotalImages = static_cast<size_t>(totalRects * multiplier);
+    const size_t realTotalImages = static_cast<size_t>((uint32) totalRects * multiplier);
 
     result.reserve(realTotalImages);
 
@@ -204,7 +204,7 @@ namespace util {
     }
 
     return result;
-  
+
   }
 
   /**
@@ -230,7 +230,7 @@ namespace util {
     }
     return Result;
   }
-    
+
 }
 
 
