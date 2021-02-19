@@ -105,11 +105,13 @@ EditorApp::init() {
 RESULT_APP_STAGES::E
 EditorApp::handleDraw() {
   m_window->clear();
+
   auto& gm = GameManager::getInstance();
   m_spriteAtlas->draw(*m_window);
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
   m_window->display();
+
   return RESULT_APP_STAGES::E::NO_ERROR;
 }
 
@@ -138,6 +140,11 @@ EditorApp::handleInput() {
       if(sf::Keyboard::L == event.key.code)
       {
         m_gameMap->loadMap(s_pathToSaveFileDefault);
+        auto& gameMan = GameManager::getInstance();
+        for(auto& boid : gameMan .getAgentContainerRef() )
+        {
+          boid.getBoidData().m_pathNodes = m_gameMap->m_positionData;
+        }
       }
 
     }
@@ -150,8 +157,8 @@ EditorApp::handleInput() {
 RESULT_APP_STAGES::E
 EditorApp::handleRacers() {
   auto& gm = GameManager::getInstance();
-
-  for (auto& racer : gm.getAgentContainerRef() ) {
+  auto& container = gm.getAgentContainerRef();
+  for (auto& racer : container) {
     racer.update(m_deltaTime);
   }
 
@@ -178,7 +185,7 @@ void
 EditorApp::createPath(const std::filesystem::path& pathToFile) {
   GameManager& gameMan = GameManager::getInstance();
   if ("" != pathToFile) {
-
+    m_gameMap->loadMap(pathToFile.generic_string());
   }
   else {
     const unsigned int one10thOfWidth = m_screenWidth / 10;

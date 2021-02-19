@@ -34,9 +34,14 @@ public:
 
   /**
    * used to create a map.
+   * @param[in] mapData
+   * Contains all the position necessary for creating the map.
    */
   void
   createMap(const std::vector<FollowPathNode>& mapData);
+
+  void
+  createMap(std::vector<FollowPathNode>&& mapData);
 
 
 

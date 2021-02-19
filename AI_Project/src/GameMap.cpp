@@ -18,8 +18,9 @@ GameMap::loadMap(const std::filesystem::path& pathToMap) {
 
     const std::string data = util::loadFileToString(pathToMap.generic_string());
 
-    size_t index = data.find('[');
     {
+
+      size_t index = data.find('[');
       std::vector<FollowPathNode> newPath;
 
       while (std::string::npos != index) {
@@ -33,7 +34,7 @@ GameMap::loadMap(const std::filesystem::path& pathToMap) {
         newPath.emplace_back(FollowPathNode(nodePosition, nodeRadius));
       }
 
-      createMap(newPath);
+      createMap(std::move(newPath));
     }
 
 
@@ -90,6 +91,12 @@ GameMap::createMap(const std::vector<FollowPathNode>& mapData) {
     m_visuals.emplace_back(std::move(temp));
   }
 
+}
+
+void
+GameMap::createMap(std::vector<FollowPathNode>&& mapData) {
+
+  createMap(std::forward < const std::vector<FollowPathNode> >(mapData));
 }
 
 GameMap::mapPathContainer::iterator
