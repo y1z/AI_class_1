@@ -70,7 +70,6 @@ Boid::update(float deltaTime)
   Vec2 const TempPrevPosition = m_data.m_position;
 
   m_data.m_position += (ResultDir) * (m_data.m_speed * deltaTime);
-  std::cout << m_data.m_position << '\n';
   m_data.m_shape.setPosition(m_data.m_position.x, m_data.m_position.y);
 
   if( TempPrevPosition.notEquals(m_data.m_position, 7) )
