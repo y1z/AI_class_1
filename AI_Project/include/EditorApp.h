@@ -79,7 +79,6 @@ class EditorApp final : public BaseApp
 
  private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
-  std::string m_file;
 
   std::unique_ptr<sf::RenderWindow> m_window;
   std::unique_ptr<SpriteAtlas> m_spriteAtlas;

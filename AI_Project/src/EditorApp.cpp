@@ -76,14 +76,6 @@ EditorApp::init() {
     m_gameMap = make_unique<GameMap>();
 
     {
-      const fs::path pathToText = fs::path(m_initialPath).append(s_pathToTextDefault);
-      m_file = util::loadFileToString(pathToText.generic_string());
-      if ("Error" == m_file) {
-        return -1;
-      }
-    }
-
-    {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasDefault);
       if (!createAtlas(pathToAtlas)) {
         return -1;
