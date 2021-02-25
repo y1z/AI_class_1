@@ -58,7 +58,7 @@ GameManager::addRacerToGame(const BoidDescriptor& descriptor)
   return addRacerToGame(Racer(descriptor));
 }
 
-size_t 
+size_t
 GameManager::addRacerToGame(const BoidDescriptor& descriptor,
                             SpriteAtlas* atlas) {
   const size_t boidIndex = addRacerToGame(descriptor) - 1u;
@@ -74,7 +74,7 @@ GameManager::addRacerToGame(const Boid& newBoid)
   return addRacerToGame(Racer(newBoid));
 }
 
-size_t 
+size_t
 GameManager::addRacerToGame(const Racer& racer)
 {
   m_groupAgents.emplace_back(racer);
@@ -97,10 +97,10 @@ GameManager::addNodeToGlobalPath(const FollowPathNode& node) {
   m_lapRequirements.m_currentCheckPoints += 1u;
 }
 
-void 
+void
 GameManager::setLapTotal(const uint32 requiredLapCount)
 {
-  m_lapRequirements.m_fullLap = requiredLapCount; 
+  m_lapRequirements.m_fullLap = requiredLapCount;
 }
 
 bool
@@ -115,7 +115,7 @@ GameManager::removeBoidFromGame(const size_t index)
   return false;
 }
 
-LapCount 
+LapCount
 GameManager::getLapRequirements() const
 {
   return m_lapRequirements;
@@ -192,7 +192,7 @@ GameManager::addDebugVertexLine(const Vec2& start,
   addDebugVertexLine(lineStart, lineEnd);
 }
 
-void 
+void
 GameManager::addDebugVertexLine(const sf::Vertex& startOfLine,
                                 const sf::Vertex& endOfLine)
 {

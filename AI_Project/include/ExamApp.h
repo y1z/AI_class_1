@@ -5,7 +5,7 @@
 #include "SpriteAtlas.h"
 
 
-class ExamApp : public BaseApp 
+class ExamApp : public BaseApp
 {
 public:
   ExamApp();
@@ -24,7 +24,6 @@ protected:
   init(unsigned int width,
        unsigned int height);
 
-  
   bool
   createRacers()const;
 
@@ -36,7 +35,6 @@ protected:
 
   bool
   createRacersPortraits();
-  
 
   void
   handleInput();
@@ -53,7 +51,7 @@ protected:
 private:
 
   /** @brief controls the UI*/
-  UiManager m_manager; 
+  UiManager m_manager;
 
   /** @brief stores the path */
   std::filesystem::path m_path;

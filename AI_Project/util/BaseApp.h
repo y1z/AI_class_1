@@ -5,7 +5,7 @@
 /**
 * @brief Defines an interface from which many app can be run.
 */
-class BaseApp 
+class BaseApp
 {
 public:// constructors
   BaseApp()
@@ -21,8 +21,8 @@ public:// constructors
   * @brief The interface of the app.
   * @bug no known bugs.
   */
-  virtual int run(unsigned int screenWith = 1280u, 
-                  unsigned int screenHeight =720u) = 0;
+  virtual int run(unsigned int screenWith = 1280u,
+                  unsigned int screenHeight = 720u) = 0;
 protected:
 
   /**

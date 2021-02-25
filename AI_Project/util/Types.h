@@ -59,7 +59,7 @@ enum class StateType : uint32
 
 /**
  * @brief a individual node of a path.
- */ 
+ */
 struct FollowPathNode
 {
 public:
@@ -70,7 +70,7 @@ public:
   float m_radius;
 };
 
-/** 
+/**
  * @brief a representation of the path.
  */
 struct FollowPath
@@ -83,7 +83,7 @@ struct FollowPath
   sf::VertexArray m_vertexArray;
 };
 
-struct LapCount 
+struct LapCount
 {
   bool operator <(const LapCount& other) const
   {
@@ -373,7 +373,7 @@ struct BoidDescriptor
   bool m_isWandering;
 
   /**
-   * @brief 
+   * @brief
    */
   bool m_isFollowingPath;
 
