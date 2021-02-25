@@ -7,12 +7,12 @@
  * @file
  * @class UiManager : controls the UI.
  */
-class UiManager 
+class UiManager
 {
 public:
   using RectangleContainer = std::vector< UiRectangle >;
 public:
-  
+
   /**
    * @brief starts the UI Manager.
    */
@@ -30,7 +30,7 @@ public:
   resizeAllRectangle(const sf::Vector2f& newSize);
 
 
-  UiRectangle& 
+  UiRectangle&
   getRectangle(const uint32 index);
 
   uint32
