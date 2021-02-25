@@ -82,8 +82,8 @@ GameMap::createMap(const std::vector<FollowPathNode>& mapData) {
     m_positionData.emplace_back(elem);
 
     sf::CircleShape templateCircle(elem.m_radius);
-    const Vec2 center = util::getCenterOfIntRect(templateCircle.getTextureRect());
-    templateCircle.setOrigin(center.x, center.y);
+    const float circleRadius = templateCircle.getRadius();
+    templateCircle.setOrigin(circleRadius * .5f, circleRadius * .5f);
     templateCircle.setFillColor(sf::Color::Yellow);
     templateCircle.setPosition(elem.m_position.x, elem.m_position.y);
 

@@ -339,7 +339,6 @@ Boid::followPath(const Boid& pathFollower,
     {
       indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
       m_data.m_nodesReached += 1u;
-      printf("Reached node");
     }
     else if( currentIndex + 1 < path.size() - 1 )
     {
