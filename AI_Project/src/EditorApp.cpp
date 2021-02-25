@@ -1,4 +1,9 @@
 #include <iostream>
+#define NOMINMAX
+#include <Windows.h>
+#undef max
+#undef min
+#undef NO_ERROR
 #include "util.h"
 #include "EditorApp.h"
 
@@ -6,8 +11,10 @@ namespace fs = std::filesystem;
 
 using std::make_unique;
 
-constexpr static const char*
-s_pathToTextDefault = "resources/test_doc.txt";
+
+fs::path
+openFilePath(const char* startingPoint = "resources");
+
 
 constexpr static const char*
 s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario.png";
@@ -129,6 +136,11 @@ EditorApp::handleInput() {
         m_gameMap->saveMap(s_pathToSaveFileDefault);
       }
 
+      if (sf::Keyboard::P == event.key.code) {
+        const fs::path p = openFilePath();
+        std::cout << p << '\n';
+      }
+
       if(sf::Keyboard::L == event.key.code)
       {
         m_gameMap->loadMap(s_pathToSaveFileDefault);
@@ -217,4 +229,30 @@ EditorApp::createRacer() {
   return true;
 }
 
+fs::path
+openFilePath (const char* startingPoint ) {
+  OPENFILENAMEA File;
 
+  static constexpr const char* fileTypes = "All files\0*.*\0 files\0*.txt\0";
+  char FileName[4096];
+
+  std::memset(&File, 0, sizeof(File));
+  std::memset(&FileName, 0, sizeof(FileName));
+
+  File.lStructSize = sizeof(OPENFILENAMEA);
+  File.hwndOwner = nullptr;
+  File.lpstrFile = FileName;
+
+  /* First \0 describes the name of the options
+  that the user will be presented with, the second \0
+  will discribe the type of files to look for */
+  File.lpstrFile[0] = '\0';
+  File.nMaxFile = 4096;
+  File.lpstrFilter = fileTypes;
+  File.nFilterIndex = 1;
+
+  GetOpenFileNameA(&File);
+
+  return  fs::path(FileName);
+
+}
