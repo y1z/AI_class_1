@@ -4,6 +4,7 @@
 #include "BaseApp.h"
 #include "SpriteAtlas.h"
 #include "GameMap.h"
+#include "UIStateMachine.h"
 
 
 namespace RESULT_APP_STAGES {
@@ -54,6 +55,8 @@ class EditorApp final : public BaseApp
   int
   init();
 
+  bool
+  createMenu();
 
   RESULT_APP_STAGES::E
   handleDraw();
@@ -80,9 +83,10 @@ class EditorApp final : public BaseApp
  private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
 
-  std::unique_ptr<sf::RenderWindow> m_window;
-  std::unique_ptr<SpriteAtlas> m_spriteAtlas;
+  std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered */
+  std::unique_ptr<SpriteAtlas> m_spriteAtlas; /**< Controls the sprites.*/
   std::unique_ptr<GameMap> m_gameMap;
+  std::unique_ptr<UIStateMachine> m_stateMachine;
   Vec2 m_mousePos;
 };
 
