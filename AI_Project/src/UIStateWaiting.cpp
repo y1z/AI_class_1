@@ -10,3 +10,13 @@ UIStateWaiting::onUpdate(const sf::Vector2f& mousePos,
 
   return UI_STATE_NAME::E::kWAITING;
 }
+
+UI_STATE_NAME::E
+UIStateWaiting::onExit(const sf::Vector2f& mousePos, int32 mouseButtonCode) {
+  return UI_STATE_NAME::E();
+}
+
+UI_STATE_NAME::E
+UIStateWaiting::getCurrentState() const {
+  return  UI_STATE_NAME::E::kWAITING;
+}
