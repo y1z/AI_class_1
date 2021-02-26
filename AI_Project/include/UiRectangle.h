@@ -6,7 +6,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-struct UIRectangleDesc 
+struct UIRectangleDesc
 {
   UIRectangleDesc()
     :pathToSprite({}),
@@ -30,7 +30,7 @@ struct UIRectangleDesc
   UIRectangleDesc& operator = (const UIRectangleDesc&) = default;
   UIRectangleDesc& operator = (UIRectangleDesc&&) noexcept = default;
 
-  
+
   std::string pathToSprite;
   sf::Vector2f position;
   int32 width;
@@ -41,13 +41,13 @@ struct UIRectangleDesc
 /**
  * @class UiRectangle : controls all rectangular shaped rectangles.
  */
-class UiRectangle 
+class UiRectangle
 {
 public:
   explicit UiRectangle(const UIRectangleDesc& desc);
 
 
-  bool 
+  bool
   operator<(const UiRectangle& other) const;
 
   bool
@@ -62,7 +62,7 @@ public:
   /** @returns the width of the UI rectangle*/
   int32
   getWidth()const;
-  
+
   /** @returns the height of the UI rectangle*/
   int32
   getHeight()const;
@@ -93,6 +93,9 @@ public:
 
   void
   swapPosition(UiRectangle& otherUI);
+
+  bool
+  isInsideRect(const sf::Vector2f& pos);
 
 
 public:

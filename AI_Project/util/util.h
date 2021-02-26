@@ -21,7 +21,7 @@ namespace util {
   randomRangeFloat(const float minimum,
                    const float maximum) {
    assert(maximum > minimum);
-   constexpr static float inverseMaximum = 1.0f / RAND_MAX;
+   constexpr static const float inverseMaximum = 1.0f / RAND_MAX;
    const float delta = maximum - minimum;
 
     return  minimum + (inverseMaximum * std::rand() * delta);
@@ -145,7 +145,7 @@ namespace util {
 
     originalImage.flipHorizontally();
 
-    result.copy(originalImage, 0, 0,sf::IntRect(0,0,0,0),true);
+    result.copy(originalImage, 0, 0, sf::IntRect(0, 0, 0, 0), true);
 
     originalImage.flipHorizontally();
 

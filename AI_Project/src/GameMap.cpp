@@ -49,22 +49,18 @@ GameMap::loadMap(const std::filesystem::path& pathToMap) {
 
 bool
 GameMap::saveMap(const std::string_view saveFilePath) {
-  //char bufferForConversion[128];
-  //std::memset(bufferForConversion, ' ', sizeof(bufferForConversion));
-  //bufferForConversion[127] = '\0';
+
   std::ofstream file(saveFilePath);
-
-  if (file.is_open()) {
-
+  const bool isOperationSuccessful = file.is_open();
+  if (isOperationSuccessful) {
     file << "pos: ";
     for (const auto& elem : m_positionData) {
       file << '[' << elem.m_radius << "]_" << elem.m_position;
     }
     file << "pos;;";
-    return true;
   }
 
-  return false;
+  return isOperationSuccessful;
 }
 
 void

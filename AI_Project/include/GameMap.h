@@ -79,10 +79,16 @@ public:
   cend()const;
 
 private:
+  /**
+   * @returns A float extracted from the data
+   */
   float
   extractRadiusFrom(const std::string& data,
                     const size_t currentIndex)const;
 
+  /**
+   * @returns A Vec2 extracted from the data.
+   */
   Vec2
   extractPositionFrom(const std::string& data,
                       const size_t currentIndex)const;
