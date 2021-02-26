@@ -1,6 +1,8 @@
 #include <iostream>
 #define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <commdlg.h> // for GetOpenFileName
 #undef max
 #undef min
 #undef NO_ERROR
@@ -11,11 +13,9 @@ namespace fs = std::filesystem;
 
 using std::make_unique;
 
-
-fs::path
-openFilePath(const char* startingPoint = "resources");
-
-
+/**
+ * NonClass related constants.
+ */
 constexpr static const char*
 s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario.png";
 
@@ -23,9 +23,12 @@ constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
 
 
+fs::path
+openFilePath();
+
+
 EditorApp::EditorApp()
-  : BaseApp(), m_mousePos(Vec2(0.0f, 0.0f))
-{}
+  : BaseApp(), m_mousePos(Vec2(0.0f, 0.0f)) {}
 
 int
 EditorApp::run(unsigned int screenWidth,
@@ -33,8 +36,7 @@ EditorApp::run(unsigned int screenWidth,
   m_screenWidth = screenWidth;
   m_screenHeight = screenHeight;
 
-  if (-1 == init())
-  {
+  if (-1 == init()) {
     return -1;
   }
 
@@ -82,6 +84,8 @@ EditorApp::init() {
 
     m_gameMap = make_unique<GameMap>();
 
+    m_stateMachine = make_unique<UIStateMachine>();
+
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasDefault);
       if (!createAtlas(pathToAtlas)) {
@@ -99,6 +103,35 @@ EditorApp::init() {
   }
 
   return 0;
+}
+
+bool
+EditorApp::createMenu() {
+  {
+    UISceneDescriptor firstScene;
+    const UiRectangle continueRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
+    const UiRectangle exitRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 600), ""));
+
+    firstScene.rectangles.push_back(continueRect);
+    firstScene.rectangles.push_back(exitRect);
+    firstScene.ID = sf::Vector2i(1, 0);
+    firstScene.nextScene = sf::Vector2i(2, 1);
+    m_stateMachine->m_scenes.push_back(UIScene(firstScene));
+  }
+  {
+
+    UISceneDescriptor secondScene;
+    const UiRectangle temp(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
+
+    secondScene.rectangles.push_back(temp);
+    secondScene.nextScene = sf::Vector2i(2, 1);
+    secondScene.ID = sf::Vector2i(2, 0);
+    m_stateMachine->m_scenes.push_back(UIScene(secondScene));
+
+  }
+
+
+  return true;
 }
 
 RESULT_APP_STAGES::E
@@ -129,11 +162,10 @@ EditorApp::handleInput() {
       m_mousePos = Vec2(event.mouseMove.x, event.mouseMove.y);
     }
 
-    if(sf::Event::KeyPressed == event.type)
-    {
-      if(sf::Keyboard::S == event.key.code)
-      {
-        m_gameMap->saveMap(s_pathToSaveFileDefault);
+    if (sf::Event::KeyPressed == event.type) {
+      if (sf::Keyboard::S == event.key.code) {
+        const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
+        m_gameMap->saveMap(path.generic_string());
       }
 
       if (sf::Keyboard::P == event.key.code) {
@@ -141,12 +173,12 @@ EditorApp::handleInput() {
         std::cout << p << '\n';
       }
 
-      if(sf::Keyboard::L == event.key.code)
-      {
-        m_gameMap->loadMap(s_pathToSaveFileDefault);
+      if (sf::Keyboard::L == event.key.code) {
+        const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
+        m_gameMap->loadMap(path);
         auto& gameMan = GameManager::getInstance();
-        for(auto& boid : gameMan .getAgentContainerRef() )
-        {
+
+        for (auto& boid : gameMan.getAgentContainerRef()) {
           boid.getBoidData().m_pathNodes = m_gameMap->m_positionData;
         }
       }
@@ -187,7 +219,6 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
 
 void
 EditorApp::createPath(const std::filesystem::path& pathToFile) {
-  GameManager& gameMan = GameManager::getInstance();
   if ("" != pathToFile) {
     m_gameMap->loadMap(pathToFile.generic_string());
   }
@@ -202,8 +233,7 @@ EditorApp::createPath(const std::filesystem::path& pathToFile) {
 
       path.emplace_back(node);
     }
-    const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5,
-                                  0),
+    const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5, 0),
                                   80.0f);
     path.emplace_back(endPoint);
     m_gameMap->createMap(path);
@@ -230,28 +260,31 @@ EditorApp::createRacer() {
 }
 
 fs::path
-openFilePath (const char* startingPoint ) {
-  OPENFILENAMEA File;
+openFilePath() {
 
+  OPENFILENAMEA File;
+  /**
+   * All text before the first null character is the name we give to the type
+   * of files we are looking for what comes after that is the name of the extension
+   */
   static constexpr const char* fileTypes = "All files\0*.*\0 files\0*.txt\0";
-  char FileName[4096];
+  char FileName[2048];
 
   std::memset(&File, 0, sizeof(File));
-  std::memset(&FileName, 0, sizeof(FileName));
+  std::memset(&FileName, '\0', sizeof(FileName));
 
-  File.lStructSize = sizeof(OPENFILENAMEA);
+  File.lStructSize = sizeof(File);
   File.hwndOwner = nullptr;
-  File.lpstrFile = FileName;
 
-  /* First \0 describes the name of the options
-  that the user will be presented with, the second \0
-  will discribe the type of files to look for */
+  File.lpstrFile = FileName;
   File.lpstrFile[0] = '\0';
-  File.nMaxFile = 4096;
+
+  File.nMaxFile = sizeof(FileName);
   File.lpstrFilter = fileTypes;
   File.nFilterIndex = 1;
 
   GetOpenFileNameA(&File);
+
 
   return  fs::path(FileName);
 
