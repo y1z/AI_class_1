@@ -5,7 +5,6 @@
 #include <commdlg.h> // for GetOpenFileName
 #undef max
 #undef min
-#undef NO_ERROR
 #include "util.h"
 #include "EditorApp.h"
 
@@ -108,28 +107,18 @@ EditorApp::init() {
 bool
 EditorApp::createMenu() {
   {
-    UISceneDescriptor firstScene;
-    const UiRectangle continueRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
-    const UiRectangle exitRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 600), ""));
+    UISceneDesc firstScene;
+    const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
+    const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 600), ""));
+    const UiRectangle exitRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 900), ""));
 
-    firstScene.rectangles.push_back(continueRect);
+    firstScene.rectangles.push_back(selectRect);
+    firstScene.rectangles.push_back(playRect);
     firstScene.rectangles.push_back(exitRect);
-    firstScene.ID = sf::Vector2i(1, 0);
-    firstScene.nextScene = sf::Vector2i(2, 1);
+    firstScene.ID = 0;
+    firstScene.associatedScenes = { 2 , 1, -1 };
     m_stateMachine->m_scenes.push_back(UIScene(firstScene));
   }
-  {
-
-    UISceneDescriptor secondScene;
-    const UiRectangle temp(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
-
-    secondScene.rectangles.push_back(temp);
-    secondScene.nextScene = sf::Vector2i(2, 1);
-    secondScene.ID = sf::Vector2i(2, 0);
-    m_stateMachine->m_scenes.push_back(UIScene(secondScene));
-
-  }
-
 
   return true;
 }
@@ -144,7 +133,7 @@ EditorApp::handleDraw() {
   gm.drawRacers(*m_window);
   m_window->display();
 
-  return RESULT_APP_STAGES::E::NO_ERROR;
+  return RESULT_APP_STAGES::E::kNO_ERROR;
 }
 
 RESULT_APP_STAGES::E
@@ -187,7 +176,7 @@ EditorApp::handleInput() {
 
   }
 
-  return RESULT_APP_STAGES::E::NO_ERROR;
+  return RESULT_APP_STAGES::E::kNO_ERROR;
 }
 
 RESULT_APP_STAGES::E
@@ -262,16 +251,22 @@ EditorApp::createRacer() {
 fs::path
 openFilePath() {
 
-  OPENFILENAMEA File;
   /**
    * All text before the first null character is the name we give to the type
    * of files we are looking for what comes after that is the name of the extension
    */
   static constexpr const char* fileTypes = "All files\0*.*\0 files\0*.txt\0";
-  char FileName[2048];
+
+  OPENFILENAMEA File;
+  char FileName[MAX_PATH];
+  char currentPathDir[MAX_PATH];
 
   std::memset(&File, 0, sizeof(File));
+  std::memset(&currentPathDir, '\0', sizeof(currentPathDir));
   std::memset(&FileName, '\0', sizeof(FileName));
+
+  // save the current directory so we don't change it later
+  GetCurrentDirectoryA(sizeof(currentPathDir) - 1, currentPathDir);
 
   File.lStructSize = sizeof(File);
   File.hwndOwner = nullptr;
@@ -285,6 +280,7 @@ openFilePath() {
 
   GetOpenFileNameA(&File);
 
+  SetCurrentDirectoryA(currentPathDir);
 
   return  fs::path(FileName);
 

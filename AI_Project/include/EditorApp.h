@@ -10,8 +10,8 @@
 namespace RESULT_APP_STAGES {
   enum E {
     kERROR = -1,
-    NO_ERROR = 0,
-    MISSING_IMPL,
+    kNO_ERROR = 0,
+    kMISSING_IMPL,
   };
 }
 
