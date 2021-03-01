@@ -12,7 +12,18 @@ enum E : size_t
 
 }
 
+struct UIStateData
+{
 
+  /** keeps track of which sate we are in*/
+  sf::Vector2i currentStateID;
+  sf::Vector2i lastIndexID;
+};
+
+
+/**
+ * Is a interface for all UI states.
+ */
 struct UIState
 {
   UIState() = default;
