@@ -85,8 +85,8 @@ class EditorApp final : public BaseApp
 
   std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered */
   std::unique_ptr<SpriteAtlas> m_spriteAtlas; /**< Controls the sprites.*/
-  std::unique_ptr<GameMap> m_gameMap;
-  std::unique_ptr<UIStateMachine> m_stateMachine;
+  std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used.*/
+  std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI.*/
   Vec2 m_mousePos;
 };
 

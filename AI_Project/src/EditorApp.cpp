@@ -255,15 +255,15 @@ openFilePath() {
    * All text before the first null character is the name we give to the type
    * of files we are looking for what comes after that is the name of the extension
    */
-  static constexpr const char* fileTypes = "All files\0*.*\0 files\0*.txt\0";
+  static constexpr const char* fileTypes = "All files\0*.*\0 \0*.txt\0";
 
   OPENFILENAMEA File;
   char FileName[MAX_PATH];
   char currentPathDir[MAX_PATH];
 
   std::memset(&File, 0, sizeof(File));
-  std::memset(&currentPathDir, '\0', sizeof(currentPathDir));
   std::memset(&FileName, '\0', sizeof(FileName));
+  std::memset(&currentPathDir, '\0', sizeof(currentPathDir));
 
   // save the current directory so we don't change it later
   GetCurrentDirectoryA(sizeof(currentPathDir) - 1, currentPathDir);
@@ -276,6 +276,7 @@ openFilePath() {
 
   File.nMaxFile = sizeof(FileName);
   File.lpstrFilter = fileTypes;
+  // controls which of the file type is chosen by default.
   File.nFilterIndex = 1;
 
   GetOpenFileNameA(&File);

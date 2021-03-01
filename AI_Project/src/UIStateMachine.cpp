@@ -1,23 +1,12 @@
 #include "UIStateMachine.h"
+// states
 #include "UIStateWaiting.h"
 
+using std::make_unique;
 
-UIStateMachine::UIStateMachine() {
-  m_states.fill(nullptr);
-}
-
-UIStateMachine::~UIStateMachine()
-{
-  for (UIState* elemptr : m_states) {
-    if (nullptr != elemptr) {
-      delete elemptr;
-    }
-  }
-
-}
 
 bool
-UIStateMachine::init(const std::vector<UISceneDescriptor>& descriptor) {
+UIStateMachine::init(const std::vector<UISceneDesc>& descriptor) {
   m_scenes.reserve(descriptor.size());
 
   for (auto elem : descriptor) {
@@ -26,13 +15,15 @@ UIStateMachine::init(const std::vector<UISceneDescriptor>& descriptor) {
 
 
 
-  m_states[UI_STATE_NAME::kWAITING] = new UIStateWaiting();
-  m_currentScene = m_states[UI_STATE_NAME::kWAITING];
+  m_states[UI_STATE_NAME::kWAITING] = make_unique <UIStateWaiting>();
+  m_currentScene = m_states[UI_STATE_NAME::kWAITING].get();
 
-
-  for (auto state : m_states) {
-    state->ptr_scenes = &m_scenes;
+  for (auto& elem : m_states) {
+    elem->ptr_scenes = &m_scenes;
   }
 
   return true;
 }
+
+void
+UIStateMachine::update(const sf::Vector2f& mousePosition) {}

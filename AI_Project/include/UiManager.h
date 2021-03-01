@@ -26,6 +26,9 @@ public:
   void
   addRectangle(const UIRectangleDesc& desc);
 
+  /**
+   * @brief Changes the size of every single rectangle.
+   */
   void
   resizeAllRectangle(const sf::Vector2f& newSize);
 
