@@ -1,6 +1,6 @@
 #include "UIScene.h"
 
-UIScene::UIScene(const UISceneDescriptor& descriptor)
+UIScene::UIScene(const UISceneDesc& descriptor)
 :m_desc(descriptor)
 {}
 

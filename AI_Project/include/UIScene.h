@@ -3,33 +3,30 @@
 #include <vector>
 #include "UiRectangle.h"
 
-struct UISceneDescriptor
+
+/**
+ * controls
+ */
+struct UISceneDesc
 {
-  std::vector<UiRectangle> rectangles;
-  sf::Vector2i ID;
-  sf::Vector2i nextScene;
+  std::vector<UiRectangle> rectangles;/**< The visual representation*/
+  std::vector<int32_t> associatedScenes;
+  int32_t ID;
 
   constexpr bool
-  operator<(const UISceneDescriptor& other)const {
-    if (ID.x == other.ID.x) {
-      return ID.y < other.ID.y;
-    }
-
-    return ID.x < other.ID.x;
+  operator<(const UISceneDesc& other)const {
+    return ID < other.ID;
   }
 
   constexpr bool
-  operator>(const UISceneDescriptor& other)const {
-    if (ID.x == other.ID.x) {
-      return ID.y > other.ID.y;
-    }
+  operator>(const UISceneDesc& other)const {
 
-    return ID.x > other.ID.x;
+    return ID > other.ID;
   }
 
   constexpr bool
-  operator==(const UISceneDescriptor& other)const {
-    return ID.x > other.ID.x && ID.y > other.ID.y;
+  operator==(const UISceneDesc& other)const {
+    return ID == other.ID;
   }
 };
 
@@ -39,7 +36,7 @@ struct UISceneDescriptor
  */
 class UIScene {
 public:
-  explicit UIScene(const UISceneDescriptor& descriptor);
+  explicit UIScene(const UISceneDesc& descriptor);
 
   constexpr bool
   operator<(const UIScene& other)const {
@@ -58,7 +55,6 @@ public:
     return m_desc == other.m_desc;
   }
 
-  UISceneDescriptor m_desc;
-  sf::Vector2i nextScene;
+  UISceneDesc m_desc;
 };
 
