@@ -36,11 +36,16 @@ public:
   /**
    * @brief Starts up the state machine
    */
+  bool
+  update(const sf::Vector2f& mousePosition,
+         const sf::Mouse::Button accion);
+
   void
-  update(const sf::Vector2f& mousePosition);
+  render(sf::RenderWindow* window);
 
   UIState* m_currentScene;
   std::array<std::unique_ptr<UIState>, UI_STATE_NAME::E::kNumStates> m_states;
   std::vector<UIScene> m_scenes;
+  bool isActive = true;
 };
 
