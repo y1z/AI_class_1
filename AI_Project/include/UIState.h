@@ -7,7 +7,6 @@ namespace UI_STATE_NAME {
 enum E : size_t {
   kWAITING = 0,
   kCHANGING,
-  kStop,
   kNumStates
 };
 
@@ -40,7 +39,7 @@ struct UIState
   virtual UI_STATE_NAME::E
   getCurrentState()const = 0;
 
-  int32_t index = 0;
   std::vector<UIScene>* ptr_scenes;
+  int32_t index = 0;
 };
 
