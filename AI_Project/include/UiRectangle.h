@@ -95,7 +95,7 @@ public:
   swapPosition(UiRectangle& otherUI);
 
   bool
-  isInsideRect(const sf::Vector2f& pos);
+  isInsideRect(const sf::Vector2f& pos)const;
 
 
 public:

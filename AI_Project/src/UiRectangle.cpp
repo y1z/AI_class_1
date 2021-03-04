@@ -128,7 +128,7 @@ UiRectangle::swapPosition(UiRectangle& otherUI)
 }
 
 bool
-UiRectangle::isInsideRect(const sf::Vector2f& pos) {
+UiRectangle::isInsideRect(const sf::Vector2f& pos)const {
   auto bound = m_rect.getGlobalBounds();
   sf::Rect temp(pos, { 1,1 });
   return bound.intersects(temp);
