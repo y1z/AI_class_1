@@ -16,8 +16,9 @@ UiRectangle::UiRectangle(const UIRectangleDesc &desc)
   {
     m_texture->loadFromStream(fileStream);
     m_rect.setTexture(m_texture.get());
-    m_rect.setPosition(desc.position);
   }
+  m_rect.setPosition(desc.position);
+  m_rect.setFillColor(desc.color);
 }
 
 bool

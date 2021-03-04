@@ -23,11 +23,11 @@ s_pathToSaveFileDefault = "resources/saves/test.txt";
 
 
 fs::path
-openFilePath();
+openFilePath(BaseApp* app);
 
 
 EditorApp::EditorApp()
-  : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), 0)
+  : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), sf::Mouse::Button::ButtonCount)
 {}
 
 int
@@ -50,11 +50,15 @@ EditorApp::mainLoop() {
   auto& container = gameMan.getAgentContainerRef();
 
   while (m_stateMachine->isStateMachineActive()) {
+    m_window->clear();
     handleInput();
     const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.mousePosition);
     m_stateMachine->update(mousePosition , m_mouseData.mouseAccion);
     m_stateMachine->render(m_window.get());
+    m_window->display();
   }
+
+  setUpNewPath();
 
   for (auto& elem : container) {
     elem.m_atlasPtr = m_spriteAtlas.get();
@@ -117,16 +121,19 @@ bool
 EditorApp::createMenu() {
   {
     UISceneDesc menuScene;
-    const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
-    const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 600), ""));
-    const UiRectangle exitRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 900), ""));
+    auto const halfScreenWidth = m_screenWidth / 2.0f;
+    auto const halfScreenHeight = m_screenHeight / 2.0f;
+    const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth,200), "", sf::Color::Yellow));
+    const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
 
-    menuScene.rectangles.push_back(selectRect);
-    menuScene.rectangles.push_back(playRect);
-    menuScene.rectangles.push_back(exitRect);
+    //auto function_lambda = [](BaseApp* editor) { return openFilePath(editor); };
+    //std::function<fs::path(void) > func(;
+    menuScene.AddElement(selectRect, -1, std::function<fs::path(BaseApp*)>(openFilePath));
+    menuScene.AddElement(playRect, -1);
+
     menuScene.ID = 0;
-    menuScene.associatedScenes = { 2 , 1, -1 };
-    m_stateMachine->init({ menuScene }); //m_scenes.push_back(UIScene(menuScene));
+
+    m_stateMachine->init({ menuScene }, this); //m_scenes.push_back(UIScene(menuScene));
   }
 
   return true;
@@ -171,18 +178,14 @@ EditorApp::handleInput() {
       }
 
       if (sf::Keyboard::P == event.key.code) {
-        const fs::path p = openFilePath();
+        const fs::path p = openFilePath(this);
         std::cout << p << '\n';
       }
 
       if (sf::Keyboard::L == event.key.code) {
         const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
         m_gameMap->loadMap(path);
-        auto& gameMan = GameManager::getInstance();
-
-        for (auto& boid : gameMan.getAgentContainerRef()) {
-          boid.getBoidData().m_pathNodes = m_gameMap->m_positionData;
-        }
+        setUpNewPath();
       }
 
     }
@@ -242,6 +245,15 @@ EditorApp::createPath(const std::filesystem::path& pathToFile) {
   }
 }
 
+void
+EditorApp::setUpNewPath() {
+  auto& gameMan = GameManager::getInstance();
+
+  for (auto& boid : gameMan.getAgentContainerRef()) {
+    boid.getBoidData().m_pathNodes = m_gameMap->m_positionData;
+  }
+}
+
 bool
 EditorApp::createRacer() {
   GameManager& gameMan = GameManager::getInstance();
@@ -262,8 +274,10 @@ EditorApp::createRacer() {
 }
 
 fs::path
-openFilePath() {
+openFilePath(BaseApp* app) {
 
+  assert(app != nullptr);
+  auto editorApp = dynamic_cast<EditorApp*> (app);
   /**
    * All text before the first null character is the name we give to the type
    * of files we are looking for what comes after that is the name of the extension
@@ -294,8 +308,9 @@ openFilePath() {
 
   GetOpenFileNameA(&File);
 
-  SetCurrentDirectoryA(currentPathDir);
+  editorApp->createPath(fs::path(FileName));
 
+  SetCurrentDirectoryA(currentPathDir);
   return  fs::path(FileName);
 
 }

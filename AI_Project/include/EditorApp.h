@@ -68,7 +68,7 @@ class EditorApp final : public BaseApp
   init();
 
   /**
-   *
+   * for creating the menu of the game.
    */
   bool
   createMenu();
@@ -98,12 +98,17 @@ class EditorApp final : public BaseApp
   bool
   createAtlas(const std::filesystem::path& pathToAtlas) const;
 
+public:
   /**
    * @brief creates the path the agents of the are going to follow.
    */
   void
   createPath(const std::filesystem::path& pathToFile = "");
 
+  void
+  setUpNewPath();
+
+private:
   /**
    * @brief creates the racers a.k.a the agents of the game.
    */

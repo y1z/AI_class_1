@@ -65,7 +65,7 @@ public:// functions
 
   /**
   * @brief For initializing the game-manger.
-  * @returns the index for that boid.
+  * @returns the sceneIndex for that boid.
   */
   size_t
   addRacerToGame(const Boid& newBoid);

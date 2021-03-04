@@ -183,7 +183,7 @@ struct BoidDescriptor
   std::vector<FollowPathNode> m_pathNodes;
 
   /**
-  * @brief used to keep track of what index the boid is following.
+  * @brief used to keep track of what sceneIndex the boid is following.
   */
   IndexTracker m_indexTracker;
 

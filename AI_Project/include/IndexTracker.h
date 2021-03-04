@@ -2,50 +2,50 @@
 #include <cstdint>
 
 /**
-* @brief Keeps track of a index
+* @brief Keeps track of a sceneIndex
 */
 class IndexTracker 
 {
 public:
 
   /**
-   * @brief increments the index.
-   * @returns the index after the increment.
+   * @brief increments the sceneIndex.
+   * @returns the sceneIndex after the increment.
    * @Note It's possible to increment by a negative number.
    */
   int64_t 
   incrementIndex();
 
   /**
-  * @brief resets the current index.
+  * @brief resets the current sceneIndex.
   */
   void
   resetIndex();
 
   /**
-  * @brief The current index.
+  * @brief The current sceneIndex.
   */
   [[nodiscard]] int64_t
   getCurrentIndex()const;
 
-  /** @returns a previous index. */
+  /** @returns a previous sceneIndex. */
   [[nodiscard]] int64_t
   getPrevIndex() const;
 
   /**
-  * @returns The amount the index is incremented by.
+  * @returns The amount the sceneIndex is incremented by.
   */
   [[nodiscard]] int64_t 
   getIncrementAmount()const;
 
   /**
-  * @brief sets the amount they increase the index.
+  * @brief sets the amount they increase the sceneIndex.
   */
   void 
   setIncrementAmount(const int64_t newIncrementAmount);
 
   /**
-  * @brief sets the current index.
+  * @brief sets the current sceneIndex.
   */
   void
   setCurrentIndex(const int64_t newCurrentIndex);
