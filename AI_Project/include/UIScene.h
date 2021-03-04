@@ -1,7 +1,11 @@
 #pragma once
 #include <cstdint>
 #include <vector>
+#include <functional>
+#include <variant>
+#include <filesystem>
 #include "UiRectangle.h"
+#include "BaseApp.h"
 
 
 /**
@@ -9,9 +13,23 @@
  */
 struct UISceneDesc
 {
+  /** The types of function that the struct can accept.*/
+  using UICallbackFunction =
+    std::variant< std::function<void(void)>,
+                  std::function<int(void)>,
+                  std::function<std::filesystem::path (BaseApp*) > >;
+
+
   std::vector<UiRectangle> rectangles;/**< The visual representation. */
   std::vector<int32_t> associatedScenes;/**< The connections between scenes. */
+  std::vector<UICallbackFunction> callbackFunctions;
   int32_t ID; /**< Used to identify the scenes. */
+
+
+  void
+  AddElement(const UiRectangle& _rectangle,
+             const int32_t _associatedScene,
+             const UICallbackFunction& _callback = []() {});
 
   constexpr bool
   operator<(const UISceneDesc& other)const {

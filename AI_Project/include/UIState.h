@@ -5,8 +5,9 @@
 namespace UI_STATE_NAME {
 
 enum E : size_t {
+  kStop,
   kWAITING = 0,
-  kCHANGING,
+  kCHANGING = 1,
   kNumStates
 };
 
@@ -31,15 +32,16 @@ struct UIState
   virtual ~UIState() = default;
 
   virtual UI_STATE_NAME::E
-  onUpdate(const UIStateData mousePos) = 0;
+  onUpdate(UIStateData& mousePos) = 0;
 
   virtual UI_STATE_NAME::E
-  onExit(const UIStateData mousePos) = 0;
+  onExit(UIStateData& mousePos) = 0;
 
   virtual UI_STATE_NAME::E
   getCurrentState()const = 0;
 
   std::vector<UIScene>* ptr_scenes;
-  int32_t index = 0;
+  BaseApp* editor = nullptr;
+  int32_t sceneIndex = 0;
 };
 
