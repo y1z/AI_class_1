@@ -14,10 +14,13 @@ public:
   ~UIStateWaiting() = default;
 
   UI_STATE_NAME::E
-  onUpdate(const UIStateData sceneData) override;
+  onUpdate(UIStateData& sceneData) override;
+
+  void
+  executeCallBack(int32 callbackIndex, const  UISceneDesc& scene);
 
   UI_STATE_NAME::E
-  onExit(const UIStateData sceneData) override;
+  onExit(UIStateData& sceneData) override;
 
   UI_STATE_NAME::E
   getCurrentState()const override;

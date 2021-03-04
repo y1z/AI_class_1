@@ -6,6 +6,7 @@
 #include "UIScene.h"
 #include "UIState.h"
 
+class BaseApp;
 
 
 /**
@@ -31,7 +32,8 @@ public:
    * @brief Starts up the state machine
    */
   bool
-  init(const std::vector<UISceneDesc>& descriptor);
+  init(const std::vector<UISceneDesc>& descriptor,
+       BaseApp* const currentApp);
 
   /**
    * @brief Starts up the state machine
@@ -47,6 +49,7 @@ public:
   isStateMachineActive()const;
 
   UIState* m_currentScene;
+  BaseApp* m_currentApp;
   std::vector<UIScene> m_scenes;
   std::array<std::unique_ptr<UIState>, UI_STATE_NAME::E::kNumStates> m_states;
 };

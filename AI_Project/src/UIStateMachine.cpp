@@ -1,4 +1,6 @@
 #include "UIStateMachine.h"
+#include "BaseApp.h"
+#include <cassert>
 // states
 #include "UIStateWaiting.h"
 #include "UIStateChanging.h"
@@ -7,20 +9,30 @@ using std::make_unique;
 
 
 bool
-UIStateMachine::init(const std::vector<UISceneDesc>& descriptor) {
+UIStateMachine::init(const std::vector<UISceneDesc>& descriptor,
+                     BaseApp* const currentApp) {
+
+  assert(nullptr != currentApp);
   m_scenes.reserve(descriptor.size());
 
-  for (auto elem : descriptor) {
+  for (auto& elem : descriptor) {
     m_scenes.emplace_back(UIScene(elem));
   }
 
   m_states[UI_STATE_NAME::kWAITING] = make_unique<UIStateWaiting>();
-  m_states[UI_STATE_NAME::kCHANGING] = make_unique<UIStateWaiting>();
+  m_states[UI_STATE_NAME::kCHANGING] = make_unique<UIStateChanging>();
 
   m_states[UI_STATE_NAME::kWAITING]->ptr_scenes = &m_scenes;
   m_states[UI_STATE_NAME::kCHANGING]->ptr_scenes = &m_scenes;
 
+  m_states[UI_STATE_NAME::kWAITING]->editor = currentApp;
+  m_states[UI_STATE_NAME::kCHANGING]->editor = currentApp;
+
+  m_currentApp = currentApp;
+
   m_currentScene = m_states[UI_STATE_NAME::kWAITING].get();
+
+  m_currentApp = currentApp;
 
   for (auto& elem : m_states) {
     elem->ptr_scenes = &m_scenes;
@@ -36,12 +48,16 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
   UIStateData currentData;
   currentData.mousePosition = mousePosition;
   currentData.mouseAccion = accion;
-  currentData.ID = m_currentScene->index;
+  currentData.ID = m_currentScene->sceneIndex;
+
   const auto state = m_currentScene->getCurrentState();
   const auto updatedState = m_currentScene->onUpdate(currentData);
+
   if (state != updatedState) {
     m_currentScene->onExit(currentData);
+    m_currentScene = m_states[updatedState].get();
   }
+
 
 
   return true;
@@ -50,15 +66,18 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
 
 void
 UIStateMachine::render(sf::RenderWindow* window) {
-  auto currentIndex = m_currentScene->index;
-  for (auto& elem : m_scenes[currentIndex].m_desc.rectangles) {
-    elem.draw(*window);
+  auto currentIndex = m_currentScene->sceneIndex;
+  if( -1 !=currentIndex)
+  {
+    for (auto& elem : m_scenes[0].m_desc.rectangles) {
+      elem.draw(*window);
+    }
   }
 }
 
 bool
 UIStateMachine::isStateMachineActive() const {
-  return !(0 == m_currentScene->index);
+  return !(-1 == m_currentScene->sceneIndex);
 }
 
 
