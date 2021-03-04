@@ -27,7 +27,7 @@ UIStateWaiting::onUpdate(const UIStateData sceneData) {
 
 UI_STATE_NAME::E
 UIStateWaiting::onExit(const UIStateData sceneData) {
-  return UI_STATE_NAME::E();
+  return UI_STATE_NAME::E::kCHANGING;
 }
 
 UI_STATE_NAME::E
