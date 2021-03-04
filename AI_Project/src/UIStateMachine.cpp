@@ -1,6 +1,7 @@
 #include "UIStateMachine.h"
 // states
 #include "UIStateWaiting.h"
+#include "UIStateChanging.h"
 
 using std::make_unique;
 
@@ -14,7 +15,10 @@ UIStateMachine::init(const std::vector<UISceneDesc>& descriptor) {
   }
 
   m_states[UI_STATE_NAME::kWAITING] = make_unique<UIStateWaiting>();
+  m_states[UI_STATE_NAME::kCHANGING] = make_unique<UIStateWaiting>();
+
   m_states[UI_STATE_NAME::kWAITING]->ptr_scenes = &m_scenes;
+  m_states[UI_STATE_NAME::kCHANGING]->ptr_scenes = &m_scenes;
 
   m_currentScene = m_states[UI_STATE_NAME::kWAITING].get();
 
@@ -33,8 +37,14 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
   currentData.mousePosition = mousePosition;
   currentData.mouseAccion = accion;
   currentData.ID = m_currentScene->index;
+  const auto state = m_currentScene->getCurrentState();
+  const auto updatedState = m_currentScene->onUpdate(currentData);
+  if (state != updatedState) {
+    m_currentScene->onExit(currentData);
+  }
 
-  return false;
+
+  return true;
 }
 
 
@@ -46,5 +56,9 @@ UIStateMachine::render(sf::RenderWindow* window) {
   }
 }
 
+bool
+UIStateMachine::isStateMachineActive() const {
+  return !(0 == m_currentScene->index);
+}
 
 

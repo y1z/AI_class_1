@@ -15,8 +15,8 @@ class UIStateMachine
 {
 public:
   UIStateMachine() = default;
-  UIStateMachine(const UIStateMachine &other) = delete;
-  UIStateMachine(UIStateMachine && other)noexcept = default;
+  UIStateMachine(const UIStateMachine& other) = delete;
+  UIStateMachine(UIStateMachine&& other)noexcept = default;
 
   ~UIStateMachine() = default;
 
@@ -43,9 +43,11 @@ public:
   void
   render(sf::RenderWindow* window);
 
+  bool
+  isStateMachineActive()const;
+
   UIState* m_currentScene;
-  std::array<std::unique_ptr<UIState>, UI_STATE_NAME::E::kNumStates> m_states;
   std::vector<UIScene> m_scenes;
-  bool isActive = true;
+  std::array<std::unique_ptr<UIState>, UI_STATE_NAME::E::kNumStates> m_states;
 };
 
