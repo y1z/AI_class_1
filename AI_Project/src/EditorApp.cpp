@@ -27,7 +27,8 @@ openFilePath();
 
 
 EditorApp::EditorApp()
-  : BaseApp(), m_mousePos(Vec2(0.0f, 0.0f)) {}
+  : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), 0)
+{}
 
 int
 EditorApp::run(unsigned int screenWidth,
@@ -47,6 +48,9 @@ EditorApp::mainLoop() {
   auto& gameMan = GameManager::getInstance();
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
+
+  while (true) {
+  }
 
   for (auto& elem : container) {
     elem.m_atlasPtr = m_spriteAtlas.get();
@@ -91,6 +95,7 @@ EditorApp::init() {
         return -1;
       }
     }
+    createMenu();
 
     createPath();
 
@@ -107,17 +112,17 @@ EditorApp::init() {
 bool
 EditorApp::createMenu() {
   {
-    UISceneDesc firstScene;
+    UISceneDesc menuScene;
     const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 300), ""));
     const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 600), ""));
     const UiRectangle exitRect(UIRectangleDesc(200, 200, sf::Vector2f(300, 900), ""));
 
-    firstScene.rectangles.push_back(selectRect);
-    firstScene.rectangles.push_back(playRect);
-    firstScene.rectangles.push_back(exitRect);
-    firstScene.ID = 0;
-    firstScene.associatedScenes = { 2 , 1, -1 };
-    m_stateMachine->m_scenes.push_back(UIScene(firstScene));
+    menuScene.rectangles.push_back(selectRect);
+    menuScene.rectangles.push_back(playRect);
+    menuScene.rectangles.push_back(exitRect);
+    menuScene.ID = 0;
+    menuScene.associatedScenes = { 2 , 1, -1 };
+    m_stateMachine->init({ menuScene }); //m_scenes.push_back(UIScene(menuScene));
   }
 
   return true;
