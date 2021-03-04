@@ -14,12 +14,10 @@ public:
   ~UIStateWaiting() = default;
 
   UI_STATE_NAME::E
-  onUpdate(const sf::Vector2f& mousePos,
-           int32 mouseButtonCode) override;
+  onUpdate(const UIStateData sceneData) override;
 
   UI_STATE_NAME::E
-  onExit(const sf::Vector2f& mousePos,
-         int32 mouseButtonCode) override;
+  onExit(const UIStateData sceneData) override;
 
   UI_STATE_NAME::E
   getCurrentState()const override;
