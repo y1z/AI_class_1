@@ -49,7 +49,11 @@ EditorApp::mainLoop() {
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
 
-  while (true) {
+  while (m_stateMachine->isStateMachineActive()) {
+    handleInput();
+    const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.mousePosition);
+    m_stateMachine->update(mousePosition , m_mouseData.mouseAccion);
+    m_stateMachine->render(m_window.get());
   }
 
   for (auto& elem : container) {
@@ -153,7 +157,11 @@ EditorApp::handleInput() {
 
 
     if (sf::Event::MouseMoved == event.type) {
-      m_mousePos = Vec2(event.mouseMove.x, event.mouseMove.y);
+      m_mouseData.mousePosition = Vec2(event.mouseMove.x, event.mouseMove.y);
+    }
+
+    if (sf::Event::MouseButtonPressed == event.type) {
+      m_mouseData.mouseAccion = event.mouseButton.button;
     }
 
     if (sf::Event::KeyPressed == event.type) {
@@ -243,7 +251,7 @@ EditorApp::createRacer() {
      Vec2((i * 35), 500),
      0.75f + util::randomRangeFloat(0.01f, 1.01f)
     );
-    followBoid.m_fleeTargetPosition = &m_mousePos;
+    followBoid.m_fleeTargetPosition = &m_mouseData.mousePosition;
     followBoid.m_fleeMagnitude = 7.0f;
     followBoid.m_fleeRadius = 100.0f;
 

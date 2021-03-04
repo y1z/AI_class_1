@@ -25,10 +25,11 @@ class EditorApp final : public BaseApp
   struct MouseData
   {
     MouseData(const Vec2& _mousePosition, const int32_t _mouseAccion)
-      :mousePosition(_mousePosition), mouseAccion(_mouseAccion)
+    :mousePosition(_mousePosition),
+     mouseAccion(static_cast<sf::Mouse::Button>(_mouseAccion))
     {}
     Vec2 mousePosition;
-    int32_t mouseAccion;
+     sf::Mouse::Button mouseAccion;
   };
 
 
