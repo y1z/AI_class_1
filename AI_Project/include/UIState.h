@@ -3,10 +3,11 @@
 #include "UIScene.h"
 
 namespace UI_STATE_NAME {
-enum E : size_t
-{
+
+enum E : size_t {
   kWAITING = 0,
   kCHANGING,
+  kStop,
   kNumStates
 };
 
@@ -14,10 +15,11 @@ enum E : size_t
 
 struct UIStateData
 {
-
+  sf::Vector2f mousePosition;
   /** keeps track of which sate we are in*/
-  sf::Vector2i currentStateID;
-  sf::Vector2i lastIndexID;
+  int32_t ID;
+  int32_t lastSceneID;
+  int32_t mouseAccion;
 };
 
 
@@ -30,18 +32,15 @@ struct UIState
   virtual ~UIState() = default;
 
   virtual UI_STATE_NAME::E
-  onUpdate(const sf::Vector2f& mousePos,
-           int32 mouseButtonCode) = 0;
+  onUpdate(const UIStateData mousePos) = 0;
 
   virtual UI_STATE_NAME::E
-  onExit(const sf::Vector2f& mousePos,
-         int32 mouseButtonCode) = 0;
+  onExit(const UIStateData mousePos) = 0;
 
   virtual UI_STATE_NAME::E
   getCurrentState()const = 0;
 
-
-  sf::Vector2i index = sf::Vector2i(0, 0);
+  int32_t index = 0;
   std::vector<UIScene>* ptr_scenes;
 };
 
