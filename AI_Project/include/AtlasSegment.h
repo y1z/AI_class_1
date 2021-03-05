@@ -6,7 +6,7 @@
 class Racer;
 
 /**
- * @file 
+ * @file
  * @class AtlasSegment : represent a portion of a sprite atlas.
  */
 class AtlasSegment
@@ -84,7 +84,6 @@ private:
   bool
   isRectInsideOfBound(const sf::IntRect& rect)const;
 
-  
 private:
   /** @brief a pointer to the texture. */
   std::shared_ptr< sf::Texture > m_texture;

@@ -65,7 +65,7 @@ AtlasSegment::setSegmentDimension(const Vec2& topLeft,
   const sf::IntRect fullRectSize(sf::Vector2i(0.0f, 0.0f), sizeOfTexture);
   Vec2 center = util::getCenterOfIntRect(fullRectSize);
   center.y = 0.0f;
-  const sf::IntRect newRect(util::vec2ToVector2i(center), util::vec2ToVector2i(widthAndHeight));
+  const sf::IntRect newRect(util::vec2ToVector2i(center + topLeft) , util::vec2ToVector2i(widthAndHeight));
 
   if ((newRect.width <= sizeOfTexture.x) && (newRect.height <= sizeOfTexture.y)) {
     m_sprite.setTextureRect(newRect);
