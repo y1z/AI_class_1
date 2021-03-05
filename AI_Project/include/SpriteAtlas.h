@@ -14,13 +14,21 @@ struct SpriteAtlasDesc
   SpriteAtlasDesc(const SpriteAtlasDesc&) = default;
   SpriteAtlasDesc(SpriteAtlasDesc&&) noexcept = default;
 
-  SpriteAtlasDesc(const std::filesystem::path& path, 
+  SpriteAtlasDesc(const std::filesystem::path& path,
                   const std::vector<sf::IntRect>& dimensionOfEachSprite)
-    :m_pathToFile(path),
-    m_dimensionsOfEachSprite(dimensionOfEachSprite) 
-  {};
+    :
+    m_pathToFile(path),
+    m_dimensionsOfEachSprite(dimensionOfEachSprite) {};
 
-  std::filesystem::path m_pathToFile; 
+  ~SpriteAtlasDesc() = default;
+
+  SpriteAtlasDesc&
+  operator=(const SpriteAtlasDesc&) = default;
+
+  SpriteAtlasDesc&
+  operator=(SpriteAtlasDesc&&) = default;
+
+  std::filesystem::path m_pathToFile;
   std::vector<sf::IntRect>  m_dimensionsOfEachSprite;
 };
 
@@ -29,7 +37,7 @@ struct SpriteAtlasDesc
  * @file
  * @class SpriteAtlas : represents a collection of sprites .
  */
-class SpriteAtlas 
+class SpriteAtlas
 {
  public:
   using containerType = std::deque<AtlasSegment>;
@@ -45,6 +53,10 @@ class SpriteAtlas
   /** @returns a reference to a atlas segment. */
   [[nodiscard]]AtlasSegment&
   getAtlasSegment(const size_t index);
+
+  /** @returns how many */
+  [[nodiscard]] size_t
+  getAtlasSegmentCount()const;
 
   /** @returns the color of a pixel*/
   [[nodiscard]]sf::Color
@@ -65,9 +77,9 @@ class SpriteAtlas
   setSpriteScale(const Vec2& scale,
                  const size_t index);
 
-  /** 
-   *  @brief makes all instance of the given color transparent. 
-   *  @param color : the that will be converted to 
+  /**
+   *  @brief makes all instance of the given color transparent.
+   *  @param color : the that will be converted to
    */
   void
   makeColorTransparent(const sf::Color color)const;
@@ -77,6 +89,7 @@ class SpriteAtlas
   draw(sf::RenderTarget& target) const;
 
  private:
+
   bool
   internalInit(const SpriteAtlasDesc& atlasDesc);
  public:

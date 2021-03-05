@@ -61,6 +61,9 @@ class EditorApp final : public BaseApp
   int
   mainLoop()override;
 
+  int
+  menuLoop();
+
   /**
    * For creation of resources
    */

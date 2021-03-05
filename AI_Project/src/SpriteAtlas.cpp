@@ -35,6 +35,11 @@ SpriteAtlas::getAtlasSegment(const size_t index) {
   return m_segments[index];
 }
 
+size_t
+SpriteAtlas::getAtlasSegmentCount() const {
+  return m_segments.size();
+}
+
 sf::Color
 SpriteAtlas::getColorOfPixel(const unsigned x,
                              const unsigned y)const {
@@ -79,7 +84,7 @@ SpriteAtlas::draw(sf::RenderTarget& target) const {
 
 }
 
-bool 
+bool
 SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
   sf::FileInputStream fileStream;
   if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {

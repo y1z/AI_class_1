@@ -4,9 +4,9 @@
 
 /**
  * @file
- * @class Racer : contains the racer. 
+ * @class Racer : contains the racer.
  */
-class Racer 
+class Racer
 {
 public:
   Racer(const BoidDescriptor& desc);
@@ -38,19 +38,32 @@ public:
   getLapRequirements()const;
 
   /** @returns the total amount of checkpoints passed.*/
-  uint32 
+  uint32
   getCheckpointTotal()const;
 
   /** @returns the total amount of checkpoints passed of the current lap.*/
   uint32
   getCurrentLapCheckPoint()const;
 
+  /**
+   * Advances the frame in the sprite atlas.
+   */
+  void
+  advanceFrames(const int32 framesToAdvance = 1);
 
+  /**
+   * updates the logic for the racer.
+   */
   void
   update(float deltaTime);
 
+  /**
+   * draws the racers
+   * @Note If the racer does NOT have a sprite, the racer will look like a sphere.
+   */
   void
   draw(sf::RenderTarget& target);
+
 
   void
   destroy();

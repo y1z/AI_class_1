@@ -64,11 +64,24 @@ Racer::getCurrentLapCheckPoint() const
 }
 
 void
+Racer::advanceFrames(const int32 framesToAdvance) {
+  const size_t totalSegments = m_atlasPtr->getAtlasSegmentCount();
+
+  m_atlasPtr->setSpriteLocation(Vec2(std::numeric_limits<float>::lowest(),
+                                std::numeric_limits<float>::lowest()),
+                                m_currentFrame);
+
+  m_currentFrame = (( m_currentFrame + framesToAdvance) % totalSegments);
+  std::cout << "current frame [" << m_currentFrame << "] ";
+}
+
+void
 Racer::update(float deltaTime)
 {
   m_boid.update(deltaTime);
   if( m_atlasPtr != nullptr )
   {
+    //m_boid.getDir().getAngle();
     m_atlasPtr->setSpriteLocation(m_boid.m_data.m_position, m_currentFrame);
   }
   const bool shouldUpdateLapCount = m_boid.m_data.m_nodesReached > 0u;
@@ -85,7 +98,7 @@ Racer::draw(sf::RenderTarget& target)
   {
     const auto boidSize = m_boid.m_data.m_boidSize;
     m_atlasPtr->setSpriteScale(Vec2(1.0f, 1.0f), m_currentFrame);
-    m_atlasPtr->setSpriteLocation(m_boid.m_data.m_position,m_currentFrame);
+    m_atlasPtr->setSpriteLocation(m_boid.m_data.m_position, m_currentFrame);
     m_atlasPtr->draw(target);
   }
   else

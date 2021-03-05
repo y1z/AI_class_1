@@ -16,7 +16,7 @@ using std::make_unique;
  * NonClass related constants.
  */
 constexpr static const char*
-s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario.png";
+s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario2.png";
 
 constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
@@ -49,6 +49,44 @@ EditorApp::mainLoop() {
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
 
+  menuLoop();
+
+  for (auto& elem : container) {
+    elem.m_atlasPtr = m_spriteAtlas.get();
+  }
+
+  const float changeRate = 0.8f;
+  float totalTime = 0.0f;
+  while (m_window->isOpen()) {
+
+    m_timer.StartTiming();
+    handleRacers();
+
+    handleInput();
+
+    handleDraw();
+
+    if (totalTime >= changeRate) {
+      totalTime = 0.0f;
+
+      for (auto& racer : container) {
+        racer.advanceFrames(1);
+      }
+
+    }
+
+
+    m_timer.EndTiming();
+    m_deltaTime = m_timer.GetResultSecondsFloat();
+    totalTime += m_deltaTime;
+  }
+
+  return 0;
+}
+
+int
+EditorApp::menuLoop() {
+
   while (m_stateMachine->isStateMachineActive()) {
     m_window->clear();
     handleInput();
@@ -59,23 +97,6 @@ EditorApp::mainLoop() {
   }
 
   setUpNewPath();
-
-  for (auto& elem : container) {
-    elem.m_atlasPtr = m_spriteAtlas.get();
-  }
-
-  while (m_window->isOpen()) {
-
-    m_timer.StartTiming();
-    handleRacers();
-
-    handleInput();
-
-    handleDraw();
-
-    m_timer.EndTiming();
-    m_deltaTime = m_timer.GetResultSecondsFloat();
-  }
 
   return 0;
 }
@@ -144,7 +165,7 @@ EditorApp::handleDraw() {
   m_window->clear();
 
   auto& gm = GameManager::getInstance();
-  m_spriteAtlas->draw(*m_window);
+  //m_spriteAtlas->draw(*m_window);
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
   m_window->display();
@@ -210,7 +231,7 @@ bool
 EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
 
   const std::vector<sf::IntRect> rectSequence =
-    util::createHorizontalIntRectSequence(sf::Vector2i(0, 0), sf::Vector2i(25, 25), 2);
+    util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
 
   const SpriteAtlasDesc desc(pathToAtlas, rectSequence);
 

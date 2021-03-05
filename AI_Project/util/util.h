@@ -181,7 +181,7 @@ namespace util {
                                   const bool createMirroredSequence = true) {
     std::vector<sf::IntRect> result;
     const uint32 multiplier = (createMirroredSequence) ? 2u : 1u;
-    const size_t realTotalImages = static_cast<size_t>((uint32) totalRects * multiplier);
+    const size_t realTotalImages = static_cast<size_t>(totalRects * multiplier);
 
     result.reserve(realTotalImages);
 
