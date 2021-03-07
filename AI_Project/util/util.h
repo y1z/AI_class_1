@@ -231,6 +231,20 @@ namespace util {
     return Result;
   }
 
+
+  /**
+   * @returns true when the value in the range [min ... max]
+   */
+  inline bool
+  isInRange(const float min,
+            const float max,
+            const float value)
+  {
+    assert((min < max) && "min must be smaller than max");
+    return min <= value && value <= max;
+  }
+
+
 }
 
 
