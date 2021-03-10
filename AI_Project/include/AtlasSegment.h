@@ -1,6 +1,6 @@
 #pragma once
 #include "Types.h"
-
+#include "RotationSegment.h"
 #include <memory>
 
 class Racer;
@@ -29,7 +29,8 @@ public:
   /** @retruns true if the texture is not null */
   [[nodiscard]]bool
   init(std::shared_ptr<sf::Texture> texture,
-       const sf::IntRect& rect);
+       const sf::IntRect& rect,
+       const RotationSegment& angleRadians = RotationSegment(0.0f,0.f));
 
   /** @retruns true if the path is valid, return false when the path is invalid */
   [[nodiscard]]bool
@@ -46,7 +47,6 @@ public:
   /** @returns the current size of the AtlasSegment. */
   Vec2
   getSegmentSize()const;
-
 
   /** @return false when the segment is goes out side the bound of the sprite. */
   bool
@@ -69,6 +69,9 @@ public:
   bool
   offsetSegment(const Vec2& offset);
 
+  /**
+   * Draws the current segment
+   */
   void
   draw(sf::RenderTarget& target)const;
 
@@ -84,11 +87,16 @@ private:
   bool
   isRectInsideOfBound(const sf::IntRect& rect)const;
 
-private:
   /** @brief a pointer to the texture. */
   std::shared_ptr< sf::Texture > m_texture;
+
+  /** @brief represents the area of the texture being used. */
   sf::IntRect m_textureRect;
 public:
   sf::Sprite m_sprite;
+  /**
+   * Represents
+   */
+  RotationSegment m_originalSpriteOritention = RotationSegment(0.0f, 0.0f);
 };
 

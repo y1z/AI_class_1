@@ -15,8 +15,10 @@ AtlasSegment::init(std::shared_ptr<sf::Texture> texture) {
 
 bool
 AtlasSegment::init(std::shared_ptr<sf::Texture> texture,
-                   const sf::IntRect& rect) {
+                   const sf::IntRect& rect,
+                   const RotationSegment& angleRadians) {
   const bool result = init(std::move(texture)) && setSegmentDimension(rect);
+  m_originalSpriteOritention = angleRadians;
   return result;
 }
 
@@ -55,7 +57,6 @@ AtlasSegment::getSegmentSize() const {
   const auto& rect = m_sprite.getTextureRect();
   return Vec2(rect.width, rect.height);
 }
-
 
 bool
 AtlasSegment::setSegmentDimension(const Vec2& topLeft,
