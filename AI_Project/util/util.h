@@ -235,7 +235,8 @@ namespace util {
       RotationSegment currentRotation(start, end);
       std::vector<RotationSegment> sequence;
       sequence.reserve(count);
-      const float delta = end - start;
+      const float inverseTotal = 1.f / count;
+      const float delta = (end - start) * inverseTotal;
       for (uint32 i = 0u; i < count; ++i) {
         sequence.emplace_back(currentRotation);
         currentRotation.rotateRadians(delta);
