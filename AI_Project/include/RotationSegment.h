@@ -9,6 +9,10 @@ struct RotationSegment {
   RotationSegment(const float _start, const float _end)
     :start(_start), end(_end) {}
 
+  /**
+   * @returns
+   *  The delta between the variables 'start' and 'end'.
+   */
   float
   getRotationDelta()const;
 
@@ -24,10 +28,13 @@ struct RotationSegment {
    * Adds 2 rotation segment together
    */
   RotationSegment
-  operator+ (const RotationSegment& otherSegment);
+  operator+ (const RotationSegment& otherSegment)const ;
 
+  /**
+   * Subtracts 2 rotation from each-other
+   */
   RotationSegment
-  operator- (const RotationSegment& otherSegment);
+  operator- (const RotationSegment& otherSegment)const;
 
 
   float start;
