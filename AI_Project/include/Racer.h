@@ -45,6 +45,9 @@ public:
   uint32
   getCurrentLapCheckPoint()const;
 
+  void
+  setFrame(const int32 selectedFrame);
+
   /**
    * Advances the frame in the sprite atlas.
    */

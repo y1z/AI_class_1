@@ -1,5 +1,6 @@
 #include "Racer.h"
 #include "GameManager.h"
+#include <cassert>
 
 Racer::Racer(const BoidDescriptor& desc)
   :m_atlasPtr(nullptr),
@@ -61,6 +62,16 @@ uint32
 Racer::getCurrentLapCheckPoint() const
 {
   return m_lapCount.m_currentCheckPoints;
+}
+
+void
+Racer::setFrame(const int32 selectedFrame) {
+  assert(selectedFrame < this->m_atlasPtr->getAtlasSegmentCount());
+  m_atlasPtr->setSpriteLocation(Vec2(std::numeric_limits<float>::lowest(),
+                                std::numeric_limits<float>::lowest()),
+                                m_currentFrame);
+
+  m_currentFrame = selectedFrame;
 }
 
 void
