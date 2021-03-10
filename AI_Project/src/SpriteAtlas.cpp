@@ -86,7 +86,9 @@ SpriteAtlas::draw(sf::RenderTarget& target) const {
 
 bool
 SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
+
   sf::FileInputStream fileStream;
+
   if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {
     m_pixels->loadFromStream(fileStream);
     *m_pixels = util::makeSplitImageWithMirroredHalf(*m_pixels);
