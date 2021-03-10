@@ -21,14 +21,16 @@ s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario2.png";
 constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
 
+constexpr static const char*
+s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
+
 
 fs::path
 openFilePath(BaseApp* app);
 
 
 EditorApp::EditorApp()
-  : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), sf::Mouse::Button::ButtonCount)
-{}
+  : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), sf::Mouse::Button::ButtonCount) {}
 
 int
 EditorApp::run(unsigned int screenWidth,
@@ -37,6 +39,11 @@ EditorApp::run(unsigned int screenWidth,
   m_screenHeight = screenHeight;
 
   if (-1 == init()) {
+    return -1;
+  }
+
+
+  if (-1 == menuLoop()) {
     return -1;
   }
 
@@ -49,7 +56,6 @@ EditorApp::mainLoop() {
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
 
-  menuLoop();
 
   for (auto& elem : container) {
     elem.m_atlasPtr = m_spriteAtlas.get();
@@ -70,7 +76,7 @@ EditorApp::mainLoop() {
       totalTime = 0.0f;
 
       for (auto& racer : container) {
-        racer.advanceFrames(1);
+        racer.setFrame(12);
       }
 
     }
@@ -91,7 +97,7 @@ EditorApp::menuLoop() {
     m_window->clear();
     handleInput();
     const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.mousePosition);
-    m_stateMachine->update(mousePosition , m_mouseData.mouseAccion);
+    m_stateMachine->update(mousePosition, m_mouseData.mouseAccion);
     m_stateMachine->render(m_window.get());
     m_window->display();
   }
@@ -144,7 +150,7 @@ EditorApp::createMenu() {
     UISceneDesc menuScene;
     auto const halfScreenWidth = m_screenWidth / 2.0f;
     auto const halfScreenHeight = m_screenHeight / 2.0f;
-    const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth,200), "", sf::Color::Yellow));
+    const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 200), "", sf::Color::Yellow));
     const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
 
     //auto function_lambda = [](BaseApp* editor) { return openFilePath(editor); };
@@ -193,20 +199,33 @@ EditorApp::handleInput() {
     }
 
     if (sf::Event::KeyPressed == event.type) {
-      if (sf::Keyboard::S == event.key.code) {
+
+      switch (event.key.code) {
+      case sf::Keyboard::S:
+      {
         const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
         m_gameMap->saveMap(path.generic_string());
       }
+      break;
 
-      if (sf::Keyboard::P == event.key.code) {
-        const fs::path p = openFilePath(this);
-        std::cout << p << '\n';
+      case sf::Keyboard::P:
+      {
+        auto path = fs::path(m_initialPath).append(s_pathToSaveSpriteAtlus);
+        if (m_spriteAtlas->m_atlasTexture->copyToImage().saveToFile(path.generic_string())) {
+          std::cout << "saving sprite image to [" << s_pathToSaveSpriteAtlus << "]\n";
+        }
       }
 
-      if (sf::Keyboard::L == event.key.code) {
+      break;
+      case sf::Keyboard::L:
+      {
         const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
         m_gameMap->loadMap(path);
         setUpNewPath();
+      }
+      break;
+      default:
+      break;
       }
 
     }

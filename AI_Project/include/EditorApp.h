@@ -8,8 +8,7 @@
 
 
 namespace RESULT_APP_STAGES {
-enum E
-{
+  enum E {
   kERROR = -1,
   kNO_ERROR = 0,
   kMISSING_IMPL,
@@ -29,7 +28,7 @@ class EditorApp final : public BaseApp
      mouseAccion(static_cast<sf::Mouse::Button>(_mouseAccion))
     {}
     Vec2 mousePosition;
-     sf::Mouse::Button mouseAccion;
+    sf::Mouse::Button mouseAccion;
   };
 
 
@@ -61,6 +60,9 @@ class EditorApp final : public BaseApp
   int
   mainLoop()override;
 
+  /**
+   * creates the main menu.
+   */
   int
   menuLoop();
 
