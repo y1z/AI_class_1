@@ -9,6 +9,7 @@
 #include "SFML/System/Vector2.hpp"
 
 #include "GameManager.h"
+#include "RotationSegment.h"
 
 namespace util {
 
@@ -205,6 +206,26 @@ namespace util {
 
     return result;
 
+  }
+
+  /**
+   * @returns A vector containing RotationSegment's that are used to represent
+   *  a partial segment of a circular rotation.
+   *
+   * @param[in] startingAngleRadians The angle where the sequence starts.
+   * @param[in] endingAngleRadians Where the sequence ends.
+   * @param[in] howManyRotationSegment Controls the amount of rotation segments
+   *  to makes NOTE this number is doubled if \p createMirrorSequence is true.
+   * @param[in] createMirrorSequence Controls if another sequence that rotates
+   *  in the opposite orientation.
+   */
+  static std::vector<RotationSegment>
+  createRotationSegmentSequence(const float startingAngleRadians,
+                                const float endingAngleRadians,
+                                const uint32 howManyRotationSegment,
+                                const bool createMirrorSequence = true)
+  {
+    const float delta = endingAngleRadians - startingAngleRadians;
   }
 
   /**
