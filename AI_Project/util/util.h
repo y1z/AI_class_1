@@ -225,7 +225,36 @@ namespace util {
                                 const uint32 howManyRotationSegment,
                                 const bool createMirrorSequence = true)
   {
-    const float delta = endingAngleRadians - startingAngleRadians;
+    std::vector<RotationSegment> result;
+    const uint32 reservedSegments = (createMirrorSequence) ?
+                                    howManyRotationSegment * 2 :
+                                    howManyRotationSegment;
+    result.reserve(reservedSegments);
+
+    auto const createSequence = [](const float start, const float end, const uint32 count) {
+      RotationSegment currentRotation(start, end);
+      std::vector<RotationSegment> sequence;
+      sequence.reserve(count);
+      const float delta = end - start;
+      for (uint32 i = 0u; i < count; ++i) {
+        sequence.emplace_back(currentRotation);
+        currentRotation.rotateRadians(delta);
+      }
+      return sequence;
+    };
+
+    result = (createSequence(startingAngleRadians,
+              endingAngleRadians,
+              howManyRotationSegment));
+
+    if (createMirrorSequence) {
+      auto temp = createSequence(endingAngleRadians,
+                                 startingAngleRadians,
+                                 howManyRotationSegment);
+      std::move(temp.begin(), temp.end(), std::back_inserter(result));
+    }
+
+    return result;
   }
 
   /**
