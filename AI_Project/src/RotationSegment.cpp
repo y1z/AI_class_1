@@ -3,7 +3,7 @@
 
 float
 RotationSegment::getRotationDelta() const {
-  return start - end;
+  return end - start;
 }
 
 RotationSegment&
