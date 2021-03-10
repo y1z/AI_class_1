@@ -1,3 +1,4 @@
+#include "EditorApp.h"
 #include <iostream>
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
@@ -6,7 +7,7 @@
 #undef max
 #undef min
 #include "util.h"
-#include "EditorApp.h"
+#include "GlobalValues.h"
 
 namespace fs = std::filesystem;
 
@@ -149,18 +150,15 @@ EditorApp::createMenu() {
   {
     UISceneDesc menuScene;
     auto const halfScreenWidth = m_screenWidth / 2.0f;
-    auto const halfScreenHeight = m_screenHeight / 2.0f;
     const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 200), "", sf::Color::Yellow));
     const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
 
-    //auto function_lambda = [](BaseApp* editor) { return openFilePath(editor); };
-    //std::function<fs::path(void) > func(;
     menuScene.AddElement(selectRect, -1, std::function<fs::path(BaseApp*)>(openFilePath));
     menuScene.AddElement(playRect, -1);
 
     menuScene.ID = 0;
 
-    m_stateMachine->init({ menuScene }, this); //m_scenes.push_back(UIScene(menuScene));
+    m_stateMachine->init({ menuScene }, this);
   }
 
   return true;
@@ -251,6 +249,10 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
 
   const std::vector<sf::IntRect> rectSequence =
     util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
+
+  const std::vector<RotationSegment> rotations =
+    util::createRotationSegmentSequence()
+
 
   const SpriteAtlasDesc desc(pathToAtlas, rectSequence);
 
