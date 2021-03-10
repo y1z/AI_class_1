@@ -15,11 +15,22 @@ struct SpriteAtlasDesc
   SpriteAtlasDesc(SpriteAtlasDesc&&) noexcept = default;
 
   SpriteAtlasDesc(const std::filesystem::path& path,
-                  const std::vector<sf::IntRect>& dimensionOfEachSprite)
+                  const std::vector<sf::IntRect>& dimensionOfEachSprite,
+                  const std::vector<RotationSegment>& rotationOfEachSprite={})
     :
     m_pathToFile(path),
-    m_dimensionsOfEachSprite(dimensionOfEachSprite) {};
+    m_dimensionsOfEachSprite(dimensionOfEachSprite),
+    m_rotationOfEachSprite(rotationOfEachSprite)
+  {};
 
+
+  SpriteAtlasDesc(std::filesystem::path&& path,
+                  std::vector<sf::IntRect>&& dimensionOfEachSprite,
+                  std::vector<RotationSegment>&& rotationOfEachSprite = {})
+    : m_pathToFile(path),
+      m_dimensionsOfEachSprite(dimensionOfEachSprite),
+      m_rotationOfEachSprite(rotationOfEachSprite)
+  {}
   ~SpriteAtlasDesc() = default;
 
   SpriteAtlasDesc&
@@ -30,6 +41,7 @@ struct SpriteAtlasDesc
 
   std::filesystem::path m_pathToFile;
   std::vector<sf::IntRect>  m_dimensionsOfEachSprite;
+  std::vector<RotationSegment> m_rotationOfEachSprite;
 };
 
 
