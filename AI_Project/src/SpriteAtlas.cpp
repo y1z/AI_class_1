@@ -95,14 +95,19 @@ SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
 
     m_atlasTexture->loadFromImage(*m_pixels);
 
-    for (const auto& segmentDimensions : atlasDesc.m_dimensionsOfEachSprite) {
+    const size_t totalElements = atlasDesc.m_dimensionsOfEachSprite.size();
+    for(size_t i = 0u; i < totalElements ;++i)
+    {
       AtlasSegment segment;
-      if (segment.init(m_atlasTexture, segmentDimensions)) {
+      const auto& segmentDim = atlasDesc.m_dimensionsOfEachSprite[i];
+      const auto& rotationSeg = atlasDesc.m_rotationOfEachSprite[i];
+      if (segment.init(m_atlasTexture, segmentDim, rotationSeg)) {
         m_segments.emplace_back(segment);
       }
       else {
         return false;
       }
+
     }
   }
   return true;

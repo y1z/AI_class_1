@@ -251,10 +251,12 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
     util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
 
   const std::vector<RotationSegment> rotations =
-    util::createRotationSegmentSequence()
+    util::createRotationSegmentSequence(gvar::halfPi,
+                                        gvar::halfPi - gvar::pi,
+                                        12);
 
 
-  const SpriteAtlasDesc desc(pathToAtlas, rectSequence);
+  const SpriteAtlasDesc desc(pathToAtlas, rectSequence, rotations);
 
   const bool isAtlasInitialized = m_spriteAtlas->init(desc);
 

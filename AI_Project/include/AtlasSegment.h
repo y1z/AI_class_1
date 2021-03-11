@@ -30,7 +30,7 @@ public:
   [[nodiscard]]bool
   init(std::shared_ptr<sf::Texture> texture,
        const sf::IntRect& rect,
-       const RotationSegment& angleRadians = RotationSegment(0.0f,0.f));
+       const RotationSegment& rotation = RotationSegment(0.0f,0.f));
 
   /** @retruns true if the path is valid, return false when the path is invalid */
   [[nodiscard]]bool
