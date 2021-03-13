@@ -4,14 +4,14 @@
 /**
  * @file
  * @class StateScoreCheck : represents the score board checking that the position of the 
- * UiRectangle are in their correct position relative to the racers.
+ * UIRectangle are in their correct position relative to the racers.
  */
 class StateScoreCheck : public StateScoreBase  
 {
 public:
   int
   run(UiManager& man,
-      UiRectangle& rect,
+      UIRectangle& rect,
       const LapCount& baseLap) override;
 
 };

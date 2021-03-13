@@ -3,12 +3,12 @@
 
 int
 StateScoreCheck::run(UiManager& man,
-                     UiRectangle& rect,
+                     UIRectangle& rect,
                      const LapCount& baseLap)
 {
   int result = 0;
 
-  const auto sortFunc = [](UiRectangle& rect1, UiRectangle& rect2) {
+  const auto sortFunc = [](UIRectangle& rect1, UIRectangle& rect2) {
     const bool shouldSwap = (rect1 < rect2);
     if( shouldSwap )
     {

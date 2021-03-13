@@ -10,7 +10,7 @@
 class UiManager
 {
 public:
-  using RectangleContainer = std::vector< UiRectangle >;
+  using RectangleContainer = std::vector< UIRectangle >;
 public:
 
   /**
@@ -33,7 +33,7 @@ public:
   resizeAllRectangle(const sf::Vector2f& newSize);
 
 
-  UiRectangle&
+  UIRectangle&
   getRectangle(const uint32 index);
 
   uint32

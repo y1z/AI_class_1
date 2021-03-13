@@ -20,6 +20,6 @@ public:
   StateScoreBase& operator= (StateScoreBase&&)noexcept = default;
 public:
   virtual int
-  run(UiManager& man ,UiRectangle& rect, const LapCount& baseLap) = 0;
+  run(UiManager& man ,UIRectangle& rect, const LapCount& baseLap) = 0;
   
 };

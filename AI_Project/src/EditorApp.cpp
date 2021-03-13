@@ -150,8 +150,8 @@ EditorApp::createMenu() {
   {
     UISceneDesc menuScene;
     auto const halfScreenWidth = m_screenWidth / 2.0f;
-    const UiRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 200), "", sf::Color::Yellow));
-    const UiRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
+    const UIRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 200), "", sf::Color::Yellow));
+    const UIRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
 
     menuScene.AddElement(selectRect, -1, std::function<fs::path(BaseApp*)>(openFilePath));
     menuScene.AddElement(playRect, -1);

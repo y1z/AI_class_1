@@ -17,9 +17,9 @@ struct UIRectangleDesc
   UIRectangleDesc(const int32 _width,
                   const int32 _height,
                   const sf::Vector2f& _position,
-                  const std::string_view path = "",
+                  const std::string_view _path = "",
                   const sf::Color _color = sf::Color::White)
-    :pathToSprite(path),
+    :pathToSprite(_path),
     position(_position),
     color(_color),
     width(_width),
@@ -42,22 +42,22 @@ struct UIRectangleDesc
 
 
 /**
- * @class UiRectangle : controls all rectangular shaped rectangles.
+ * @class UIRectangle : controls all rectangular shaped rectangles.
  */
-class UiRectangle
+class UIRectangle
 {
 public:
-  explicit UiRectangle(const UIRectangleDesc& desc);
+  explicit UIRectangle(const UIRectangleDesc& desc);
 
 
   bool
-  operator<(const UiRectangle& other) const;
+  operator<(const UIRectangle& other) const;
 
   bool
-  operator>(const UiRectangle& other) const;
+  operator>(const UIRectangle& other) const;
 
   bool
-  operator==(const UiRectangle& other) const;
+  operator==(const UIRectangle& other) const;
 
   bool
   init(const UIRectangleDesc& desc);
@@ -95,7 +95,7 @@ public:
   resizeRectangle(const sf::Vector2f& newSize);
 
   void
-  swapPosition(UiRectangle& otherUI);
+  swapPosition(UIRectangle& otherUI);
 
   bool
   isInsideRect(const sf::Vector2f& pos)const;

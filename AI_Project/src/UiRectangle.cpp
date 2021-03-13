@@ -4,7 +4,7 @@
 #include <SFML/System/FileInputStream.hpp>
 
 
-UiRectangle::UiRectangle(const UIRectangleDesc &desc)
+UIRectangle::UIRectangle(const UIRectangleDesc &desc)
   : m_rect(sf::Vector2f(desc.width, desc.height)),
     m_ptrRacer(nullptr),
     m_texture(std::make_shared<sf::Texture>())
@@ -22,25 +22,25 @@ UiRectangle::UiRectangle(const UIRectangleDesc &desc)
 }
 
 bool
-UiRectangle::operator<(const UiRectangle& other) const
+UIRectangle::operator<(const UIRectangle& other) const
 {
   return this->m_ptrRacer->m_lapCount < other.m_ptrRacer->m_lapCount;
 }
 
 bool
-UiRectangle::operator>(const UiRectangle& other) const
+UIRectangle::operator>(const UIRectangle& other) const
 {
   return this->m_ptrRacer->m_lapCount > other.m_ptrRacer->m_lapCount;
 }
 
 bool
-UiRectangle::operator==(const UiRectangle& other) const
+UIRectangle::operator==(const UIRectangle& other) const
 {
   return this->m_ptrRacer->m_lapCount == other.m_ptrRacer->m_lapCount;
 }
 
 bool
-UiRectangle::init(const UIRectangleDesc& desc)
+UIRectangle::init(const UIRectangleDesc& desc)
 {
   m_rect.setSize(sf::Vector2f(desc.width, desc.height));
   m_texture = std::make_shared<sf::Texture>();
@@ -60,37 +60,37 @@ UiRectangle::init(const UIRectangleDesc& desc)
 }
 
 int32
-UiRectangle::getWidth() const
+UIRectangle::getWidth() const
 {
   return m_rect.getSize().x;
 }
 
 int32
-UiRectangle::getHeight() const
+UIRectangle::getHeight() const
 {
   return m_rect.getSize().y;
 }
 
 void
-UiRectangle::draw(sf::RenderTarget& target) const
+UIRectangle::draw(sf::RenderTarget& target) const
 {
   target.draw(m_rect);
 }
 
 sf::Vector2f
-UiRectangle::getScale() const
+UIRectangle::getScale() const
 {
   return m_rect.getScale();
 }
 
 sf::Vector2f
-UiRectangle::getPosition() const
+UIRectangle::getPosition() const
 {
   return m_rect.getPosition();
 }
 
 sf::Vector2f
-UiRectangle::getCenter() const
+UIRectangle::getCenter() const
 {
   const sf::FloatRect bounds = m_rect.getLocalBounds();
   const sf::Vector2f centerPosition
@@ -103,13 +103,13 @@ UiRectangle::getCenter() const
 }
 
 void
-UiRectangle::setPosition(const sf::Vector2f& newPos)
+UIRectangle::setPosition(const sf::Vector2f& newPos)
 {
   m_rect.setPosition(newPos);
 }
 
 sf::Vector2f
-UiRectangle::resizeRectangle(const sf::Vector2f& newSize)
+UIRectangle::resizeRectangle(const sf::Vector2f& newSize)
 {
   const sf::Vector2f newScale = util::rescaleVector(m_rect.getSize(),
                                                     m_rect.getScale(),
@@ -121,7 +121,7 @@ UiRectangle::resizeRectangle(const sf::Vector2f& newSize)
 }
 
 void
-UiRectangle::swapPosition(UiRectangle& otherUI)
+UIRectangle::swapPosition(UIRectangle& otherUI)
 {
   const auto myPos = m_rect.getPosition();
   m_rect.setPosition(otherUI.getPosition());
@@ -129,7 +129,7 @@ UiRectangle::swapPosition(UiRectangle& otherUI)
 }
 
 bool
-UiRectangle::isInsideRect(const sf::Vector2f& pos)const {
+UIRectangle::isInsideRect(const sf::Vector2f& pos)const {
   auto bound = m_rect.getGlobalBounds();
   sf::Rect temp(pos, { 1,1 });
   return bound.intersects(temp);

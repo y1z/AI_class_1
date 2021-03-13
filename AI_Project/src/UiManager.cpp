@@ -22,7 +22,7 @@ UiManager::init(const std::vector< UIRectangleDesc >& descriptors) {
 
 void
 UiManager::addRectangle(const UIRectangleDesc& desc) {
-  m_rectangles.emplace_back(UiRectangle(desc));
+  m_rectangles.emplace_back(UIRectangle(desc));
 }
 
 void
@@ -33,7 +33,7 @@ UiManager::resizeAllRectangle(const sf::Vector2f& newSize) {
 
 }
 
-UiRectangle&
+UIRectangle&
 UiManager::getRectangle(const uint32 index) {
   return m_rectangles.at(index);
 }

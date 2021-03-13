@@ -4,7 +4,7 @@ UIScene::UIScene(const UISceneDesc& descriptor)
   :m_desc(descriptor) {}
 
 void
-UISceneDesc::AddElement(const UiRectangle& _rectangle,
+UISceneDesc::AddElement(const UIRectangle& _rectangle,
                         const int32_t _associatedScene,
                         const UICallbackFunction& _callback) {
 

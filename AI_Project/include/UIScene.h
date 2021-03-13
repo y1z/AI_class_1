@@ -20,14 +20,14 @@ struct UISceneDesc
                   std::function<std::filesystem::path (BaseApp*) > >;
 
 
-  std::vector<UiRectangle> rectangles;/**< The visual representation. */
+  std::vector<UIRectangle> rectangles;/**< The visual representation. */
   std::vector<int32_t> associatedScenes;/**< The connections between scenes. */
   std::vector<UICallbackFunction> callbackFunctions;
   int32_t ID; /**< Used to identify the scenes. */
 
 
   void
-  AddElement(const UiRectangle& _rectangle,
+  AddElement(const UIRectangle& _rectangle,
              const int32_t _associatedScene,
              const UICallbackFunction& _callback = []() {});
 

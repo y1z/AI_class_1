@@ -6,7 +6,7 @@
 UI_STATE_NAME::E
 UIStateWaiting::onUpdate(UIStateData& sceneData) {
   assert(nullptr != ptr_scenes);
-  std::vector<UiRectangle>& UISceneElements = ptr_scenes->at(sceneIndex).m_desc.rectangles;
+  std::vector<UIRectangle>& UISceneElements = ptr_scenes->at(sceneIndex).m_desc.rectangles;
   UISceneDesc& scene = ptr_scenes->at(sceneIndex).m_desc;
   size_t i = 0;
   for (const auto& elem : UISceneElements) {
