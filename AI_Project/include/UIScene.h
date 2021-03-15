@@ -22,6 +22,20 @@ struct UISceneDesc
                   std::function<std::filesystem::path (BaseApp*) > >;
 
   struct TextElement {
+    TextElement() = default;
+    TextElement(TextElement&& other) noexcept = default;
+
+    TextElement(const TextElement& other) = default;
+
+    TextElement&
+    operator=(TextElement&& other) noexcept = default;
+
+    TextElement&
+    operator=(const TextElement& other) = delete;
+    //TextElement() = default;
+    //TextElement(TextElement&& other) noexcept {
+    //  text = std::move(other.text);
+    //}
     UIText text;
     uint64 index;
   };
@@ -45,6 +59,14 @@ struct UISceneDesc
              const int32_t _associatedScene,
              const UICallbackFunction& _callback,
              const UITextDescriptor& _textDesc);
+
+
+
+  void
+  AddElement(const UIRectangle& _rectangle,
+             const int32_t _associatedScene,
+             const UICallbackFunction& _callback,
+             UIText&& _text);
 
 
   constexpr bool
@@ -81,6 +103,8 @@ struct UISceneDesc
 class UIScene {
 public:
   explicit UIScene(const UISceneDesc& descriptor);
+
+  explicit UIScene(UISceneDesc&& descriptor);
 
   constexpr bool
   operator<(const UIScene& other)const {
