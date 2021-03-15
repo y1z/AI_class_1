@@ -1,24 +1,13 @@
 #include "UiRectangle.h"
 #include "util.h"
+#include "UIText.h"
 
 #include <SFML/System/FileInputStream.hpp>
 
 
 UIRectangle::UIRectangle(const UIRectangleDesc &desc)
-  : m_rect(sf::Vector2f(desc.width, desc.height)),
-    m_ptrRacer(nullptr),
-    m_texture(std::make_shared<sf::Texture>())
 {
-  const sf::Vector2f currentSize = m_rect.getSize();
-  m_rect.setOrigin(currentSize.x * 0.5f, currentSize.y * 0.5f);
-  sf::FileInputStream fileStream;
-  if( fileStream.open(desc.pathToSprite) )
-  {
-    m_texture->loadFromStream(fileStream);
-    m_rect.setTexture(m_texture.get());
-  }
-  m_rect.setPosition(desc.position);
-  m_rect.setFillColor(desc.color);
+  init(desc);
 }
 
 bool
@@ -42,21 +31,26 @@ UIRectangle::operator==(const UIRectangle& other) const
 bool
 UIRectangle::init(const UIRectangleDesc& desc)
 {
-  m_rect.setSize(sf::Vector2f(desc.width, desc.height));
+  m_rect = sf::RectangleShape (sf::Vector2f(desc.width, desc.height));
+  m_ptrRacer = nullptr;
   m_texture = std::make_shared<sf::Texture>();
 
   const sf::Vector2f currentSize = m_rect.getSize();
   m_rect.setOrigin(currentSize.x * 0.5f, currentSize.y * 0.5f);
   sf::FileInputStream fileStream;
-  if( fileStream.open(desc.pathToSprite) )
-  {
-    m_texture->loadFromStream(fileStream);
-    m_rect.setTexture(m_texture.get());
-    m_rect.setPosition(desc.position);
-    return true;
-  }
+  const bool isFileOpen = fileStream.open(desc.pathToSprite);
+  bool canLoadFromStream = false;
+  if (isFileOpen) {
+    canLoadFromStream = m_texture->loadFromStream(fileStream);
 
-  return false;
+    if (canLoadFromStream) {
+      m_rect.setTexture(m_texture.get());
+    }
+  }
+  m_rect.setPosition(desc.position);
+  m_rect.setFillColor(desc.color);
+
+  return isFileOpen && canLoadFromStream;
 }
 
 int32
@@ -134,4 +128,14 @@ UIRectangle::isInsideRect(const sf::Vector2f& pos)const {
   sf::Rect temp(pos, { 1,1 });
   return bound.intersects(temp);
 }
+
+UIRectangle
+UIRectangle::createRectangleWithText(const UIRectangleDesc& desc,
+                                     const UIText& text) {
+
+  UIRectangle result(desc);
+  text.attachToReactangle (&result);
+  return result;
+}
+
 

@@ -6,39 +6,8 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-struct UIRectangleDesc
-{
-  UIRectangleDesc()
-    :pathToSprite({}),
-    position(sf::Vector2f(0.0f, 0.0f)),
-    width(100),
-    height(100)
-  {}
-  UIRectangleDesc(const int32 _width,
-                  const int32 _height,
-                  const sf::Vector2f& _position,
-                  const std::string_view _path = "",
-                  const sf::Color _color = sf::Color::White)
-    :pathToSprite(_path),
-    position(_position),
-    color(_color),
-    width(_width),
-    height(_height)
-  {}
-  UIRectangleDesc(const UIRectangleDesc&) = default;
-  UIRectangleDesc(UIRectangleDesc&&) noexcept = default;
-  ~UIRectangleDesc() = default;
-
-  UIRectangleDesc& operator = (const UIRectangleDesc&) = default;
-  UIRectangleDesc& operator = (UIRectangleDesc&&) noexcept = default;
-
-
-  std::string pathToSprite;
-  sf::Vector2f position;
-  sf::Color color;
-  int32 width;
-  int32 height;
-};
+struct UIRectangleDesc;
+class UIText;
 
 
 /**
@@ -101,6 +70,11 @@ public:
   isInsideRect(const sf::Vector2f& pos)const;
 
 
+  static UIRectangle
+  createRectangleWithText(const UIRectangleDesc& desc,
+                          const UIText& text);
+
+
 public:
   sf::RectangleShape m_rect;
 
@@ -108,4 +82,45 @@ public:
 private:
   std::shared_ptr<sf::Texture> m_texture;
 };
+
+
+struct UIRectangleDesc
+{
+  UIRectangleDesc()
+    :pathToSprite({}),
+    position(sf::Vector2f(0.0f, 0.0f)),
+    width(100),
+    height(100)
+  {}
+  UIRectangleDesc(const int32 _width,
+                  const int32 _height,
+                  const sf::Vector2f& _position,
+                  const std::string_view _path = "",
+                  const sf::Color _color = sf::Color::White)
+    :pathToSprite(_path),
+    position(_position),
+    color(_color),
+    width(_width),
+    height(_height)
+  {}
+  UIRectangleDesc(const UIRectangleDesc&) = default;
+  UIRectangleDesc(UIRectangleDesc&&) noexcept = default;
+  ~UIRectangleDesc() = default;
+
+  UIRectangleDesc& operator = (const UIRectangleDesc&) = default;
+  UIRectangleDesc& operator = (UIRectangleDesc&&) noexcept = default;
+
+
+  std::string pathToSprite;
+  sf::Vector2f position;
+  sf::Color color;
+  int32 width;
+  int32 height;
+};
+
+
+
+
+
+
 
