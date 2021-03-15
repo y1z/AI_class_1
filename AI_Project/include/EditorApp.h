@@ -5,6 +5,7 @@
 #include "SpriteAtlas.h"
 #include "GameMap.h"
 #include "UIStateMachine.h"
+#include "UIText.h"
 
 
 namespace RESULT_APP_STAGES {
@@ -128,5 +129,6 @@ private:
   std::unique_ptr<SpriteAtlas> m_spriteAtlas; /**< Controls the sprites.*/
   std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used. */
   std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI. */
+  std::unique_ptr<UIText> m_testText; /**< used for displaying text. */
 };
 

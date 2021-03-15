@@ -25,6 +25,9 @@ s_pathToSaveFileDefault = "resources/saves/test.txt";
 constexpr static const char*
 s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
 
+constexpr static const char*
+s_pathToFront = "resources/fonts/DiscoBlingRegular-MjGJ.ttf";
+
 
 fs::path
 openFilePath(BaseApp* app);
@@ -76,9 +79,9 @@ EditorApp::mainLoop() {
     if (totalTime >= changeRate) {
       totalTime = 0.0f;
 
-      for (auto& racer : container) {
-        racer.setFrame(12);
-      }
+      sf::Vector2f textPos = m_testText->getPosition();
+      textPos.x += 1.5f;
+      m_testText->setPosition(textPos);
 
     }
 
@@ -126,6 +129,14 @@ EditorApp::init() {
     m_stateMachine = make_unique<UIStateMachine>();
 
     {
+      m_testText = make_unique<UIText>();
+      UITextDescriptor desc;
+      desc.pathToFont = s_pathToFront;
+      desc.textString = "dslkfjdsjfdsk;\nljfklsdjfklsjfk;\nldsjflkjdsk;\nlfjdkf";
+      m_testText->init(desc);
+    }
+
+    {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasDefault);
       if (!createAtlas(pathToAtlas)) {
         return -1;
@@ -152,7 +163,6 @@ EditorApp::createMenu() {
     auto const halfScreenWidth = m_screenWidth / 2.0f;
     const UIRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 200), "", sf::Color::Yellow));
     const UIRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
-
     menuScene.AddElement(selectRect, -1, std::function<fs::path(BaseApp*)>(openFilePath));
     menuScene.AddElement(playRect, -1);
 
@@ -172,6 +182,7 @@ EditorApp::handleDraw() {
   //m_spriteAtlas->draw(*m_window);
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
+  m_testText->draw(m_window.get());
   m_window->display();
 
   return RESULT_APP_STAGES::E::kNO_ERROR;
