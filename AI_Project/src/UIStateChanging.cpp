@@ -1,13 +1,15 @@
 #include "UIStateChanging.h"
 
 UI_STATE_NAME::E
-UIStateChanging::onUpdate(UIStateData& mousePos) {
+UIStateChanging::onUpdate(UIStateData& stateData) {
+  static_cast<void>(stateData);
 
-    return UI_STATE_NAME::E();
+  return UI_STATE_NAME::E();
 }
 
 UI_STATE_NAME::E
-UIStateChanging::onExit(UIStateData& mousePos) {
+UIStateChanging::onExit(UIStateData& stateData) {
+  static_cast<void>(stateData);
   return UI_STATE_NAME::E::kWAITING;
 }
 
