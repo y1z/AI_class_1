@@ -1,5 +1,6 @@
 #include "UIText.h"
 #include "SFML/Graphics/RenderTarget.hpp"
+#include "UiRectangle.h"
 #include <iostream>
 
 using std::make_shared;
@@ -25,7 +26,7 @@ UIText::init(const UITextDescriptor& descriptor) {
       m_text->setFillColor(descriptor.textFillColor);
       m_text->setCharacterSize(descriptor.textSize);
       m_text->setPosition(descriptor.textPosition);
-      m_text->setString(m_textString);
+      m_text->setString(descriptor.textString);
     }
     return canLoadStream && hasLoadedFront;
   }
@@ -39,8 +40,13 @@ UIText::getPosition() const {
 }
 
 sf::Color
-UIText::getColor() const {
+UIText::getFillColor() const {
   return m_text->getFillColor();
+}
+
+sf::Color
+UIText::getOuterColor() const {
+  return m_text->getOutlineColor();
 }
 
 unsigned int
@@ -73,16 +79,59 @@ UIText::setString(const std::string_view newString) {
   m_text->setString(sf::String(newString.data()));
 }
 
+bool
+UIText::makeTextFitSimple(const sf::FloatRect& constraints) {
+  auto const bounds = m_text->getLocalBounds();
+  const float delta = std::fabsf((bounds.left + bounds.width) - bounds.left);
+  {
+    const size_t limit = m_text->getString().getSize();
+
+    for (size_t i = 0u; i < limit; ++i) {
+      const sf::FloatRect approximetion(m_text->findCharacterPos(i), { .10f, .10f });
+      const bool isInsideConstraints = constraints.intersects(approximetion);
+      if (!isInsideConstraints) {
+        m_textString.insert(i-1, '\n');
+      }
+    }
+  }
+
+  return true;
+}
+
+void
+UIText::attachToReactangle(UIRectangle* pRect) const {
+  m_rectPointer = pRect;
+  m_text->setPosition(m_rectPointer->getPosition());
+}
+
+void
+UIText::unattachFromReactangle() {
+  m_rectPointer = nullptr;
+}
+
+
 void
 UIText::draw(sf::RenderTarget* target) const {
   target->draw(*m_text);
+}
+
+void
+UIText::update() {
+  const bool isAttached = (nullptr != m_rectPointer);
+
+  if (isAttached) {
+    auto bound = m_rectPointer->m_rect.getGlobalBounds();
+    m_text->setPosition(bound.left, bound.top);
+  }
+
+  m_text->setString(m_textString);
 }
 
 UIText&
 UIText::copy(const UIText& other) {
   this->m_fileStream = other.m_fileStream;
   this->m_font = other.m_font;
-  m_text = make_unique<sf::Text>(m_text->getString(), *other.m_font);
+  m_text = make_unique<sf::Text>(m_text->getString(), *m_font);
   return *this;
 }
 
