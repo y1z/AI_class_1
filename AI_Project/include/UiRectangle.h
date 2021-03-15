@@ -29,6 +29,13 @@ public:
   operator==(const UIRectangle& other) const;
 
   bool
+  operator<=(const UIRectangle& other) const;
+
+  bool
+  operator>=(const UIRectangle& other) const;
+
+
+  bool
   init(const UIRectangleDesc& desc);
 
   /** @returns the width of the UI rectangle*/
@@ -70,11 +77,6 @@ public:
   isInsideRect(const sf::Vector2f& pos)const;
 
 
-  static UIRectangle
-  createRectangleWithText(const UIRectangleDesc& desc,
-                          const UIText& text);
-
-
 public:
   sf::RectangleShape m_rect;
 
@@ -92,6 +94,7 @@ struct UIRectangleDesc
     width(100),
     height(100)
   {}
+
   UIRectangleDesc(const int32 _width,
                   const int32 _height,
                   const sf::Vector2f& _position,
@@ -103,6 +106,7 @@ struct UIRectangleDesc
     width(_width),
     height(_height)
   {}
+
   UIRectangleDesc(const UIRectangleDesc&) = default;
   UIRectangleDesc(UIRectangleDesc&&) noexcept = default;
   ~UIRectangleDesc() = default;

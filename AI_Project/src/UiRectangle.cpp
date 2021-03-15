@@ -29,6 +29,16 @@ UIRectangle::operator==(const UIRectangle& other) const
 }
 
 bool
+UIRectangle::operator<=(const UIRectangle& other) const {
+  return !(this->operator>(other));
+}
+
+bool
+UIRectangle::operator>=(const UIRectangle& other) const {
+  return !(this->operator<(other));
+}
+
+bool
 UIRectangle::init(const UIRectangleDesc& desc)
 {
   m_rect = sf::RectangleShape (sf::Vector2f(desc.width, desc.height));
@@ -127,15 +137,6 @@ UIRectangle::isInsideRect(const sf::Vector2f& pos)const {
   auto bound = m_rect.getGlobalBounds();
   sf::Rect temp(pos, { 1,1 });
   return bound.intersects(temp);
-}
-
-UIRectangle
-UIRectangle::createRectangleWithText(const UIRectangleDesc& desc,
-                                     const UIText& text) {
-
-  UIRectangle result(desc);
-  text.attachToReactangle (&result);
-  return result;
 }
 
 
