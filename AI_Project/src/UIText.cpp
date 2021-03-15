@@ -8,6 +8,45 @@ using std::make_unique;
 
 constexpr static std::string_view s_formatsForFonts = "|.ttf|.eot|.otf|.pfb|.pcf|";
 
+UIText::UIText(UIText&& other) noexcept
+  : m_text(std::move(other.m_text)),
+    m_font(std::move(other.m_font)),
+    m_fileStream(std::move(other.m_fileStream))
+{
+  m_rectPointer = other.m_rectPointer;
+  other.m_rectPointer = nullptr;
+}
+
+UIText::UIText(const UIText& other)
+{
+  this->copy(other);
+}
+
+UIText&
+UIText::operator=(UIText&& other) noexcept {
+
+  if(this != &other)
+  {
+    m_text = std::move(other.m_text);
+    m_font = other.m_font;
+    m_fileStream = other.m_fileStream;
+    m_rectPointer = other.m_rectPointer;
+    other.m_rectPointer = nullptr;
+  }
+
+
+  return *this;
+}
+
+UIText&
+UIText::operator=(const UIText& other) {
+  if(this != &other)
+  {
+    this->copy(other);
+  }
+  return *this;
+}
+
 bool
 UIText::init(const UITextDescriptor& descriptor) {
 

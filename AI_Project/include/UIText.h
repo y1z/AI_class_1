@@ -27,6 +27,18 @@ enum E
 class UIText {
  public:
 
+  UIText() = default;
+  UIText(UIText&& other) noexcept;
+  UIText(const UIText& other);
+
+  ~UIText() = default;
+
+  UIText&
+  operator=(UIText&& other) noexcept;
+
+  UIText&
+  operator=(const UIText& other);
+
   /**
    * initializes the UIText.
    */
