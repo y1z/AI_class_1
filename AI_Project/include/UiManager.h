@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "UiRectangle.h"
+#include "UIText.h"
 
 /**
  * @file
@@ -11,6 +12,13 @@ class UiManager
 {
 public:
   using RectangleContainer = std::vector< UIRectangle >;
+
+  struct TextElement {
+    uint64 index;
+    UIText text;
+  };
+
+  using TextContainer = std::vector< TextElement >;
 public:
 
   /**
@@ -26,6 +34,14 @@ public:
   void
   addRectangle(const UIRectangleDesc& desc);
 
+
+  /**
+   * @brief adds a rectangle
+   */
+  void
+  addRectangle(const UIRectangleDesc& rectangleDesc,
+               const UITextDescriptor& textDesc);
+
   /**
    * @brief Changes the size of every single rectangle.
    */
@@ -34,10 +50,16 @@ public:
 
 
   UIRectangle&
-  getRectangle(const uint32 index);
+  getRectangle(const uint64 index);
 
-  uint32
+  UIText&
+  getText(const uint64 index);
+
+  uint64
   getRectangleCount()const;
+
+  uint64
+  getTextsCount()const;
 
   void
   draw(sf::RenderTarget& target);
@@ -50,6 +72,7 @@ public:
 
 private:
   RectangleContainer m_rectangles;
+  TextContainer m_texts;
 };
 
 
