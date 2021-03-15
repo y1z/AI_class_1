@@ -5,6 +5,8 @@
 #include <variant>
 #include <filesystem>
 #include "UiRectangle.h"
+
+#include "UIText.h"
 #include "BaseApp.h"
 
 
@@ -19,10 +21,16 @@ struct UISceneDesc
                   std::function<int(void)>,
                   std::function<std::filesystem::path (BaseApp*) > >;
 
+  struct TextElement {
+    UIText text;
+    uint64 index;
+  };
 
-  std::vector<UIRectangle> rectangles;/**< The visual representation. */
+
+  std::vector<UIRectangle> rectangles;/**< The visual representation of rectangles. */
   std::vector<int32_t> associatedScenes;/**< The connections between scenes. */
   std::vector<UICallbackFunction> callbackFunctions;
+  std::vector<TextElement> texts; /**< The visual representation of text.*/
   int32_t ID; /**< Used to identify the scenes. */
 
 
@@ -30,6 +38,14 @@ struct UISceneDesc
   AddElement(const UIRectangle& _rectangle,
              const int32_t _associatedScene,
              const UICallbackFunction& _callback = []() {});
+
+
+  void
+  AddElement(const UIRectangle& _rectangle,
+             const int32_t _associatedScene,
+             const UICallbackFunction& _callback,
+             const UITextDescriptor& _textDesc);
+
 
   constexpr bool
   operator<(const UISceneDesc& other)const {
