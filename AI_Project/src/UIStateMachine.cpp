@@ -16,7 +16,7 @@ UIStateMachine::init(const std::vector<UISceneDesc>& descriptor,
   m_scenes.reserve(descriptor.size());
 
   for (auto& elem : descriptor) {
-    m_scenes.emplace_back(UIScene(elem));
+    m_scenes.emplace_back(std::move(UIScene(elem)));
   }
 
   m_states[UI_STATE_NAME::kWAITING] = make_unique<UIStateWaiting>();
@@ -50,6 +50,8 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
   currentData.mouseAccion = accion;
   currentData.ID = m_currentScene->sceneIndex;
 
+  m_scenes[m_currentScene->sceneIndex].update();
+
   const auto state = m_currentScene->getCurrentState();
   const auto updatedState = m_currentScene->onUpdate(currentData);
 
@@ -58,19 +60,21 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
     m_currentScene = m_states[updatedState].get();
   }
 
-
-
   return true;
 }
 
 
 void
 UIStateMachine::render(sf::RenderWindow* window) {
-  auto currentIndex = m_currentScene->sceneIndex;
-  if( -1 !=currentIndex)
-  {
-    for (auto& elem : m_scenes[0].m_desc.rectangles) {
+  const auto currentIndex = m_currentScene->sceneIndex;
+  if (-1 != currentIndex) {
+
+    for (auto& elem : m_scenes[currentIndex].m_desc.rectangles) {
       elem.draw(*window);
+    }
+
+    for (auto& elem : m_scenes[currentIndex].m_desc.texts) {
+      elem.text.draw(window);
     }
   }
 }
