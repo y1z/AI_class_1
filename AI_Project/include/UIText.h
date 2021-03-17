@@ -33,10 +33,10 @@ class UIText {
   ~UIText() = default;
 
   UIText&
-  operator=(UIText&& other) noexcept;
+  operator=(UIText&& other) noexcept = default;
 
   UIText&
-  operator=(const UIText& other);
+  operator=(const UIText& other) = default;
 
   /**
    * initializes the UIText.
@@ -66,7 +66,7 @@ class UIText {
   setOuterColor(const sf::Color color);
 
   void
-  setCharacterSize(unsigned int newSize)const;
+  setCharacterSize(unsigned int newSize);
 
   /**
    * Controls the alignment of the text with attached to a rectangle.
@@ -118,6 +118,14 @@ class UIText {
   copy(const UIText& other);
 
   /**
+   * Takes the resources from another UIText
+   * @NOTE The UIText object that passed in will be in a INVALID state pleas ignore it after
+   * calling this function.
+   */
+  UIText&
+  takeResources(UIText&& other) noexcept;
+
+  /**
    * Controls the string to be displayed on UIText
    * @Note changes to this will only be seen after calling the update function.
    */
@@ -145,6 +153,9 @@ class UIText {
   std::shared_ptr<sf::Font> m_font = nullptr;
   std::shared_ptr<sf::FileInputStream> m_fileStream = nullptr;
   mutable UIRectangle* m_rectPointer = nullptr;
+  sf::Color m_fillColor = sf::Color::Black;
+  sf::Color m_outerColor = sf::Color::White;
+  unsigned int m_textSize = 30u;
   TEXT_ALIGNMENT::E m_alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };
 
@@ -162,8 +173,8 @@ struct UITextDescriptor
    * what to make a copy.
    */
   UIText* ptrCopyText = nullptr;
-  sf::Color textFillColor = sf::Color(255u, 255u, 255u);
-  sf::Color texOuterColor = sf::Color(255u, 255u, 255u);
+  sf::Color textFillColor = sf::Color(255u, 255u, 255u, 255u);
+  sf::Color textOuterColor = sf::Color(255u, 255u, 255u, 255u);
   unsigned int textSize = 30u;
   TEXT_ALIGNMENT::E alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };

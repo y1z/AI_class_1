@@ -1,6 +1,7 @@
 #include "UIText.h"
 #include "SFML/Graphics/RenderTarget.hpp"
 #include "UiRectangle.h"
+#include "util.h"
 #include <iostream>
 #include <cassert>
 
@@ -17,7 +18,10 @@ UIText::UIText(UIText&& other) noexcept
     m_font(std::move(other.m_font)),
     m_fileStream(std::move(other.m_fileStream)),
     m_rectPointer(other.m_rectPointer),
-    m_alignment(other.m_alignment)
+    m_alignment(other.m_alignment),
+    m_fillColor(other.m_fillColor),
+    m_outerColor(other.m_outerColor),
+    m_textSize(other.m_textSize)
 
 {
   other.m_rectPointer = nullptr;
@@ -28,31 +32,7 @@ UIText::UIText(const UIText& other)
   this->copy(other);
 }
 
-UIText&
-UIText::operator=(UIText&& other) noexcept {
 
-  if(this != &other)
-  {
-    m_text = std::move(other.m_text);
-    m_font = other.m_font;
-    m_fileStream = other.m_fileStream;
-    m_textString = other.m_textString;
-    m_rectPointer = other.m_rectPointer;
-    other.m_rectPointer = nullptr;
-  }
-
-
-  return *this;
-}
-
-UIText&
-UIText::operator=(const UIText& other) {
-  if(this != &other)
-  {
-    this->copy(other);
-  }
-  return *this;
-}
 
 bool
 UIText::init(const UITextDescriptor& descriptor) {
@@ -74,8 +54,12 @@ UIText::init(const UITextDescriptor& descriptor) {
     const bool hasLoadedFront = m_font->loadFromStream(*m_fileStream);
     if (hasLoadedFront) {
       m_text->setFont(*m_font);
-      m_text->setFillColor(descriptor.textFillColor);
-      m_text->setCharacterSize(descriptor.textSize);
+      m_fillColor = descriptor.textFillColor;
+      m_outerColor = descriptor.textOuterColor;
+      m_text->setFillColor(m_fillColor);
+      m_text->setOutlineColor(m_outerColor);
+      m_textSize = descriptor.textSize;
+      m_text->setCharacterSize(m_textSize);
       m_text->setPosition(descriptor.textPosition);
       m_textString = descriptor.textString;
       m_text->setString(m_textString);
@@ -114,17 +98,21 @@ UIText::setPosition(const sf::Vector2f& position) {
 
 void
 UIText::setFillColor(const sf::Color color) {
-  m_text->setFillColor(color);
+  m_fillColor = color;
+  m_text->setFillColor(m_fillColor);
 }
 
 void
 UIText::setOuterColor(const sf::Color color) {
-  m_text->setOutlineColor(color);
+  m_outerColor = color;
+  m_text->setOutlineColor(m_outerColor);
 }
 
 void
-UIText::setCharacterSize(unsigned int newSize) const {
-  m_text->setCharacterSize(newSize);
+UIText::setCharacterSize(unsigned int newSize) {
+
+  m_textSize = newSize;
+  m_text->setCharacterSize( m_textSize );
 }
 
 void
@@ -141,12 +129,12 @@ UIText::makeTextFitSimple(const sf::FloatRect& constraints) {
     auto pair = this->isTextInsideHorizontalContraints(constraints);
     bool isIside = pair.first;
     while (!isIside) {
-      m_textString.insert(pair.second, "-");
+      m_textString.insert(pair.second, '\n');
       m_text->setString(m_textString);
       update();
 
       pair = this->isTextInsideHorizontalContraints(constraints);
-      isIside = true;
+      isIside = pair.first;
     }
 
   }
@@ -170,6 +158,9 @@ UIText::unattachFromReactangle() {
 
 void
 UIText::draw(sf::RenderTarget* target) const {
+  m_text->setFillColor(m_fillColor);
+  m_text->setOutlineColor(m_outerColor);
+  m_text->setCharacterSize(m_textSize);
   target->draw(*m_text);
 }
 
@@ -190,6 +181,26 @@ UIText::copy(const UIText& other) {
   this->m_font = other.m_font;
   m_textString = other.m_text->getString();
   m_text = make_unique<sf::Text>(m_textString, *m_font);
+  m_fillColor = other.m_fillColor;
+  m_outerColor = other.m_outerColor;
+  m_textSize = other.m_textSize;
+  m_alignment = other.m_alignment;
+  return *this;
+}
+
+UIText&
+UIText::takeResources(UIText&& other) noexcept {
+
+  m_text = std::move(other.m_text);
+  m_font = std::move(other.m_font);
+  m_fileStream = std::move(other.m_fileStream);
+  m_textString = std::move(other.m_textString);
+  m_fillColor = other.m_fillColor;
+  m_outerColor = other.m_outerColor;
+  m_textSize = other.m_textSize;
+  m_alignment = other.m_alignment;
+  m_rectPointer = other.m_rectPointer;
+  other.m_rectPointer = nullptr;
   return *this;
 }
 
@@ -219,10 +230,21 @@ UIText::alignText() const {
 
 std::pair<bool, uint64_t>
 UIText::isTextInsideHorizontalContraints(const sf::FloatRect& constraints)const {
-  const uint64 limit = static_cast<uint64>(m_text->getString().getSize() - 1);
+  const auto& refToString = m_text->getString();
+  const auto limit = static_cast<uint64>(refToString.getSize() - 1);
+  const float leftMost = constraints.left;
+  const float rightMost = constraints.left + constraints.width;
   for (uint64 i = 0u; i < limit; ++i) {
+    const bool isNewLine = ('\n' == refToString[i]);
+    if (isNewLine) {
+      continue;
+    }
+
     const sf::FloatRect approximetion(m_text->findCharacterPos(i), { .10f, .10f });
-    const bool isInsideConstraints = constraints.intersects(approximetion);
+    const bool isInsideConstraints =
+      util::isInRange(leftMost, rightMost, approximetion.left) &&
+      util::isInRange(leftMost, rightMost, approximetion.left + approximetion.width);
+    //const bool = constraints.intersects(approximetion);
 
     if (!isInsideConstraints) {
       return std::pair<bool, uint64_t>(false, i);

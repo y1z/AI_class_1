@@ -76,8 +76,7 @@ UIRectangle::getHeight() const
 }
 
 void
-UIRectangle::draw(sf::RenderTarget& target) const
-{
+UIRectangle::draw(sf::RenderTarget& target) const {
   target.draw(m_rect);
 }
 

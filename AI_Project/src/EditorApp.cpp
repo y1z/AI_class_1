@@ -26,7 +26,7 @@ constexpr static const char*
 s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
 
 constexpr static const char*
-s_pathToFront = "resources/fonts/DiscoBlingRegular-MjGJ.ttf";
+s_pathToFront = "resources/fonts/Gamepixies-8MO6n.ttf";
 
 
 fs::path
@@ -60,13 +60,10 @@ EditorApp::mainLoop() {
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
 
-
   for (auto& elem : container) {
     elem.m_atlasPtr = m_spriteAtlas.get();
   }
 
-  const float changeRate = 0.8f;
-  float totalTime = 0.0f;
   while (m_window->isOpen()) {
 
     m_timer.StartTiming();
@@ -76,19 +73,8 @@ EditorApp::mainLoop() {
 
     handleDraw();
 
-    if (totalTime >= changeRate) {
-      totalTime = 0.0f;
-
-      sf::Vector2f textPos = m_testText->getPosition();
-      textPos.x += 1.5f;
-      m_testText->setPosition(textPos);
-
-    }
-
-
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();
-    totalTime += m_deltaTime;
   }
 
   return 0;
@@ -133,6 +119,7 @@ EditorApp::init() {
       UITextDescriptor desc;
       desc.pathToFont = s_pathToFront;
       desc.textString = "dslkfjdsjfdsk;ljfklsdjfklsjfk;ldsjflkjdsk;lfjdkf";
+      desc.textFillColor = sf::Color::Blue;
       m_testText->init(desc);
     }
 
@@ -163,15 +150,15 @@ EditorApp::createMenu() {
   {
     UISceneDesc menuScene;
     auto const halfScreenWidth = m_screenWidth / 2.0f;
-    const UIRectangle selectRect(UIRectangleDesc(200,
+    const UIRectangle selectRect(UIRectangleDesc(300,
                                  200,
-                                 sf::Vector2f(halfScreenWidth, 200),
+                                 sf::Vector2f(halfScreenWidth, 300),
                                  "",
-                                 sf::Color::Yellow));
+                                 sf::Color::Green));
 
-    const UIRectangle playRect(UIRectangleDesc(200,
+    const UIRectangle playRect(UIRectangleDesc(300,
                                200,
-                               sf::Vector2f(halfScreenWidth, 400),
+                               sf::Vector2f(halfScreenWidth, 600),
                                "",
                                sf::Color::Red));
 
@@ -179,6 +166,9 @@ EditorApp::createMenu() {
       UITextDescriptor disc;
       disc.pathToFont = s_pathToFront;
       disc.textString = "play button";
+      disc.textFillColor = sf::Color::Black;
+      disc.textOuterColor = sf::Color::Blue;
+      disc.textSize = 50;
       menuScene.AddElement(selectRect, -1, openFilePath, disc);
 
       disc.textString = "exit button";
