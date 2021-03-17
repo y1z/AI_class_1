@@ -2,18 +2,24 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 #include "UiRectangle.h"
 #include <iostream>
+#include <cassert>
 
 using std::make_shared;
 using std::make_unique;
 
 constexpr static std::string_view s_formatsForFonts = "|.ttf|.eot|.otf|.pfb|.pcf|";
 
+
 UIText::UIText(UIText&& other) noexcept
-  : m_text(std::move(other.m_text)),
+
+  : m_textString(other.m_textString),
+    m_text(std::move(other.m_text)),
     m_font(std::move(other.m_font)),
-    m_fileStream(std::move(other.m_fileStream))
+    m_fileStream(std::move(other.m_fileStream)),
+    m_rectPointer(other.m_rectPointer),
+    m_alignment(other.m_alignment)
+
 {
-  m_rectPointer = other.m_rectPointer;
   other.m_rectPointer = nullptr;
 }
 
@@ -30,6 +36,7 @@ UIText::operator=(UIText&& other) noexcept {
     m_text = std::move(other.m_text);
     m_font = other.m_font;
     m_fileStream = other.m_fileStream;
+    m_textString = other.m_textString;
     m_rectPointer = other.m_rectPointer;
     other.m_rectPointer = nullptr;
   }
@@ -54,6 +61,11 @@ UIText::init(const UITextDescriptor& descriptor) {
     return false;
   }
 
+  if (nullptr != descriptor.ptrCopyText) {
+    this->copy(*descriptor.ptrCopyText);
+    return true;
+  }
+
   const bool createdResources = internalInit();
   if (createdResources) {
     /// The supported font formats are: TrueType, Type 1, CFF,
@@ -65,7 +77,9 @@ UIText::init(const UITextDescriptor& descriptor) {
       m_text->setFillColor(descriptor.textFillColor);
       m_text->setCharacterSize(descriptor.textSize);
       m_text->setPosition(descriptor.textPosition);
-      m_text->setString(descriptor.textString);
+      m_textString = descriptor.textString;
+      m_text->setString(m_textString);
+      m_alignment = descriptor.alignment;
     }
     return canLoadStream && hasLoadedFront;
   }
@@ -114,33 +128,38 @@ UIText::setCharacterSize(unsigned int newSize) const {
 }
 
 void
-UIText::setString(const std::string_view newString) {
-  m_text->setString(sf::String(newString.data()));
+UIText::setAlignment(const TEXT_ALIGNMENT::E alignment) {
+  m_alignment = alignment;
 }
+
 
 bool
 UIText::makeTextFitSimple(const sf::FloatRect& constraints) {
   auto const bounds = m_text->getLocalBounds();
   const float delta = std::fabsf((bounds.left + bounds.width) - bounds.left);
   {
-    const size_t limit = m_text->getString().getSize();
+    auto pair = this->isTextInsideHorizontalContraints(constraints);
+    bool isIside = pair.first;
+    while (!isIside) {
+      m_textString.insert(pair.second, "-");
+      m_text->setString(m_textString);
+      update();
 
-    for (size_t i = 0u; i < limit; ++i) {
-      const sf::FloatRect approximetion(m_text->findCharacterPos(i), { .10f, .10f });
-      const bool isInsideConstraints = constraints.intersects(approximetion);
-      if (!isInsideConstraints) {
-        m_textString.insert(i-1, '\n');
-      }
+      pair = this->isTextInsideHorizontalContraints(constraints);
+      isIside = true;
     }
+
   }
 
   return true;
 }
 
+
 void
 UIText::attachToReactangle(UIRectangle* pRect) const {
   m_rectPointer = pRect;
-  m_text->setPosition(m_rectPointer->getPosition());
+
+  alignText();
 }
 
 void
@@ -159,8 +178,7 @@ UIText::update() {
   const bool isAttached = (nullptr != m_rectPointer);
 
   if (isAttached) {
-    auto bound = m_rectPointer->m_rect.getGlobalBounds();
-    m_text->setPosition(bound.left, bound.top);
+    alignText();
   }
 
   m_text->setString(m_textString);
@@ -170,8 +188,48 @@ UIText&
 UIText::copy(const UIText& other) {
   this->m_fileStream = other.m_fileStream;
   this->m_font = other.m_font;
-  m_text = make_unique<sf::Text>(m_text->getString(), *m_font);
+  m_textString = other.m_text->getString();
+  m_text = make_unique<sf::Text>(m_textString, *m_font);
   return *this;
+}
+
+
+void
+UIText::alignText() const {
+  assert(nullptr != m_rectPointer);
+  const auto bound = m_rectPointer->m_rect.getGlobalBounds();
+  switch (m_alignment) {
+  case TEXT_ALIGNMENT::E::centerAlign:
+  {
+    const float halfHeight = bound.top - (bound.height / 2);
+    const float halfWidth = bound.left + (bound.width / 2);
+    m_text->setPosition(halfWidth, halfHeight);
+
+  }
+  break;
+
+  case TEXT_ALIGNMENT::E::leftAlign:
+  [[fallthrough]];
+  default:
+  m_text->setPosition(bound.left, bound.top);
+  break;
+  }
+
+}
+
+std::pair<bool, uint64_t>
+UIText::isTextInsideHorizontalContraints(const sf::FloatRect& constraints)const {
+  const uint64 limit = static_cast<uint64>(m_text->getString().getSize() - 1);
+  for (uint64 i = 0u; i < limit; ++i) {
+    const sf::FloatRect approximetion(m_text->findCharacterPos(i), { .10f, .10f });
+    const bool isInsideConstraints = constraints.intersects(approximetion);
+
+    if (!isInsideConstraints) {
+      return std::pair<bool, uint64_t>(false, i);
+    }
+
+  }
+  return std::pair<bool, uint64_t>(true, static_cast<uint64_t>(-1));
 }
 
 bool

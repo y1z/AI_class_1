@@ -12,11 +12,10 @@ struct UITextDescriptor;
 class UIRectangle;
 
 namespace TEXT_ALIGNMENT {
-enum E
-{
-  leftAlign,
-  centerAlign,
-  DEFAULT = leftAlign,
+  enum struct E : uint32_t {
+    leftAlign = 0u,
+    centerAlign,
+    DEFAULT = leftAlign,
   };
 }
 
@@ -69,8 +68,11 @@ class UIText {
   void
   setCharacterSize(unsigned int newSize)const;
 
+  /**
+   * Controls the alignment of the text with attached to a rectangle.
+   */
   void
-  setString(const std::string_view newString);
+  setAlignment(const TEXT_ALIGNMENT::E alignment);
 
   /**
    * Modify the text so it can fit inside the constraints in global space.
@@ -122,6 +124,16 @@ class UIText {
   sf::String m_textString = { "       " };
 
  private:
+  void
+  alignText()const;
+
+   /**
+    * @reutrns
+    *  A pair the first argument returns true if the text fits inside the constraints
+    *  the second argument return the index of the character that outside the constraints.
+    */
+  std::pair<bool, uint64_t>
+  isTextInsideHorizontalContraints(const sf::FloatRect& constraints)const;
 
   /**
    * creates the resources
@@ -133,6 +145,7 @@ class UIText {
   std::shared_ptr<sf::Font> m_font = nullptr;
   std::shared_ptr<sf::FileInputStream> m_fileStream = nullptr;
   mutable UIRectangle* m_rectPointer = nullptr;
+  TEXT_ALIGNMENT::E m_alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };
 
 
@@ -141,12 +154,18 @@ class UIText {
  */
 struct UITextDescriptor
 {
-  sf::String textString = sf::String("      ");
-  std::string_view pathToFont;
-  sf::Vector2f textPosition = sf::Vector2f(0.0f, 0.0f);
+  sf::String textString = sf::String("      ");/**< Controls the characters of the string*/
+  std::string_view pathToFont;/**< Controls which font to load. */
+  sf::Vector2f textPosition = sf::Vector2f(0.0f, 0.0f); /**< Controls where the text will be . */
+  /**
+   * Used for creating a copy from other UIText object.(just keep this a nullptr if you don't
+   * what to make a copy.
+   */
+  UIText* ptrCopyText = nullptr;
   sf::Color textFillColor = sf::Color(255u, 255u, 255u);
   sf::Color texOuterColor = sf::Color(255u, 255u, 255u);
   unsigned int textSize = 30u;
+  TEXT_ALIGNMENT::E alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };
 
 
