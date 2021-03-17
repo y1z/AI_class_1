@@ -10,9 +10,6 @@
 #include "BaseApp.h"
 
 
-/**
- * Contains the data for creating a scene.
- */
 struct UISceneDesc
 {
   /** The types of function that the struct can accept.*/
@@ -61,6 +58,12 @@ struct UISceneDesc
              const UITextDescriptor& _textDesc);
 
 
+  void
+  AddElement(const UIRectangle& _rectangle,
+             const int32_t _associatedScene,
+             const UICallbackFunction& _callback,
+             const UIText& _text);
+
 
   void
   AddElement(const UIRectangle& _rectangle,
@@ -95,16 +98,21 @@ struct UISceneDesc
   }
 
 };
+/**
+ * Contains the data for creating a scene.
+ */
 
 
 /**
  * Controls whats a scene has.
  */
-class UIScene {
+class UIScene
+{
 public:
   explicit UIScene(const UISceneDesc& descriptor);
 
   explicit UIScene(UISceneDesc&& descriptor);
+
 
   constexpr bool
   operator<(const UIScene& other)const {
@@ -123,6 +131,15 @@ public:
     return m_desc == other.m_desc;
   }
 
+  void
+  update();
+
+  void
+  draw(sf::RenderTarget* target)const;
+ private:
+
+ public:
   UISceneDesc m_desc;
 };
+
 

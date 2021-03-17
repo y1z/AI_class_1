@@ -1,11 +1,31 @@
 #include "UIScene.h"
+#include <cassert>
 
 UIScene::UIScene(const UISceneDesc& descriptor)
-  :m_desc(descriptor) {}
+  : m_desc(descriptor) {}
 
 UIScene::UIScene(UISceneDesc&& descriptor)
-  :m_desc(std::move(descriptor))
-{}
+  : m_desc(std::move(descriptor)) {}
+
+void
+UIScene::update() {
+  for (auto& elem : m_desc.texts) {
+    auto& rectangles = m_desc.rectangles;
+    auto& refToRec = rectangles[elem.index];
+    elem.text.attachToReactangle(&refToRec);
+    elem.text.makeTextFitSimple(refToRec.m_rect.getGlobalBounds());
+  }
+
+}
+
+void
+UIScene::draw(sf::RenderTarget* target) const {
+  assert(nullptr != target);
+  for (const auto& elem : m_desc.rectangles) {
+    elem.draw(*target);
+  }
+
+}
 
 void
 UISceneDesc::AddElement(const UIRectangle& _rectangle,
@@ -33,6 +53,16 @@ void
 UISceneDesc::AddElement(const UIRectangle& _rectangle,
                         const int32_t _associatedScene,
                         const UICallbackFunction& _callback,
+                        const UIText& _text) {
+  UIText copy(_text);
+
+  AddElement(_rectangle, _associatedScene, _callback, std::move(copy));
+}
+
+void
+UISceneDesc::AddElement(const UIRectangle& _rectangle,
+                        const int32_t _associatedScene,
+                        const UICallbackFunction& _callback,
                         UIText&& _text) {
 
   rectangles.emplace_back(_rectangle);
@@ -42,8 +72,10 @@ UISceneDesc::AddElement(const UIRectangle& _rectangle,
     TextElement newTextElement;
     newTextElement.text = std::move(_text);
     newTextElement.index = static_cast<uint64>(rectangles.size() - 1);
+    newTextElement.text.attachToReactangle(&rectangles[newTextElement.index]);
     texts.emplace_back(std::move(newTextElement));
   }
 
 }
+
 
