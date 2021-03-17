@@ -55,9 +55,9 @@ class EditorApp final : public BaseApp
 
 
  protected:
-   /**
-    * The main process of the Game
-    */
+  /**
+   * The main process of the Game
+   */
   int
   mainLoop()override;
 

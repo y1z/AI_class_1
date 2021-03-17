@@ -97,7 +97,7 @@ EditorApp::mainLoop() {
 int
 EditorApp::menuLoop() {
 
-  while (m_stateMachine->isStateMachineActive()) {
+  while (m_stateMachine->isStateMachineActive() && m_window->isOpen()) {
     m_window->clear();
     handleInput();
     const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.mousePosition);
@@ -132,7 +132,7 @@ EditorApp::init() {
       m_testText = make_unique<UIText>();
       UITextDescriptor desc;
       desc.pathToFont = s_pathToFront;
-      desc.textString = "dslkfjdsjfdsk;\nljfklsdjfklsjfk;\nldsjflkjdsk;\nlfjdkf";
+      desc.textString = "dslkfjdsjfdsk;ljfklsdjfklsjfk;ldsjflkjdsk;lfjdkf";
       m_testText->init(desc);
     }
 
@@ -158,19 +158,43 @@ EditorApp::init() {
 
 bool
 EditorApp::createMenu() {
+
+  std::vector<UISceneDesc> descriptors;
   {
     UISceneDesc menuScene;
     auto const halfScreenWidth = m_screenWidth / 2.0f;
-    const UIRectangle selectRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 200), "", sf::Color::Yellow));
-    const UIRectangle playRect(UIRectangleDesc(200, 200, sf::Vector2f(halfScreenWidth, 400), "", sf::Color::Red));
-    menuScene.AddElement(selectRect, -1, std::function<fs::path(BaseApp*)>(openFilePath));
-    menuScene.AddElement(playRect, -1);
+    const UIRectangle selectRect(UIRectangleDesc(200,
+                                 200,
+                                 sf::Vector2f(halfScreenWidth, 200),
+                                 "",
+                                 sf::Color::Yellow));
+
+    const UIRectangle playRect(UIRectangleDesc(200,
+                               200,
+                               sf::Vector2f(halfScreenWidth, 400),
+                               "",
+                               sf::Color::Red));
+
+    {
+      UITextDescriptor disc;
+      disc.pathToFont = s_pathToFront;
+      disc.textString = "play button";
+      menuScene.AddElement(selectRect, -1, openFilePath, disc);
+
+      disc.textString = "exit button";
+      menuScene.AddElement(playRect, -1, []() {}, disc);
+    }
 
     menuScene.ID = 0;
 
-    m_stateMachine->init({ menuScene }, this);
+    descriptors.push_back(menuScene);
+  }
+  {
+
   }
 
+
+  m_stateMachine->init(descriptors, this);
   return true;
 }
 
@@ -200,7 +224,8 @@ EditorApp::handleInput() {
 
 
     if (sf::Event::MouseMoved == event.type) {
-      m_mouseData.mousePosition = Vec2(event.mouseMove.x, event.mouseMove.y);
+      m_mouseData.mousePosition = Vec2(static_cast<float>(event.mouseMove.x),
+                                       static_cast<float>(event.mouseMove.y));
     }
 
     if (sf::Event::MouseButtonPressed == event.type) {
