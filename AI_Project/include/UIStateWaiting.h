@@ -1,6 +1,8 @@
 #pragma once
 #include "UIState.h"
 
+#include <optional>
+
 
 
 /**
@@ -16,7 +18,7 @@ public:
   UI_STATE_NAME::E
   onUpdate(UIStateData& sceneData) override;
 
-  void
+  std::optional<int>
   executeCallBack(int32 callbackIndex, const  UISceneDesc& scene);
 
   UI_STATE_NAME::E

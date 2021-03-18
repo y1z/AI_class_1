@@ -1,4 +1,5 @@
 #include <cassert>
+
 #include "UIStateWaiting.h"
 
 
@@ -27,23 +28,30 @@ UIStateWaiting::onUpdate(UIStateData& sceneData) {
   return UI_STATE_NAME::E::kWAITING;
 }
 
-void
+
+std::optional<int>
 UIStateWaiting::executeCallBack(int32 callbackIndex, const UISceneDesc& scene)
 {
   UISceneDesc::UICallbackFunction callBack = scene.callbackFunctions.at(callbackIndex);
+
   auto callIndex = callBack.index();
   if (auto call = std::get_if<std::function<void(void)>>(&callBack)) {
-    std::function<void(void)> func = *call;
-    func();
-    return;
+    (*call)();
+    return std::nullopt;
   }
-  else if (auto call = std::get_if <std::function< std::filesystem::path(BaseApp*)>>(&callBack))
+  else if (auto call = std::get_if < UISceneDesc::AppFuncReturnFilePath >(&callBack)) {
+    (*call)(editor);
+    return std::nullopt;
+  }
+  else if (auto call = std::get_if<UISceneDesc::AppFuncReturnInt>(&callBack)) {
+    return (*call)(editor);
+  }
+  else if(auto call = std::get_if<std::function<int(void)>>(&callBack))
   {
-    std::function< std::filesystem::path(BaseApp*)> func = *call;
-    func(editor);
-    return;
+    return (*call)();
   }
 
+  return std::nullopt;
 }
 
 
