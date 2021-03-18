@@ -17,8 +17,28 @@ enum E : size_t {
  */
 struct UIStateData
 {
+  UIStateData() = default;
+  UIStateData(const sf::Vector2f& _mousePosition,
+              const float _deltaTime,
+              int32_t _sceneIndex,
+              int32_t _lastSceneID,
+              int32_t _mouseAccion)
+    : mousePosition(_mousePosition),
+      deltaTime(_deltaTime),
+      sceneIndex(_sceneIndex),
+      lastSceneID(_lastSceneID),
+      mouseAccion(_mouseAccion)
+  {}
+
+  /**
+   * Where the mouse is located on the screen.
+   */
   sf::Vector2f mousePosition;
-  /** keeps track of which sate we are in*/
+  /**
+   * The since the last update.
+   */
+  float deltaTime;
+  /** keeps track of which sate we are in. */
   int32_t sceneIndex;
   int32_t lastSceneID;
   int32_t mouseAccion;
