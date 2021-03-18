@@ -19,35 +19,34 @@ UIStateWaiting::onUpdate(UIStateData& sceneData) {
       executeCallBack(i, scene);
       sceneIndex = scene.associatedScenes.at(i);
 
-      return UI_STATE_NAME::E::kCHANGING;
+      return UI_STATE_NAME::kCHANGING;
     }
 
     ++i;
   }
 
-  return UI_STATE_NAME::E::kWAITING;
+  return UI_STATE_NAME::kWAITING;
 }
 
 
 std::optional<int>
-UIStateWaiting::executeCallBack(int32 callbackIndex, const UISceneDesc& scene)
-{
+UIStateWaiting::executeCallBack(int32 callbackIndex, const UISceneDesc& scene) {
   UISceneDesc::UICallbackFunction callBack = scene.callbackFunctions.at(callbackIndex);
 
   auto callIndex = callBack.index();
-  if (auto call = std::get_if<std::function<void(void)>>(&callBack)) {
+  if (const auto call = std::get_if<std::function<void(void)>>(&callBack)) {
     (*call)();
     return std::nullopt;
   }
-  else if (auto call = std::get_if < UISceneDesc::AppFuncReturnFilePath >(&callBack)) {
+
+  if (const auto call = std::get_if < UISceneDesc::AppFuncReturnFilePath >(&callBack)) {
     (*call)(editor);
     return std::nullopt;
   }
-  else if (auto call = std::get_if<UISceneDesc::AppFuncReturnInt>(&callBack)) {
+  if (const auto call = std::get_if<UISceneDesc::AppFuncReturnInt>(&callBack)) {
     return (*call)(editor);
   }
-  else if(auto call = std::get_if<std::function<int(void)>>(&callBack))
-  {
+  if (const auto call = std::get_if<std::function<int(void)>>(&callBack)) {
     return (*call)();
   }
 
