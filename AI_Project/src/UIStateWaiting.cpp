@@ -1,30 +1,36 @@
 #include <cassert>
-
 #include "UIStateWaiting.h"
+
+constexpr static float s_inputDelay = .30f;
 
 
 
 UI_STATE_NAME::E
 UIStateWaiting::onUpdate(UIStateData& sceneData) {
   assert(nullptr != ptr_scenes);
+
   std::vector<UIRectangle>& UISceneElements = ptr_scenes->at(sceneIndex).m_desc.rectangles;
   UISceneDesc& scene = ptr_scenes->at(sceneIndex).m_desc;
   size_t i = 0;
+  m_timeSinceInput += sceneData.deltaTime;
+
   for (const auto& elem : UISceneElements) {
 
-    const bool isInsideUI = elem.isInsideRect(sceneData.mousePosition);
-    if (isInsideUI && sf::Mouse::Left == sceneData.mouseAccion) {
+    const bool canAcceptInput = (m_timeSinceInput > s_inputDelay) &&
+                                elem.isInsideRect(sceneData.mousePosition) &&
+                                sf::Mouse::Left == sceneData.mouseAccion;
+    if (canAcceptInput) {
       sceneData.lastSceneID = sceneIndex;
 
       executeCallBack(i, scene);
       sceneIndex = scene.associatedScenes.at(i);
+      m_timeSinceInput = 0.0f;
 
       return UI_STATE_NAME::kCHANGING;
     }
 
     ++i;
   }
-
   return UI_STATE_NAME::kWAITING;
 }
 

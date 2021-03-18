@@ -27,5 +27,6 @@ public:
   UI_STATE_NAME::E
   getCurrentState()const override;
 
+  float m_timeSinceInput = 0.0f;
 };
 

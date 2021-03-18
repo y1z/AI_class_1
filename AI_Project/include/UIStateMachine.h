@@ -40,7 +40,8 @@ public:
    */
   bool
   update(const sf::Vector2f& mousePosition,
-         const sf::Mouse::Button accion);
+         const sf::Mouse::Button accion,
+         const float deltaTime);
 
   void
   render(sf::RenderWindow* window);
