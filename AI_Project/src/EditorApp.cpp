@@ -165,13 +165,14 @@ EditorApp::createMenu() {
     {
       UITextDescriptor disc;
       disc.pathToFont = s_pathToFront;
-      disc.textString = "play button";
+      disc.textString = " play button";
       disc.textFillColor = sf::Color::Black;
       disc.textOuterColor = sf::Color::Blue;
       disc.textSize = 50;
+      UISceneDesc::UICallbackFunction temp(openFilePath);
       menuScene.AddElement(selectRect, -1, openFilePath, disc);
 
-      disc.textString = "exit button";
+      disc.textString = " exit button";
       menuScene.AddElement(playRect, -1, []() {}, disc);
     }
 
