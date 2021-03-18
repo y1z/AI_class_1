@@ -44,11 +44,13 @@ UIStateMachine::init(const std::vector<UISceneDesc>& descriptor,
 
 bool
 UIStateMachine::update(const sf::Vector2f& mousePosition,
-                       const sf::Mouse::Button accion) {
+                       const sf::Mouse::Button accion,
+                       const float deltaTime) {
   UIStateData currentData;
   currentData.mousePosition = mousePosition;
   currentData.mouseAccion = accion;
   currentData.sceneIndex = m_currentScene->sceneIndex;
+  currentData.deltaTime = deltaTime;
 
   m_scenes[m_currentScene->sceneIndex].update();
 
