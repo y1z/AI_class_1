@@ -142,12 +142,13 @@ public:
 
   void
   draw(sf::RenderTarget* target)const;
- private:
 
    /**
     * Used to indicate no more scenes are going to load.
     */
   constexpr static int32 NOMORE_SCENES_ID = -1;
+ private:
+
 
  public:
   UISceneDesc m_desc;
