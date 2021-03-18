@@ -67,7 +67,7 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
 void
 UIStateMachine::render(sf::RenderWindow* window) {
   const auto currentIndex = m_currentScene->sceneIndex;
-  if (-1 != currentIndex) {
+  if (UIScene::NOMORE_SCENES_ID != currentIndex) {
 
     for (auto& elem : m_scenes[currentIndex].m_desc.rectangles) {
       elem.draw(*window);
@@ -81,7 +81,7 @@ UIStateMachine::render(sf::RenderWindow* window) {
 
 bool
 UIStateMachine::isStateMachineActive() const {
-  return !(-1 == m_currentScene->sceneIndex);
+  return !(UIScene::NOMORE_SCENES_ID == m_currentScene->sceneIndex);
 }
 
 

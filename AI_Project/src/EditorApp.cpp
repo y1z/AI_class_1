@@ -23,6 +23,9 @@ constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
 
 constexpr static const char*
+s_pathToLevelOne = "resources/saves/level_1.txt";
+
+constexpr static const char*
 s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
 
 constexpr static const char*
@@ -34,6 +37,9 @@ openFilePath(BaseApp* app);
 
 int
 closeApp(BaseApp* app);
+
+int
+loadLevelOne(BaseApp* app);
 
 
 EditorApp::EditorApp()
@@ -155,20 +161,20 @@ bool
 EditorApp::createMenu() {
 
   std::vector<UISceneDesc> descriptors;
+
+  auto const halfScreenWidth = static_cast<float>(m_screenWidth) * .5f;
+  auto const halfScreenHeight = static_cast<float>(m_screenHeight) * .5f;
+
   {
     UISceneDesc menuScene;
-    auto const halfScreenWidth = m_screenWidth / 2.0f;
-    const UIRectangle selectRect(UIRectangleDesc(300,
-                                 200,
-                                 sf::Vector2f(halfScreenWidth, 300),
-                                 "",
-                                 sf::Color::Green));
+    const UIRectangle playRect(UIRectangleDesc(300, 200,
+                               sf::Vector2f(halfScreenWidth, 300),
+                               "", sf::Color::Green));
 
-    const UIRectangle playRect(UIRectangleDesc(300,
-                               200,
+    const UIRectangle exitRect(UIRectangleDesc(300, 200,
                                sf::Vector2f(halfScreenWidth, 600),
-                               "",
-                               sf::Color::Red));
+                               "", sf::Color::Red));
+
 
     {
       UITextDescriptor disc;
@@ -178,18 +184,31 @@ EditorApp::createMenu() {
       disc.textOuterColor = sf::Color::Blue;
       disc.textSize = 50;
 
-      menuScene.AddElement(selectRect, -1, openFilePath, disc);
+      menuScene.AddElement(playRect, 1, []() {}, disc);
 
       disc.textString = " exit button";
-      menuScene.AddElement(playRect, -1, closeApp, disc);
+      menuScene.AddElement(exitRect, UIScene::NOMORE_SCENES_ID, closeApp, disc);
     }
 
     menuScene.ID = 0;
 
     descriptors.push_back(menuScene);
   }
-  {
 
+  {
+    UISceneDesc levelSelect;
+    const UIRectangle levelOneRect(UIRectangleDesc(300, 200,
+                                   sf::Vector2f(halfScreenWidth, 300),
+                                   "", sf::Color::Yellow));
+
+    UITextDescriptor disc;
+    disc.pathToFont = s_pathToFront;
+    disc.textString = " play button";
+    disc.textFillColor = sf::Color::Black;
+    disc.textOuterColor = sf::Color::Blue;
+    disc.textSize = 50;
+    levelSelect.AddElement(levelOneRect, UIScene::NOMORE_SCENES_ID, loadLevelOne, disc);
+    levelSelect.ID = 1;
   }
 
 
@@ -397,6 +416,15 @@ openFilePath(BaseApp* app) {
 int
 closeApp(BaseApp* app) {
   app->closeWindow();
+  return 0;
+}
+
+int
+loadLevelOne(BaseApp* app) {
+  assert(nullptr != app);
+  auto gameApp = reinterpret_cast<EditorApp*>(app);
+  gameApp->createPath(s_pathToLevelOne);
+
   return 0;
 }
 
