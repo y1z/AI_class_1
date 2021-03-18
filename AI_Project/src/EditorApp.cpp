@@ -177,11 +177,11 @@ EditorApp::createMenu() {
       disc.textFillColor = sf::Color::Black;
       disc.textOuterColor = sf::Color::Blue;
       disc.textSize = 50;
-      UISceneDesc::UICallbackFunction temp(openFilePath);
+
       menuScene.AddElement(selectRect, -1, openFilePath, disc);
 
       disc.textString = " exit button";
-      menuScene.AddElement(playRect, -1, []() {}, disc);
+      menuScene.AddElement(playRect, -1, closeApp, disc);
     }
 
     menuScene.ID = 0;
