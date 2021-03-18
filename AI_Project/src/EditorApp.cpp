@@ -32,6 +32,9 @@ s_pathToFront = "resources/fonts/Gamepixies-8MO6n.ttf";
 fs::path
 openFilePath(BaseApp* app);
 
+int
+closeApp(BaseApp* app);
+
 
 EditorApp::EditorApp()
   : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), sf::Mouse::Button::ButtonCount) {}
@@ -52,6 +55,11 @@ EditorApp::run(unsigned int screenWidth,
   }
 
   return mainLoop();
+}
+
+void
+EditorApp::closeWindow() {
+  m_window->close();
 }
 
 int
@@ -385,3 +393,10 @@ openFilePath(BaseApp* app) {
   return  fs::path(FileName);
 
 }
+
+int
+closeApp(BaseApp* app) {
+  app->closeWindow();
+  return 0;
+}
+

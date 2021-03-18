@@ -20,6 +20,11 @@ TestBoidApp::run(unsigned int screenWith,
   return mainLoop();
 }
 
+void
+TestBoidApp::closeWindow() {
+  m_window->close();
+}
+
 int
 TestBoidApp::init()
 {

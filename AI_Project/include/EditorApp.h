@@ -53,6 +53,9 @@ class EditorApp final : public BaseApp
   run(unsigned int screenWidth,
       unsigned int screenHeight) override;
 
+  void
+  closeWindow() override;
+
 
  protected:
   /**
@@ -111,8 +114,13 @@ public:
   void
   createPath(const std::filesystem::path& pathToFile = "");
 
+  /**
+   * @brief sets up the path for all the boids of the game.
+   */
   void
   setUpNewPath();
+
+
 
 private:
   /**

@@ -23,6 +23,8 @@ public:// constructors
   */
   virtual int run(unsigned int screenWith = 1280u,
                   unsigned int screenHeight = 720u) = 0;
+
+  virtual void closeWindow() = 0;
 protected:
 
   /**

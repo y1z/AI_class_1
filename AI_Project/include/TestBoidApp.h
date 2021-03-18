@@ -17,25 +17,26 @@ public:
   TestBoidApp& operator=(const TestBoidApp&) = delete;
   TestBoidApp& operator=(TestBoidApp&&) = delete;
 public:
-  
   int
   run(unsigned int screenWith,
       unsigned int screenHeight) override;
- 
+
+  virtual void
+  closeWindow() override;
 private:
 
   /**
   * @brief Initializes all the variables used by the app.
   * @bug no known bugs.
   */
-  int 
+  int
   init();
 
   /**
   * @brief Takes care of handling user input.
   * @bug no known bugs.
   */
-  void 
+  void
   handleInput();
 
   /**
@@ -59,7 +60,7 @@ private:
   */
   int
   mainLoop()override;
-  
+
 private:
 
   /** @brief controls the mouse position. */

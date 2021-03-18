@@ -18,6 +18,9 @@ public:
       unsigned int screenHeight) override;
 
 
+  virtual void
+  closeWindow() override;
+
 protected:
 
   int

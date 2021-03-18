@@ -26,6 +26,11 @@ ExamApp::run(unsigned int screenWith,
   return mainLoop();
 }
 
+void
+ExamApp::closeWindow() {
+  m_window->close();
+}
+
 int
 ExamApp::init(unsigned int width,
               unsigned int height) {
