@@ -99,10 +99,17 @@ EditorApp::menuLoop() {
 
   while (m_stateMachine->isStateMachineActive() && m_window->isOpen()) {
     m_window->clear();
+
+    m_timer.StartTiming();
     handleInput();
+
     const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.mousePosition);
-    m_stateMachine->update(mousePosition, m_mouseData.mouseAccion);
+    m_stateMachine->update(mousePosition, m_mouseData.mouseAccion, m_deltaTime);
     m_stateMachine->render(m_window.get());
+
+    m_timer.EndTiming();
+    m_deltaTime = m_timer.GetResultSecondsFloat();
+
     m_window->display();
   }
 
