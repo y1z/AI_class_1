@@ -5,7 +5,6 @@
 namespace UI_STATE_NAME {
 
 enum E : size_t {
-  kStop,
   kWAITING = 0,
   kCHANGING = 1,
   kNumStates
@@ -13,11 +12,14 @@ enum E : size_t {
 
 }
 
+/**
+ * The data that the state needs for work.
+ */
 struct UIStateData
 {
   sf::Vector2f mousePosition;
   /** keeps track of which sate we are in*/
-  int32_t ID;
+  int32_t sceneIndex;
   int32_t lastSceneID;
   int32_t mouseAccion;
 };
