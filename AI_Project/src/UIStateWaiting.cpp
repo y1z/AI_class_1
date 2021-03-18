@@ -12,8 +12,8 @@ UIStateWaiting::onUpdate(UIStateData& sceneData) {
   size_t i = 0;
   for (const auto& elem : UISceneElements) {
 
-    const bool isIsideUI = elem.isInsideRect(sceneData.mousePosition);
-    if (isIsideUI && sf::Mouse::Left == sceneData.mouseAccion) {
+    const bool isInsideUI = elem.isInsideRect(sceneData.mousePosition);
+    if (isInsideUI && sf::Mouse::Left == sceneData.mouseAccion) {
       sceneData.lastSceneID = sceneIndex;
 
       executeCallBack(i, scene);
