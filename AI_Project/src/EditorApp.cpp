@@ -209,6 +209,8 @@ EditorApp::createMenu() {
     disc.textSize = 50;
     levelSelect.AddElement(levelOneRect, UIScene::NOMORE_SCENES_ID, loadLevelOne, disc);
     levelSelect.ID = 1;
+
+    descriptors.emplace_back(levelSelect);
   }
 
 
