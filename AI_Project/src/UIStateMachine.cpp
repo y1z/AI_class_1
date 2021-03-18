@@ -1,6 +1,7 @@
 #include "UIStateMachine.h"
 #include "BaseApp.h"
 #include <cassert>
+#include "MouseData.h"
 // states
 #include "UIStateWaiting.h"
 #include "UIStateChanging.h"
@@ -44,11 +45,11 @@ UIStateMachine::init(const std::vector<UISceneDesc>& descriptor,
 
 bool
 UIStateMachine::update(const sf::Vector2f& mousePosition,
-                       const sf::Mouse::Button accion,
+                       const MouseData& data,
                        const float deltaTime) {
   UIStateData currentData;
   currentData.mousePosition = mousePosition;
-  currentData.mouseAccion = accion;
+  currentData.mouseAccion = data.m_mouseAccion;
   currentData.sceneIndex = m_currentScene->sceneIndex;
   currentData.deltaTime = deltaTime;
 

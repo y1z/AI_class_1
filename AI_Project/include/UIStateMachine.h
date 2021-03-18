@@ -7,6 +7,7 @@
 #include "UIState.h"
 
 class BaseApp;
+class MouseData;
 
 
 /**
@@ -40,7 +41,7 @@ public:
    */
   bool
   update(const sf::Vector2f& mousePosition,
-         const sf::Mouse::Button accion,
+         const MouseData& data,
          const float deltaTime);
 
   void
