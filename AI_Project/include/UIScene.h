@@ -23,6 +23,7 @@ struct UISceneDesc
                   AppFuncReturnFilePath ,
                   AppFuncReturnInt >;
 
+
   struct TextElement {
     TextElement() = default;
     TextElement(TextElement&& other) noexcept = default;
@@ -142,6 +143,11 @@ public:
   void
   draw(sf::RenderTarget* target)const;
  private:
+
+   /**
+    * Used to indicate no more scenes are going to load.
+    */
+  constexpr static int32 NOMORE_SCENES_ID = -1;
 
  public:
   UISceneDesc m_desc;
