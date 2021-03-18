@@ -12,11 +12,16 @@
 
 struct UISceneDesc
 {
+
+  using AppFuncReturnFilePath = std::function<std::filesystem::path(BaseApp*) >;
+  using AppFuncReturnInt = std::function<int(BaseApp*)>;
+
   /** The types of function that the struct can accept.*/
   using UICallbackFunction =
     std::variant< std::function<void(void)>,
                   std::function<int(void)>,
-                  std::function<std::filesystem::path (BaseApp*) > >;
+                  AppFuncReturnFilePath ,
+                  AppFuncReturnInt >;
 
   struct TextElement {
     TextElement() = default;
