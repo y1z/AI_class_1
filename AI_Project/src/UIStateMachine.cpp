@@ -48,7 +48,7 @@ UIStateMachine::update(const sf::Vector2f& mousePosition,
   UIStateData currentData;
   currentData.mousePosition = mousePosition;
   currentData.mouseAccion = accion;
-  currentData.ID = m_currentScene->sceneIndex;
+  currentData.sceneIndex = m_currentScene->sceneIndex;
 
   m_scenes[m_currentScene->sceneIndex].update();
 
