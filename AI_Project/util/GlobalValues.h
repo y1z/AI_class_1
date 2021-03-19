@@ -2,7 +2,6 @@
 /**
 * @brief : a namespace that contains global variables
 */
-
 namespace gvar
 {
   /**
