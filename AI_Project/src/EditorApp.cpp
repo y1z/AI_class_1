@@ -29,6 +29,9 @@ constexpr static const char*
 s_pathToLevel2 = "resources/saves/level_2.txt";
 
 constexpr static const char*
+s_pathToLevel3 = "resources/saves/level_3.txt";
+
+constexpr static const char*
 s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
 
 constexpr static const char*
@@ -37,6 +40,9 @@ s_pathToFront = "resources/fonts/Gamepixies-8MO6n.ttf";
 
 fs::path
 openFilePath(BaseApp* app);
+
+int
+createTrack(BaseApp* app);
 
 int
 closeApp(BaseApp* app);
@@ -75,6 +81,45 @@ EditorApp::run(unsigned int screenWidth,
 void
 EditorApp::closeWindow() {
   m_window->close();
+}
+
+int
+EditorApp::createLoop() {
+
+  const float minimumTime = 0.18f;
+  float currentTime = 0.0f;
+  m_gameMap->clear();
+  {
+    auto& gm = GameManager::getInstance();
+    auto& container = gm.getAgentContainerRef();
+      for (auto& elem : container) {
+        elem.getBoid().m_data.m_position = Vec2(-1337.0f, -221321321.0f);
+      }
+  }
+  while (m_window->isOpen()) {
+
+    m_timer.StartTiming();
+    //handleRacers();
+
+    handleInput();
+
+    const bool acceptInput = m_mouseData.isPressedWith(MOUSE_ACCION::kLeftButton);
+    if (acceptInput && currentTime > minimumTime) {
+      const FollowPathNode node(m_mouseData.m_mousePosition, 25.0f);
+      m_gameMap->addNode(node);
+      currentTime = 0.0f;
+    }
+
+
+
+    handleDraw();
+
+    m_timer.EndTiming();
+    m_deltaTime = m_timer.GetResultSecondsFloat();
+    currentTime += m_deltaTime;
+  }
+
+  return 0;
 }
 
 int
@@ -125,6 +170,7 @@ EditorApp::menuLoop() {
 
   return 0;
 }
+
 
 int
 EditorApp::init() {
@@ -191,6 +237,10 @@ EditorApp::createMenu() {
                                                              sf::Color::Red,
                                                              Vec2(0.0f, rectSize.y * 1.5f));
 
+    const auto createRect = UIScene::copyAndModifyFromTemplate(exitRect,
+                                                               sf::Color::Yellow,
+                                                               Vec2(rectSize.x * 1.5f));
+
 
     {
       UITextDescriptor disc;
@@ -204,6 +254,9 @@ EditorApp::createMenu() {
 
       disc.textString = " exit button";
       menuScene.AddElement(exitRect, UIScene::NOMORE_SCENES_ID, closeApp, disc);
+
+      disc.textString = " create track";
+      menuScene.AddElement(createRect, UIScene::NOMORE_SCENES_ID, createTrack, disc);
     }
 
     menuScene.ID = 0;
@@ -237,6 +290,9 @@ EditorApp::createMenu() {
 
     disc.textString = " level 2 ";
     levelSelect.AddElement(level2Rect, UIScene::NOMORE_SCENES_ID, loadLevel2, disc);
+
+    disc.textString = " level 3 ";
+    levelSelect.AddElement(level3Rect, UIScene::NOMORE_SCENES_ID, loadLevel3, disc);
     levelSelect.ID = 1;
 
     descriptors.emplace_back(levelSelect);
@@ -447,11 +503,24 @@ openFilePath(BaseApp* app) {
 
 }
 
+
+
+int
+createTrack(BaseApp* app) {
+  assert(nullptr != app);
+  auto gameApp = reinterpret_cast<EditorApp*>(app);
+  return gameApp->createLoop();
+}
+
+
+
 int
 closeApp(BaseApp* app) {
   app->closeWindow();
   return 0;
 }
+
+
 
 int
 loadLevel1(BaseApp* app) {
@@ -462,6 +531,8 @@ loadLevel1(BaseApp* app) {
   return 0;
 }
 
+
+
 int
 loadLevel2(BaseApp* app) {
   assert(nullptr != app);
@@ -470,4 +541,15 @@ loadLevel2(BaseApp* app) {
 
   return 0;
 }
+
+int
+loadLevel3(BaseApp* app) {
+
+  assert(nullptr != app);
+  auto gameApp = reinterpret_cast<EditorApp*>(app);
+  gameApp->createPath(s_pathToLevel3);
+  return 0;
+}
+
+
 

@@ -46,6 +46,8 @@ class EditorApp final : public BaseApp
   void
   closeWindow() override;
 
+  int
+  createLoop();
 
  protected:
   /**
@@ -59,6 +61,7 @@ class EditorApp final : public BaseApp
    */
   int
   menuLoop();
+
 
   /**
    * For creation of resources
