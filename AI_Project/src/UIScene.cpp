@@ -25,6 +25,9 @@ UIScene::draw(sf::RenderTarget* target) const {
     elem.draw(*target);
   }
 
+  for (const auto& elem : m_desc.texts) {
+    elem.text.draw(target);
+  }
 }
 
 void

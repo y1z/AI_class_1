@@ -53,10 +53,9 @@ UIStateMachine::update(const MouseData& data,
 
   m_scenes[m_currentScene->sceneIndex].update();
 
-  const auto state = m_currentScene->getCurrentState();
   const auto updatedState = m_currentScene->onUpdate(currentData);
 
-  if (state != updatedState) {
+  if (m_currentScene->getCurrentState() != updatedState) {
     m_currentScene->onExit(currentData);
     m_currentScene = m_states[updatedState].get();
   }
@@ -69,14 +68,7 @@ void
 UIStateMachine::render(sf::RenderWindow* window) {
   const auto currentIndex = m_currentScene->sceneIndex;
   if (UIScene::NOMORE_SCENES_ID != currentIndex) {
-
-    for (auto& elem : m_scenes[currentIndex].m_desc.rectangles) {
-      elem.draw(*window);
-    }
-
-    for (auto& elem : m_scenes[currentIndex].m_desc.texts) {
-      elem.text.draw(window);
-    }
+    m_scenes[currentIndex].draw(window);
   }
 }
 
