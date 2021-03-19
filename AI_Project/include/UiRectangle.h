@@ -16,6 +16,7 @@ class UIText;
 class UIRectangle
 {
 public:
+  UIRectangle() = default;
   explicit UIRectangle(const UIRectangleDesc& desc);
 
 
@@ -45,6 +46,10 @@ public:
   /** @returns the height of the UI rectangle*/
   int32
   getHeight()const;
+
+  /** @returns The Width and height of the UI rectangle. */
+  sf::Vector2f
+  getSize()const;
 
 
   /** @brief draws the rectangle */

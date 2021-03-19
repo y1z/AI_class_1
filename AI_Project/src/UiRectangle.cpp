@@ -75,6 +75,11 @@ UIRectangle::getHeight() const
   return m_rect.getSize().y;
 }
 
+sf::Vector2f
+UIRectangle::getSize() const {
+  return m_rect.getSize();
+}
+
 void
 UIRectangle::draw(sf::RenderTarget& target) const {
   target.draw(m_rect);
