@@ -43,7 +43,7 @@ loadLevelOne(BaseApp* app);
 
 
 EditorApp::EditorApp()
-  : BaseApp(), m_mouseData(Vec2(0.0f, 0.0f), sf::Mouse::Button::ButtonCount) {}
+  : BaseApp() {}
 
 int
 EditorApp::run(unsigned int screenWidth,
@@ -103,8 +103,8 @@ EditorApp::menuLoop() {
     m_timer.StartTiming();
     handleInput();
 
-    const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.mousePosition);
-    m_stateMachine->update(mousePosition, m_mouseData.mouseAccion, m_deltaTime);
+    const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.m_mousePosition);
+    m_stateMachine->update(mousePosition, m_mouseData, m_deltaTime);
     m_stateMachine->render(m_window.get());
 
     m_timer.EndTiming();
@@ -251,12 +251,17 @@ EditorApp::handleInput() {
 
 
     if (sf::Event::MouseMoved == event.type) {
-      m_mouseData.mousePosition = Vec2(static_cast<float>(event.mouseMove.x),
-                                       static_cast<float>(event.mouseMove.y));
+      m_mouseData.m_mousePosition = Vec2(static_cast<float>(event.mouseMove.x),
+                                         static_cast<float>(event.mouseMove.y));
+    }
+
+    if (sf::Event::MouseButtonReleased == event.type) {
+      // m_mouseData.m_mouseAccion = event.mouseButton.button;
+      m_mouseData.setMouseAccion(event.mouseButton.button) ;
     }
 
     if (sf::Event::MouseButtonPressed == event.type) {
-      m_mouseData.mouseAccion = event.mouseButton.button;
+      m_mouseData.setMouseAccion(event.mouseButton.button) ;
     }
 
     if (sf::Event::KeyPressed == event.type) {
@@ -284,8 +289,6 @@ EditorApp::handleInput() {
         m_gameMap->loadMap(path);
         setUpNewPath();
       }
-      break;
-      default:
       break;
       }
 
@@ -370,7 +373,7 @@ EditorApp::createRacer() {
      Vec2((i * 35), 500),
      0.75f + util::randomRangeFloat(0.01f, 1.01f)
     );
-    followBoid.m_fleeTargetPosition = &m_mouseData.mousePosition;
+    followBoid.m_fleeTargetPosition = &m_mouseData.m_mousePosition;
     followBoid.m_fleeMagnitude = 7.0f;
     followBoid.m_fleeRadius = 100.0f;
 

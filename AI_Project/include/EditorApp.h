@@ -6,6 +6,7 @@
 #include "GameMap.h"
 #include "UIStateMachine.h"
 #include "UIText.h"
+#include "MouseData.h"
 
 
 namespace RESULT_APP_STAGES {
@@ -21,17 +22,6 @@ namespace RESULT_APP_STAGES {
  */
 class EditorApp final : public BaseApp
 {
-
-  struct MouseData
-  {
-    MouseData(const Vec2& _mousePosition, const int32_t _mouseAccion)
-    :mousePosition(_mousePosition),
-     mouseAccion(static_cast<sf::Mouse::Button>(_mouseAccion))
-    {}
-    Vec2 mousePosition;
-    sf::Mouse::Button mouseAccion;
-  };
-
 
  public:
   EditorApp();
