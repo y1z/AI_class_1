@@ -40,8 +40,7 @@ public:
    * @brief Starts up the state machine
    */
   bool
-  update(const sf::Vector2f& mousePosition,
-         const MouseData& data,
+  update(const MouseData& data,
          const float deltaTime);
 
   void

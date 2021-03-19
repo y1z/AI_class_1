@@ -103,8 +103,7 @@ EditorApp::menuLoop() {
     m_timer.StartTiming();
     handleInput();
 
-    const sf::Vector2f mousePosition = util::vec2ToVector2f(m_mouseData.m_mousePosition);
-    m_stateMachine->update(mousePosition, m_mouseData, m_deltaTime);
+    m_stateMachine->update(m_mouseData, m_deltaTime);
     m_stateMachine->render(m_window.get());
 
     m_timer.EndTiming();

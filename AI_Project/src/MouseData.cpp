@@ -1,8 +1,9 @@
 #include "MouseData.h"
+#include "util.h"
 
 void
 MouseData::setMousePosition(const sf::Vector2f position) {
-  m_mousePosition = position;
+  m_mousePosition = Vec2(position.x, position.y);
 }
 
 void
