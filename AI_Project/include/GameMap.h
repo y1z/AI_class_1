@@ -40,8 +40,14 @@ public:
   void
   createMap(const std::vector<FollowPathNode>& mapData);
 
+  /**
+   * @copydocs GameMap::createMap()
+   */
   void
   createMap(std::vector<FollowPathNode>&& mapData);
+
+  void
+  addNode(const FollowPathNode& newNode);
 
 
 

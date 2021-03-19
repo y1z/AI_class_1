@@ -75,16 +75,7 @@ GameMap::draw(sf::RenderWindow& window) {
 void
 GameMap::createMap(const std::vector<FollowPathNode>& mapData) {
   for (const auto& elem : mapData) {
-    m_positionData.emplace_back(elem);
-
-    sf::CircleShape templateCircle(elem.m_radius);
-    const float circleRadius = templateCircle.getRadius();
-    templateCircle.setOrigin(circleRadius * .5f, circleRadius * .5f);
-    templateCircle.setFillColor(sf::Color::Yellow);
-    templateCircle.setPosition(elem.m_position.x, elem.m_position.y);
-
-    auto temp = std::make_unique<sf::CircleShape>(templateCircle);
-    m_visuals.emplace_back(std::move(temp));
+    addNode(elem);
   }
 
 }
@@ -93,6 +84,20 @@ void
 GameMap::createMap(std::vector<FollowPathNode>&& mapData) {
 
   createMap(std::forward < const std::vector<FollowPathNode> >(mapData));
+}
+
+void
+GameMap::addNode(const FollowPathNode& newNode) {
+  m_positionData.emplace_back(newNode);
+
+  sf::CircleShape templateCircle(newNode.m_radius);
+  const float circleRadius = templateCircle.getRadius();
+  templateCircle.setOrigin(circleRadius * .5f, circleRadius * .5f);
+  templateCircle.setFillColor(sf::Color::Yellow);
+  templateCircle.setPosition(newNode.m_position.x, newNode.m_position.y);
+
+  auto temp = std::make_unique<sf::CircleShape>(templateCircle);
+  m_visuals.emplace_back(std::move(temp));
 }
 
 GameMap::mapPathContainer::iterator
