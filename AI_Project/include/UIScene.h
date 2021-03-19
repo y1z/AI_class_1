@@ -5,11 +5,15 @@
 #include <variant>
 #include <filesystem>
 #include "UiRectangle.h"
+#include <optional>
 
 #include "UIText.h"
 #include "BaseApp.h"
 
 
+/**
+ * Contains the data for creating a scene.
+ */
 struct UISceneDesc
 {
 
@@ -23,6 +27,7 @@ struct UISceneDesc
                   AppFuncReturnFilePath ,
                   AppFuncReturnInt >;
 
+  using UICallBackContainer = std::vector< UICallbackFunction >;
 
   struct TextElement {
     TextElement() = default;
@@ -35,20 +40,11 @@ struct UISceneDesc
 
     TextElement&
     operator=(const TextElement& other) = delete;
-    //TextElement() = default;
-    //TextElement(TextElement&& other) noexcept {
-    //  text = std::move(other.text);
-    //}
+
     UIText text;
     uint64 index;
   };
 
-
-  std::vector<UIRectangle> rectangles;/**< The visual representation of rectangles. */
-  std::vector<int32_t> associatedScenes;/**< The connections between scenes. */
-  std::vector<UICallbackFunction> callbackFunctions;
-  std::vector<TextElement> texts; /**< The visual representation of text.*/
-  int32_t ID; /**< Used to identify the scenes. */
 
 
   void
@@ -78,6 +74,7 @@ struct UISceneDesc
              UIText&& _text);
 
 
+
   constexpr bool
   operator<(const UISceneDesc& other)const {
     return ID < other.ID;
@@ -103,10 +100,12 @@ struct UISceneDesc
     return !(this->operator<(other));
   }
 
+  std::vector<UIRectangle> rectangles;/**< The visual representation of rectangles. */
+  std::vector<int32_t> associatedScenes;/**< The connections between scenes. */
+  std::vector<UICallbackFunction> callbackFunctions;
+  std::vector<TextElement> texts; /**< The visual representation of text.*/
+  int32_t ID; /**< Used to identify the scenes. */
 };
-/**
- * Contains the data for creating a scene.
- */
 
 
 /**
@@ -137,11 +136,39 @@ public:
     return m_desc == other.m_desc;
   }
 
+  constexpr bool
+  operator<=(const UIScene& other)const {
+    return m_desc.operator<=(other.m_desc);
+  }
+
+
+  constexpr bool
+  operator>=(const UIScene& other)const {
+    return m_desc.operator>=(other.m_desc);
+  }
+
+
+  /**
+   * updates the Scene.
+   */
   void
   update();
 
+  /**
+   * draws the scene
+   */
   void
   draw(sf::RenderTarget* target)const;
+
+  /**
+   * Create a new UIRectangle from a already created template
+   */
+  static UIRectangle
+  copyAndModifyFromTemplate(const UIRectangle& templateRectangle,
+                            const std::optional<sf::Color> color = std::nullopt,
+                            const std::optional<Vec2> howMuchToMove = std::nullopt,
+                            const std::optional<Vec2> newSize = std::nullopt);
+
 
    /**
     * Used to indicate no more scenes are going to load.
