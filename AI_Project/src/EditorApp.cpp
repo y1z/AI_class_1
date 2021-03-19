@@ -23,7 +23,10 @@ constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
 
 constexpr static const char*
-s_pathToLevelOne = "resources/saves/level_1.txt";
+s_pathToLevel1 = "resources/saves/level_1.txt";
+
+constexpr static const char*
+s_pathToLevel2 = "resources/saves/level_2.txt";
 
 constexpr static const char*
 s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
@@ -39,7 +42,13 @@ int
 closeApp(BaseApp* app);
 
 int
-loadLevelOne(BaseApp* app);
+loadLevel1(BaseApp* app);
+
+int
+loadLevel2(BaseApp* app);
+
+int
+loadLevel3(BaseApp* app);
 
 
 EditorApp::EditorApp()
@@ -177,9 +186,10 @@ EditorApp::createMenu() {
                                sf::Vector2f(halfScreenWidth, 300),
                                "", sf::Color::Green));
 
-    const UIRectangle exitRect(UIRectangleDesc(300, 200,
-                               sf::Vector2f(halfScreenWidth, 600),
-                               "", sf::Color::Red));
+    const auto rectSize = playRect.getSize();
+    const auto exitRect = UIScene::copyAndModifyFromTemplate(playRect,
+                                                             sf::Color::Red,
+                                                             Vec2(0.0f, rectSize.y * 1.5f));
 
 
     {
@@ -203,17 +213,30 @@ EditorApp::createMenu() {
 
   {
     UISceneDesc levelSelect;
-    const UIRectangle levelOneRect(UIRectangleDesc(300, 200,
+    const UIRectangle level1Rect(UIRectangleDesc(300, 200,
                                    sf::Vector2f(halfScreenWidth, 300),
                                    "", sf::Color::Yellow));
 
+    const auto rectSize = level1Rect.getSize();
+
+    const auto level2Rect = UIScene::copyAndModifyFromTemplate(level1Rect,
+                                                               std::nullopt,
+                                                               Vec2(0.0f, rectSize.y * 1.5f));
+
+    const auto level3Rect = UIScene::copyAndModifyFromTemplate(level2Rect,
+                                                               std::nullopt,
+                                                               Vec2(0.0f, rectSize.y * 1.5f));
+
     UITextDescriptor disc;
     disc.pathToFont = s_pathToFront;
-    disc.textString = " play button";
+    disc.textString = " level 1 ";
     disc.textFillColor = sf::Color::Black;
     disc.textOuterColor = sf::Color::Blue;
     disc.textSize = 50;
-    levelSelect.AddElement(levelOneRect, UIScene::NOMORE_SCENES_ID, loadLevelOne, disc);
+    levelSelect.AddElement(level1Rect, UIScene::NOMORE_SCENES_ID, loadLevel1, disc);
+
+    disc.textString = " level 2 ";
+    levelSelect.AddElement(level2Rect, UIScene::NOMORE_SCENES_ID, loadLevel2, disc);
     levelSelect.ID = 1;
 
     descriptors.emplace_back(levelSelect);
@@ -431,10 +454,19 @@ closeApp(BaseApp* app) {
 }
 
 int
-loadLevelOne(BaseApp* app) {
+loadLevel1(BaseApp* app) {
   assert(nullptr != app);
   auto gameApp = reinterpret_cast<EditorApp*>(app);
-  gameApp->createPath(s_pathToLevelOne);
+  gameApp->createPath(s_pathToLevel1);
+
+  return 0;
+}
+
+int
+loadLevel2(BaseApp* app) {
+  assert(nullptr != app);
+  auto gameApp = reinterpret_cast<EditorApp*>(app);
+  gameApp->createPath(s_pathToLevel2);
 
   return 0;
 }
