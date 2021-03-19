@@ -74,6 +74,8 @@ GameMap::draw(sf::RenderWindow& window) {
 
 void
 GameMap::createMap(const std::vector<FollowPathNode>& mapData) {
+  m_positionData.reserve(mapData.size());
+  m_visuals.reserve(mapData.size());
   for (const auto& elem : mapData) {
     addNode(elem);
   }
@@ -98,6 +100,12 @@ GameMap::addNode(const FollowPathNode& newNode) {
 
   auto temp = std::make_unique<sf::CircleShape>(templateCircle);
   m_visuals.emplace_back(std::move(temp));
+}
+
+void
+GameMap::clear() {
+  m_positionData.clear();
+  m_visuals.clear();
 }
 
 GameMap::mapPathContainer::iterator

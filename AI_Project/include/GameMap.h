@@ -50,6 +50,12 @@ public:
   addNode(const FollowPathNode& newNode);
 
 
+  /**
+   * clear out the track
+   */
+  void
+  clear();
+
 
   /**
    * @returns A begin iterator.
