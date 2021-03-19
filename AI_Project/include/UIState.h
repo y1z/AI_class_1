@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include "UIScene.h"
+#include "MouseData.h"
 
 namespace UI_STATE_NAME {
 
@@ -18,30 +19,32 @@ enum E : size_t {
 struct UIStateData
 {
   UIStateData() = default;
-  UIStateData(const sf::Vector2f& _mousePosition,
+  UIStateData(const MouseData& _mouseData,
               const float _deltaTime,
               int32_t _sceneIndex,
-              int32_t _lastSceneID,
-              int32_t _mouseAccion)
-    : mousePosition(_mousePosition),
-      deltaTime(_deltaTime),
-      sceneIndex(_sceneIndex),
-      lastSceneID(_lastSceneID),
-      mouseAccion(_mouseAccion)
+              int32_t _lastSceneID)
+    :
+    mouseData(_mouseData),
+    deltaTime(_deltaTime),
+    sceneIndex(_sceneIndex),
+    lastSceneID(_lastSceneID)
   {}
 
+
   /**
-   * Where the mouse is located on the screen.
+   * Keeps track of relevant data related with the mouse.
    */
-  sf::Vector2f mousePosition;
+  MouseData mouseData;
+
   /**
    * The since the last update.
    */
   float deltaTime;
+
   /** keeps track of which sate we are in. */
   int32_t sceneIndex;
+
   int32_t lastSceneID;
-  int32_t mouseAccion;
 };
 
 

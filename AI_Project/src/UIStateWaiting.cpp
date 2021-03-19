@@ -1,5 +1,7 @@
 #include <cassert>
 #include "UIStateWaiting.h"
+#include "util.h"
+
 
 constexpr static float s_inputDelay = .30f;
 
@@ -11,14 +13,17 @@ UIStateWaiting::onUpdate(UIStateData& sceneData) {
 
   std::vector<UIRectangle>& UISceneElements = ptr_scenes->at(sceneIndex).m_desc.rectangles;
   UISceneDesc& scene = ptr_scenes->at(sceneIndex).m_desc;
-  size_t i = 0;
   m_timeSinceInput += sceneData.deltaTime;
 
+  const MouseData& data = sceneData.mouseData;
+  const auto requiredMouseAccion = (MOUSE_ACCION::kPressing | MOUSE_ACCION::kLeftButton);
+
+  size_t i = 0;
   for (const auto& elem : UISceneElements) {
 
     const bool canAcceptInput = (m_timeSinceInput > s_inputDelay) &&
-                                elem.isInsideRect(sceneData.mousePosition) &&
-                                sf::Mouse::Left == sceneData.mouseAccion;
+                                elem.isInsideRect(util::vec2ToVector2f(data.m_mousePosition)) &&
+                                requiredMouseAccion == data.m_mouseAccion;
     if (canAcceptInput) {
       sceneData.lastSceneID = sceneIndex;
 
