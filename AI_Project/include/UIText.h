@@ -23,8 +23,9 @@ namespace TEXT_ALIGNMENT {
 /**
  * The representation text with the UI.
  */
-class UIText {
- public:
+class UIText
+{
+public:
 
   UIText() = default;
   UIText(UIText&& other) noexcept;
