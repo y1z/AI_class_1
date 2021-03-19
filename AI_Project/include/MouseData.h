@@ -50,6 +50,12 @@ struct MouseData
   bool
   isPressed()const;
 
+  bool
+  isPressedWith(const MOUSE_ACCION::E accion)const;
+
+  bool
+  isRelasedWith(const MOUSE_ACCION::E accion)const;
+
   static MOUSE_ACCION::E
   convertToMouseAccion(sf::Mouse::Button accion);
 

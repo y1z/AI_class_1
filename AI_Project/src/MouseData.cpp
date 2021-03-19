@@ -23,7 +23,17 @@ MouseData::isReleased() const {
 
 bool
 MouseData::isPressed() const {
-  return (m_mouseAccion | MOUSE_ACCION::kPressing);
+  return (m_mouseAccion & MOUSE_ACCION::kPressing);
+}
+
+bool
+MouseData::isPressedWith(const MOUSE_ACCION::E accion)const {
+  return isPressed() && (m_mouseAccion & accion);
+}
+
+bool
+MouseData::isRelasedWith(const MOUSE_ACCION::E accion) const {
+  return isReleased() && (m_mouseAccion & accion);
 }
 
 MOUSE_ACCION::E
