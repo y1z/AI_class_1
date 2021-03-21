@@ -191,6 +191,8 @@ EditorApp::init() {
 
     m_stateMachine = make_unique<UIStateMachine>();
 
+    m_spritesAtlases.reserve(3);
+
     {
       m_testText = make_unique<UIText>();
       UITextDescriptor desc;
@@ -224,48 +226,15 @@ bool
 EditorApp::createUI() {
 
   std::vector<UISceneDesc> descriptors;
+  descriptors.reserve(3);
 
   auto const halfScreenWidth = static_cast<float>(m_screenWidth) * .5f;
   auto const halfScreenHeight = static_cast<float>(m_screenHeight) * .5f;
 
   const UISceneDesc mainMenu = createMainMenuScene();
-
-   descriptors.emplace_back(mainMenu);
-  {
-    UISceneDesc levelSelect;
-    const UIRectangle level1Rect(UIRectangleDesc(300, 200,
-                                   sf::Vector2f(halfScreenWidth, 300),
-                                   "", sf::Color::Yellow));
-
-    const auto rectSize = level1Rect.getSize();
-
-    const auto level2Rect = UIScene::copyAndModifyFromTemplate(level1Rect,
-                                                               std::nullopt,
-                                                               Vec2(0.0f, rectSize.y * 1.5f));
-
-    const auto level3Rect = UIScene::copyAndModifyFromTemplate(level2Rect,
-                                                               std::nullopt,
-                                                               Vec2(0.0f, rectSize.y * 1.5f));
-
-    UITextDescriptor disc;
-    disc.pathToFont = s_pathToFront;
-    disc.textString = " level 1 ";
-    disc.textFillColor = sf::Color::Black;
-    disc.textOuterColor = sf::Color::Blue;
-    disc.textStyle = sf::Text::Bold;
-    disc.textSize = 50;
-    levelSelect.AddElement(level1Rect, UIScene::NOMORE_SCENES_ID, loadLevel1, disc);
-
-    disc.textString = " level 2 ";
-    levelSelect.AddElement(level2Rect, UIScene::NOMORE_SCENES_ID, loadLevel2, disc);
-
-    disc.textString = " level 3 ";
-    levelSelect.AddElement(level3Rect, UIScene::NOMORE_SCENES_ID, loadLevel3, disc);
-    levelSelect.ID = 1;
-
-    descriptors.emplace_back(levelSelect);
-  }
-
+  const UISceneDesc levelSelect = createLevelSelect();
+  descriptors.emplace_back(mainMenu);
+  descriptors.emplace_back(levelSelect);
 
   m_stateMachine->init(descriptors, this);
   return true;
@@ -314,6 +283,44 @@ EditorApp::createMainMenuScene() const {
 
   menuScene.ID = 0;
   return  menuScene;
+}
+
+UISceneDesc
+EditorApp::createLevelSelect() const {
+
+  const auto halfScreenWidth = static_cast<float>(m_screenWidth) / 2u;
+  UISceneDesc levelSelect;
+  const UIRectangle level1Rect(UIRectangleDesc(300, 200,
+                               sf::Vector2f(halfScreenWidth, 300),
+                               "", sf::Color::Yellow));
+
+  const auto rectSize = level1Rect.getSize();
+
+  const auto level2Rect = UIScene::copyAndModifyFromTemplate(level1Rect,
+                                                             std::nullopt,
+                                                             Vec2(0.0f, rectSize.y * 1.5f));
+
+  const auto level3Rect = UIScene::copyAndModifyFromTemplate(level2Rect,
+                                                             std::nullopt,
+                                                             Vec2(0.0f, rectSize.y * 1.5f));
+
+  UITextDescriptor disc;
+  disc.pathToFont = s_pathToFront;
+  disc.textString = " LEVEL 1 ";
+  disc.textFillColor = sf::Color::Black;
+  disc.textOuterColor = sf::Color::Blue;
+  disc.textStyle = sf::Text::Bold;
+  disc.textSize = 60;
+  levelSelect.AddElement(level1Rect, UIScene::NOMORE_SCENES_ID, loadLevel1, disc);
+
+  disc.textString = " LEVEL 2 ";
+  levelSelect.AddElement(level2Rect, UIScene::NOMORE_SCENES_ID, loadLevel2, disc);
+
+  disc.textString = " LEVEL 3 ";
+  levelSelect.AddElement(level3Rect, UIScene::NOMORE_SCENES_ID, loadLevel3, disc);
+  levelSelect.ID = 1;
+
+  return levelSelect;
 }
 
 
