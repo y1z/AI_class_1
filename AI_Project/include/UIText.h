@@ -69,6 +69,9 @@ public:
   void
   setCharacterSize(unsigned int newSize);
 
+  void
+  setTextStyle(sf::Text::Style newStyle);
+
   /**
    * Controls the alignment of the text with attached to a rectangle.
    */
@@ -157,6 +160,7 @@ public:
   sf::Color m_fillColor = sf::Color::Black;
   sf::Color m_outerColor = sf::Color::White;
   unsigned int m_textSize = 30u;
+  sf::Text::Style m_textStyle = sf::Text::Style::Regular;
   TEXT_ALIGNMENT::E m_alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };
 
@@ -177,6 +181,7 @@ struct UITextDescriptor
   sf::Color textFillColor = sf::Color(255u, 255u, 255u, 255u);
   sf::Color textOuterColor = sf::Color(255u, 255u, 255u, 255u);
   unsigned int textSize = 30u;
+  sf::Text::Style textStyle = sf::Text::Style::Regular;
   TEXT_ALIGNMENT::E alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };
 

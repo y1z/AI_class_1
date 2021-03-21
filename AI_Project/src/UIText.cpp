@@ -21,7 +21,8 @@ UIText::UIText(UIText&& other) noexcept
     m_alignment(other.m_alignment),
     m_fillColor(other.m_fillColor),
     m_outerColor(other.m_outerColor),
-    m_textSize(other.m_textSize)
+    m_textSize(other.m_textSize),
+    m_textStyle(other.m_textStyle)
 
 {
   other.m_rectPointer = nullptr;
@@ -64,6 +65,7 @@ UIText::init(const UITextDescriptor& descriptor) {
       m_textString = descriptor.textString;
       m_text->setString(m_textString);
       m_alignment = descriptor.alignment;
+      this->setTextStyle(descriptor.textStyle);
     }
     return canLoadStream && hasLoadedFront;
   }
@@ -116,6 +118,11 @@ UIText::setCharacterSize(unsigned int newSize) {
 }
 
 void
+UIText::setTextStyle(sf::Text::Style newStyle) {
+  m_textStyle = newStyle;
+}
+
+void
 UIText::setAlignment(const TEXT_ALIGNMENT::E alignment) {
   m_alignment = alignment;
 }
@@ -161,6 +168,7 @@ UIText::draw(sf::RenderTarget* target) const {
   m_text->setFillColor(m_fillColor);
   m_text->setOutlineColor(m_outerColor);
   m_text->setCharacterSize(m_textSize);
+  m_text->setStyle(m_textStyle);
   target->draw(*m_text);
 }
 
@@ -185,6 +193,7 @@ UIText::copy(const UIText& other) {
   m_outerColor = other.m_outerColor;
   m_textSize = other.m_textSize;
   m_alignment = other.m_alignment;
+  m_textStyle = other.m_textStyle;
   return *this;
 }
 
@@ -200,6 +209,7 @@ UIText::takeResources(UIText&& other) noexcept {
   m_textSize = other.m_textSize;
   m_alignment = other.m_alignment;
   m_rectPointer = other.m_rectPointer;
+  m_textStyle = other.m_textStyle;
   other.m_rectPointer = nullptr;
   return *this;
 }
