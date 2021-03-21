@@ -1,0 +1,6 @@
+Autor : Yhaliff Said Barraza
+
+  yo hice todo los siguientes sistemas 
+  - El sistema de animación 
+  - El sistema de boid's (los corredores)
+  - El sistema de UI 
