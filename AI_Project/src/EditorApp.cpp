@@ -228,8 +228,9 @@ EditorApp::createUI() {
   auto const halfScreenWidth = static_cast<float>(m_screenWidth) * .5f;
   auto const halfScreenHeight = static_cast<float>(m_screenHeight) * .5f;
 
-  createMainMenuScene(descriptors);
+  const UISceneDesc mainMenu = createMainMenuScene();
 
+   descriptors.emplace_back(mainMenu);
   {
     UISceneDesc levelSelect;
     const UIRectangle level1Rect(UIRectangleDesc(300, 200,
@@ -251,6 +252,7 @@ EditorApp::createUI() {
     disc.textString = " level 1 ";
     disc.textFillColor = sf::Color::Black;
     disc.textOuterColor = sf::Color::Blue;
+    disc.textStyle = sf::Text::Bold;
     disc.textSize = 50;
     levelSelect.AddElement(level1Rect, UIScene::NOMORE_SCENES_ID, loadLevel1, disc);
 
@@ -284,7 +286,8 @@ EditorApp::createMainMenuScene() const {
 
   const auto createRect = UIScene::copyAndModifyFromTemplate(exitRect,
                                                              sf::Color::Yellow,
-                                                             Vec2(rectSize.x * 1.5f));
+                                                             Vec2(rectSize.x * 1.5f),
+                                                             Vec2(rectSize.x + 5.0f, rectSize.y));
 
   const auto creditRect = UIScene::copyAndModifyFromTemplate(exitRect,
                                                              sf::Color::Yellow,
@@ -292,20 +295,21 @@ EditorApp::createMainMenuScene() const {
 
   UITextDescriptor disc;
   disc.pathToFont = s_pathToFront;
-  disc.textString = " play button";
+  disc.textString = " Play\n Button";
   disc.textFillColor = sf::Color::Black;
   disc.textOuterColor = sf::Color::Blue;
-  disc.textSize = 50;
+  disc.textSize = 60;
+  disc.textStyle = sf::Text::Bold;
 
   menuScene.AddElement(playRect, 1, []() {}, disc);
 
-  disc.textString = " exit button";
+  disc.textString = " Exit\n Button";
   menuScene.AddElement(exitRect, UIScene::NOMORE_SCENES_ID, closeApp, disc);
 
-  disc.textString = " create track";
+  disc.textString = " Create\n Track";
   menuScene.AddElement(createRect, UIScene::NOMORE_SCENES_ID, createTrack, disc);
 
-  disc.textString = R"...( credits )...";
+  disc.textString = " Credits";
   menuScene.AddElement(creditRect, 2, []() {}, disc);
 
   menuScene.ID = 0;
