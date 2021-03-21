@@ -37,6 +37,9 @@ s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
 constexpr static const char*
 s_pathToFront = "resources/fonts/Gamepixies-8MO6n.ttf";
 
+constexpr static const char*
+s_pathToCreadits = "resources/credits/credits.txt";
+
 
 fs::path
 openFilePath(BaseApp* app);
@@ -99,7 +102,6 @@ EditorApp::createLoop() {
   while (m_window->isOpen()) {
 
     m_timer.StartTiming();
-    //handleRacers();
 
     handleInput();
 
@@ -193,7 +195,7 @@ EditorApp::init() {
       m_testText = make_unique<UIText>();
       UITextDescriptor desc;
       desc.pathToFont = s_pathToFront;
-      desc.textString = "dslkfjdsjfdsk;ljfklsdjfklsjfk;ldsjflkjdsk;lfjdkf";
+      desc.textString = "";
       desc.textFillColor = sf::Color::Blue;
       m_testText->init(desc);
     }
@@ -204,7 +206,7 @@ EditorApp::init() {
         return -1;
       }
     }
-    createMenu();
+    createUI();
 
     createPath();
 
@@ -219,50 +221,14 @@ EditorApp::init() {
 }
 
 bool
-EditorApp::createMenu() {
+EditorApp::createUI() {
 
   std::vector<UISceneDesc> descriptors;
 
   auto const halfScreenWidth = static_cast<float>(m_screenWidth) * .5f;
   auto const halfScreenHeight = static_cast<float>(m_screenHeight) * .5f;
 
-  {
-    UISceneDesc menuScene;
-    const UIRectangle playRect(UIRectangleDesc(300, 200,
-                               sf::Vector2f(halfScreenWidth, 300),
-                               "", sf::Color::Green));
-
-    const auto rectSize = playRect.getSize();
-    const auto exitRect = UIScene::copyAndModifyFromTemplate(playRect,
-                                                             sf::Color::Red,
-                                                             Vec2(0.0f, rectSize.y * 1.5f));
-
-    const auto createRect = UIScene::copyAndModifyFromTemplate(exitRect,
-                                                               sf::Color::Yellow,
-                                                               Vec2(rectSize.x * 1.5f));
-
-
-    {
-      UITextDescriptor disc;
-      disc.pathToFont = s_pathToFront;
-      disc.textString = " play button";
-      disc.textFillColor = sf::Color::Black;
-      disc.textOuterColor = sf::Color::Blue;
-      disc.textSize = 50;
-
-      menuScene.AddElement(playRect, 1, []() {}, disc);
-
-      disc.textString = " exit button";
-      menuScene.AddElement(exitRect, UIScene::NOMORE_SCENES_ID, closeApp, disc);
-
-      disc.textString = " create track";
-      menuScene.AddElement(createRect, UIScene::NOMORE_SCENES_ID, createTrack, disc);
-    }
-
-    menuScene.ID = 0;
-
-    descriptors.push_back(menuScene);
-  }
+  createMainMenuScene(descriptors);
 
   {
     UISceneDesc levelSelect;
@@ -302,6 +268,50 @@ EditorApp::createMenu() {
   m_stateMachine->init(descriptors, this);
   return true;
 }
+
+UISceneDesc
+EditorApp::createMainMenuScene() const {
+  UISceneDesc menuScene;
+  const auto halfScreenWidth = static_cast<float>(m_screenWidth) / 2u;
+  const UIRectangle playRect(UIRectangleDesc(300, 200,
+                             sf::Vector2f(halfScreenWidth, 300),
+                             "", sf::Color::Green));
+
+  const auto rectSize = playRect.getSize();
+  const auto exitRect = UIScene::copyAndModifyFromTemplate(playRect,
+                                                           sf::Color::Red,
+                                                           Vec2(0.0f, rectSize.y * 1.5f));
+
+  const auto createRect = UIScene::copyAndModifyFromTemplate(exitRect,
+                                                             sf::Color::Yellow,
+                                                             Vec2(rectSize.x * 1.5f));
+
+  const auto creditRect = UIScene::copyAndModifyFromTemplate(exitRect,
+                                                             sf::Color::Yellow,
+                                                             Vec2(0.f, rectSize.y * 1.5f));
+
+  UITextDescriptor disc;
+  disc.pathToFont = s_pathToFront;
+  disc.textString = " play button";
+  disc.textFillColor = sf::Color::Black;
+  disc.textOuterColor = sf::Color::Blue;
+  disc.textSize = 50;
+
+  menuScene.AddElement(playRect, 1, []() {}, disc);
+
+  disc.textString = " exit button";
+  menuScene.AddElement(exitRect, UIScene::NOMORE_SCENES_ID, closeApp, disc);
+
+  disc.textString = " create track";
+  menuScene.AddElement(createRect, UIScene::NOMORE_SCENES_ID, createTrack, disc);
+
+  disc.textString = R"...( credits )...";
+  menuScene.AddElement(creditRect, 2, []() {}, disc);
+
+  menuScene.ID = 0;
+  return  menuScene;
+}
+
 
 RESULT_APP_STAGES::E
 EditorApp::handleDraw() {

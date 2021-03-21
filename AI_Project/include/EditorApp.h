@@ -70,11 +70,16 @@ class EditorApp final : public BaseApp
   init();
 
   /**
-   * for creating the menu of the game.
+   * for creating all the UI of the Game
    */
   bool
-  createMenu();
+  createUI();
 
+  /**
+   * Creates the descriptor for the UIScene.
+   */
+  UISceneDesc
+  createMainMenuScene()const;
 
   /**
    * handles drawing all relevant entity's .
