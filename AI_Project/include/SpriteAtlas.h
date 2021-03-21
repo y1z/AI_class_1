@@ -5,44 +5,7 @@
 #include <filesystem>
 
 
-/**
- * @class SpriteAtlasDesc : a descriptor for the SpriteAtlas .
- */
-struct SpriteAtlasDesc
-{
-  SpriteAtlasDesc() = default;
-  SpriteAtlasDesc(const SpriteAtlasDesc&) = default;
-  SpriteAtlasDesc(SpriteAtlasDesc&&) noexcept = default;
-
-  SpriteAtlasDesc(const std::filesystem::path& path,
-                  const std::vector<sf::IntRect>& dimensionOfEachSprite,
-                  const std::vector<RotationSegment>& rotationOfEachSprite={})
-    :
-    m_pathToFile(path),
-    m_dimensionsOfEachSprite(dimensionOfEachSprite),
-    m_rotationOfEachSprite(rotationOfEachSprite)
-  {};
-
-
-  SpriteAtlasDesc(std::filesystem::path&& path,
-                  std::vector<sf::IntRect>&& dimensionOfEachSprite,
-                  std::vector<RotationSegment>&& rotationOfEachSprite = {})
-    : m_pathToFile(path),
-      m_dimensionsOfEachSprite(dimensionOfEachSprite),
-      m_rotationOfEachSprite(rotationOfEachSprite)
-  {}
-  ~SpriteAtlasDesc() = default;
-
-  SpriteAtlasDesc&
-  operator=(const SpriteAtlasDesc&) = default;
-
-  SpriteAtlasDesc&
-  operator=(SpriteAtlasDesc&&) = default;
-
-  std::filesystem::path m_pathToFile;
-  std::vector<sf::IntRect>  m_dimensionsOfEachSprite;
-  std::vector<RotationSegment> m_rotationOfEachSprite;
-};
+struct SpriteAtlasDesc;
 
 
 /**
@@ -115,3 +78,42 @@ class SpriteAtlas
   containerType m_segments;
 };
 
+
+/**
+ * @class SpriteAtlasDesc : a descriptor for the SpriteAtlas .
+ */
+struct SpriteAtlasDesc
+{
+  SpriteAtlasDesc() = default;
+  SpriteAtlasDesc(const SpriteAtlasDesc&) = default;
+  SpriteAtlasDesc(SpriteAtlasDesc&&) noexcept = default;
+
+  SpriteAtlasDesc(const std::filesystem::path& path,
+                  const std::vector<sf::IntRect>& dimensionOfEachSprite,
+                  const std::vector<RotationSegment>& rotationOfEachSprite={})
+    :
+    m_pathToFile(path),
+    m_dimensionsOfEachSprite(dimensionOfEachSprite),
+    m_rotationOfEachSprite(rotationOfEachSprite)
+  {};
+
+
+  SpriteAtlasDesc(std::filesystem::path&& path,
+                  std::vector<sf::IntRect>&& dimensionOfEachSprite,
+                  std::vector<RotationSegment>&& rotationOfEachSprite = {})
+    : m_pathToFile(path),
+      m_dimensionsOfEachSprite(dimensionOfEachSprite),
+      m_rotationOfEachSprite(rotationOfEachSprite)
+  {}
+  ~SpriteAtlasDesc() = default;
+
+  SpriteAtlasDesc&
+  operator=(const SpriteAtlasDesc&) = default;
+
+  SpriteAtlasDesc&
+  operator=(SpriteAtlasDesc&&) = default;
+
+  std::filesystem::path m_pathToFile;
+  std::vector<sf::IntRect>  m_dimensionsOfEachSprite;
+  std::vector<RotationSegment> m_rotationOfEachSprite;
+};
