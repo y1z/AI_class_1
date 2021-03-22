@@ -140,8 +140,14 @@ public:
    * @brief Give the racers there own sprites.
    */
   void
-  setUpRacerSprites(const uint64 selectedRacer,
+  setRacerSprites(const uint64 selectedRacer,
                     const uint64 selectedSpriteAtlas);
+
+  /**
+   * @brief Gives every Racer a random sprite
+   */
+  void
+  setRandomRacerSprites();
 
 private:
   /**

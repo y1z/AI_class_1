@@ -157,14 +157,10 @@ EditorApp::mainLoop() {
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
 
-  {
-    const uint64 limit = m_spritesAtlases.size() - 1u;
-    std::uniform_int_distribution dist(static_cast<uint64>(0), limit);
-    std::mt19937 twister(std::random_device{}());
-    for (auto& elem : container) {
-      elem.m_atlasPtr = &m_spritesAtlases[dist(twister)];
-    }
-  }
+  setRandomRacerSprites();
+
+  //setRacerSprites(container.size() - 1,
+  //                )
 
   const float waitingTime = 0.18f;
   float currentTime = 0.0f;
@@ -233,8 +229,6 @@ EditorApp::init() {
     m_gameMap = make_unique<GameMap>();
 
     m_stateMachine = make_unique<UIStateMachine>();
-
-    m_spritesAtlases.reserve(4);
 
     m_userRacer = make_unique<Racer>(Boid());
 
@@ -545,7 +539,31 @@ EditorApp::setUpNewPath() {
 }
 
 void
-EditorApp::setUpRacerSprites() {}
+EditorApp::setRacerSprites(const uint64 selectedRacer,
+                             const uint64 selectedSpriteAtlas) {
+  assert(selectedSpriteAtlas <= m_spritesAtlases.size() - 1);
+
+  auto& gameMan = GameManager::getInstance();
+  auto& container = gameMan.getAgentContainerRef();
+  const uint64 limit = container.size() - 1;
+  if (selectedRacer <= limit) {
+    container[selectedRacer].m_atlasPtr = &m_spritesAtlases[selectedSpriteAtlas];
+  }
+
+}
+
+void
+EditorApp::setRandomRacerSprites()
+{
+  auto& container = GameManager::getInstance().getAgentContainerRef();
+  const uint64 limit = m_spritesAtlases.size() - 1u;
+  std::uniform_int_distribution dist(static_cast<uint64>(0), limit);
+  std::ranlux48 randEngine(std::random_device{}());
+  for (auto& elem : container) {
+    elem.m_atlasPtr = &m_spritesAtlases[dist(randEngine)];
+  }
+}
+
 
 bool
 EditorApp::createRacer() {
