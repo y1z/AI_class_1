@@ -63,10 +63,12 @@ UIScene::UIScene(UISceneDesc&& descriptor)
 void
 UIScene::update() {
   for (auto& elem : m_desc.texts) {
-    auto& rectangles = m_desc.rectangles;
-    auto& refToRec = rectangles[elem.index];
-    elem.text.attachToReactangle(&refToRec);
-    elem.text.makeTextFitSimple(refToRec.m_rect.getGlobalBounds());
+    if (UISceneDesc::TextElement::INVALID_INDEX != elem.index) {
+      auto& rectangles = m_desc.rectangles;
+      auto& refToRec = rectangles[elem.index];
+      elem.text.attachToReactangle(&refToRec);
+      elem.text.makeTextFitSimple(refToRec.m_rect.getGlobalBounds());
+    }
   }
 
 }

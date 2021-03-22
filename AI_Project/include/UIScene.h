@@ -41,6 +41,8 @@ struct UISceneDesc
     TextElement&
     operator=(const TextElement& other) = delete;
 
+    constexpr static const uint64 INVALID_INDEX = std::numeric_limits<uint64>::max();
+
     UIText text;
     uint64 index;
   };
@@ -99,6 +101,7 @@ struct UISceneDesc
   operator >= (const UISceneDesc& other)const {
     return !(this->operator<(other));
   }
+
 
   std::vector<UIRectangle> rectangles;/**< The visual representation of rectangles. */
   std::vector<int32_t> associatedScenes;/**< The connections between scenes. */
