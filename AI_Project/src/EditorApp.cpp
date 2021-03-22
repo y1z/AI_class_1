@@ -17,7 +17,13 @@ using std::make_unique;
  * NonClass related constants.
  */
 constexpr static const char*
-s_pathToAtlasDefault = "resources/sprite_sheet/sprite_sheet_mario2.png";
+s_pathToAtlasMarioSprite = "resources/sprite_sheet/sprite_sheet_mario2.png";
+
+constexpr static const char*
+s_pathToAtlasPeachSprite = "resources/sprite_sheet/sprite_sheet_peach.png";
+
+constexpr static const char*
+s_pathToAtlasBowserSprite = "resources/sprite_sheet/sprite_sheet_bowser.png";
 
 constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
@@ -32,7 +38,7 @@ constexpr static const char*
 s_pathToLevel3 = "resources/saves/level_3.txt";
 
 constexpr static const char*
-s_pathToSaveSpriteAtlus= "resources/sprite_sheet/mirrored_image_sprite.png";
+s_pathToSaveSpriteAtlus = "resources/sprite_sheet/mirrored_image_sprite.png";
 
 constexpr static const char*
 s_pathToFront = "resources/fonts/Gamepixies-8MO6n.ttf";
@@ -130,10 +136,17 @@ EditorApp::mainLoop() {
   gameMan.setupGroup();
   auto& container = gameMan.getAgentContainerRef();
 
-  for (auto& elem : container) {
-    elem.m_atlasPtr = m_spriteAtlas.get();
+  {
+    const uint64 limit = m_spritesAtlases.size() - 1u;
+    std::uniform_int_distribution dist(static_cast<uint64>(0), limit);
+    std::mt19937 twister(std::random_device{}());
+    for (auto& elem : container) {
+      elem.m_atlasPtr = &m_spritesAtlases[dist(twister)];
+    }
   }
 
+  const float waitingTime = 0.18f;
+  float currentTime = 0.0f;
   while (m_window->isOpen()) {
 
     m_timer.StartTiming();
@@ -141,10 +154,18 @@ EditorApp::mainLoop() {
 
     handleInput();
 
+    if (currentTime > waitingTime) {
+      for (auto& elem : container) {
+        elem.advanceFrames(1);
+      }
+      currentTime = 0.0f;
+    }
+
     handleDraw();
 
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();
+    currentTime += m_deltaTime;
   }
 
   return 0;
@@ -185,7 +206,6 @@ EditorApp::init() {
                                              sf::String(" app"),
                                              sf::Style::Default);
 
-    m_spriteAtlas = make_unique<SpriteAtlas>();
 
     m_gameMap = make_unique<GameMap>();
 
@@ -203,8 +223,12 @@ EditorApp::init() {
     }
 
     {
-      const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasDefault);
-      if (!createAtlas(pathToAtlas)) {
+      const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasMarioSprite);
+      const fs::path pathToAtlas1 = fs::path(m_initialPath).append(s_pathToAtlasBowserSprite);
+      const fs::path pathToAtlas2 = fs::path(m_initialPath).append(s_pathToAtlasPeachSprite);
+      if (!createAtlas(pathToAtlas) ||
+          !createAtlas(pathToAtlas1) ||
+          !createAtlas(pathToAtlas2)) {
         return -1;
       }
     }
@@ -323,6 +347,15 @@ EditorApp::createLevelSelect() const {
   return levelSelect;
 }
 
+UISceneDesc
+EditorApp::createCreditScene() const {
+  UISceneDesc creditScene;
+  UISceneDesc::TextElement element;
+creditScene.texts.push_back()
+
+  return creditScene;
+}
+
 
 RESULT_APP_STAGES::E
 EditorApp::handleDraw() {
@@ -373,13 +406,13 @@ EditorApp::handleInput() {
       }
       break;
 
-      case sf::Keyboard::P:
-      {
-        auto path = fs::path(m_initialPath).append(s_pathToSaveSpriteAtlus);
-        if (m_spriteAtlas->m_atlasTexture->copyToImage().saveToFile(path.generic_string())) {
-          std::cout << "saving sprite image to [" << s_pathToSaveSpriteAtlus << "]\n";
-        }
-      }
+      //case sf::Keyboard::P:
+      //{
+      //  auto path = fs::path(m_initialPath).append(s_pathToSaveSpriteAtlus);
+      //  if (m_spriteAtlas->m_atlasTexture->copyToImage().saveToFile(path.generic_string())) {
+      //    std::cout << "saving sprite image to [" << s_pathToSaveSpriteAtlus << "]\n";
+      //  }
+      //}
 
       break;
       case sf::Keyboard::L:
@@ -410,7 +443,7 @@ EditorApp::handleRacers() {
 }
 
 bool
-EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
+EditorApp::createAtlas(const std::filesystem::path& pathToAtlas){
 
   const std::vector<sf::IntRect> rectSequence =
     util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
@@ -420,13 +453,19 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas) const {
                                         gvar::halfPi - gvar::pi,
                                         12);
 
-
   const SpriteAtlasDesc desc(pathToAtlas, rectSequence, rotations);
 
-  const bool isAtlasInitialized = m_spriteAtlas->init(desc);
+  SpriteAtlas newAtlas;
 
-  const sf::Color backGroundColor = m_spriteAtlas->getColorOfPixel(0u, 0u);
-  m_spriteAtlas->makeColorTransparent(backGroundColor);
+  const bool isAtlasInitialized = newAtlas.init(desc);
+
+  if (isAtlasInitialized) {
+    m_spritesAtlases.push_back(newAtlas);
+
+    auto& ref = m_spritesAtlases.back();
+    const sf::Color backGroundColor = ref.getColorOfPixel(0u, 0u);
+    ref.makeColorTransparent(backGroundColor);
+  }
 
   return isAtlasInitialized;
 }

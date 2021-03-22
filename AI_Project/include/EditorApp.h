@@ -82,6 +82,15 @@ class EditorApp final : public BaseApp
   createMainMenuScene()const;
 
   /**
+   * Creates the level select scene.
+   */
+  UISceneDesc
+  createLevelSelect()const;
+
+  UISceneDesc
+  createCreditScene()const;
+
+  /**
    * handles drawing all relevant entity's .
    */
   RESULT_APP_STAGES::E
@@ -103,7 +112,7 @@ class EditorApp final : public BaseApp
    * @brief creates a sprite atlas for the characters of the game.
    */
   bool
-  createAtlas(const std::filesystem::path& pathToAtlas) const;
+  createAtlas(const std::filesystem::path& pathToAtlas);
 
 public:
   /**
@@ -131,8 +140,10 @@ private:
  private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
   MouseData m_mouseData; /**< Contains all relevant data of the mouse.*/
+  std::unique_ptr<Racer> m_mainRacer;
   std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered. */
-  std::unique_ptr<SpriteAtlas> m_spriteAtlas; /**< Controls the sprites.*/
+  /** Contains all the sprites atlases for each character. */
+  std::vector< SpriteAtlas > m_spritesAtlases;
   std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used. */
   std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI. */
   std::unique_ptr<UIText> m_testText; /**< used for displaying text. */
