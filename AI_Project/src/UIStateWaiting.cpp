@@ -3,7 +3,7 @@
 #include "util.h"
 
 
-constexpr static float s_inputDelay = .30f;
+constexpr static float s_inputDelay = static_cast<float>(1) / 5.0f;
 
 
 
