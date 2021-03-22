@@ -1,6 +1,9 @@
-Autor : Yhaliff Said Barraza
+Author : Yhaliff Said Barraza
 
-  yo hice todo los siguientes sistemas 
-  - El sistema de animación 
-  - El sistema de boid's (los corredores)
-  - El sistema de UI 
+  I made the following systems
+  - The animation system 
+  - The Boid system (AI system)
+  - The UI system (being used now)
+  - The sound system
+all of this with help from the 
+SFML library .
