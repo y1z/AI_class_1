@@ -140,7 +140,8 @@ public:
    * @brief Give the racers there own sprites.
    */
   void
-  setUpRacerSprites(const uint64 index, const std::filesystem::path& pathToFile);
+  setUpRacerSprites(const uint64 selectedRacer,
+                    const uint64 selectedSpriteAtlas);
 
 private:
   /**
@@ -157,7 +158,7 @@ private:
   std::unique_ptr<Racer> m_userRacer;
   std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered. */
   /** Contains all the sprites atlases for each character. */
-  std::vector< SpriteAtlas > m_spritesAtlases;
+  std::deque< SpriteAtlas > m_spritesAtlases;
   std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used. */
   std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI. */
 };
