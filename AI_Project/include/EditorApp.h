@@ -43,9 +43,15 @@ class EditorApp final : public BaseApp
   run(unsigned int screenWidth,
       unsigned int screenHeight) override;
 
+  /**
+   * Closes the window
+   */
   void
   closeWindow() override;
 
+  /**
+   * Used for creating custom tracks.
+   */
   int
   createLoop();
 
@@ -129,6 +135,12 @@ public:
    */
   void
   setUpNewPath();
+
+  /**
+   * @brief Give the racers there own sprites.
+   */
+  void
+  setUpRacerSprites(const uint64 index, const std::filesystem::path& pathToFile);
 
 private:
   /**

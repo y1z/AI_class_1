@@ -70,6 +70,9 @@ int
 closeApp(BaseApp* app);
 
 int
+loadLevelMaster(BaseApp* app,const int32 level);
+
+int
 loadLevel1(BaseApp* app);
 
 int
@@ -77,6 +80,9 @@ loadLevel2(BaseApp* app);
 
 int
 loadLevel3(BaseApp* app);
+
+int
+loadCharacterMaster(BaseApp* app, const fs::path& pathToCharacter);
 
 int
 loadCharacter1(BaseApp* app);
@@ -538,6 +544,9 @@ EditorApp::setUpNewPath() {
   }
 }
 
+void
+EditorApp::setUpRacerSprites() {}
+
 bool
 EditorApp::createRacer() {
   GameManager& gameMan = GameManager::getInstance();
@@ -554,6 +563,16 @@ EditorApp::createRacer() {
     gameMan.addRacerToGame(followBoid);
   }
 
+  {
+    const BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
+    (m_gameMap->m_positionData,
+     Vec2((11 * 35), 500),
+     0.80f + util::randomRangeFloat(0.65f, 1.2f)
+    );
+    *m_userRacer = Racer(followBoid);
+    gameMan.addRacerToGame(*m_userRacer);
+
+  }
 
   return true;
 }
@@ -617,35 +636,59 @@ closeApp(BaseApp* app) {
   return 0;
 }
 
+int
+loadLevelMaster(BaseApp* app, const int32 level) {
+  assert(nullptr != app);
+  auto gameApp = reinterpret_cast<EditorApp*>(app);
+  switch (level) {
+  case 1:
+  gameApp->createPath(s_pathToLevel1);
+  break;
+
+  case 2:
+  gameApp->createPath(s_pathToLevel2);
+  break;
+
+  case 3:
+  gameApp->createPath(s_pathToLevel3);
+  break;
+
+  default:
+  return -1;
+  break;
+  }
+
+  return 0;
+}
 
 
 int
 loadLevel1(BaseApp* app) {
-  assert(nullptr != app);
-  auto gameApp = reinterpret_cast<EditorApp*>(app);
-  gameApp->createPath(s_pathToLevel1);
-
-  return 0;
+  return loadLevelMaster(app, 1);
 }
-
 
 
 int
 loadLevel2(BaseApp* app) {
-  assert(nullptr != app);
-  auto gameApp = reinterpret_cast<EditorApp*>(app);
-  gameApp->createPath(s_pathToLevel2);
-
-  return 0;
+  return loadLevelMaster(app, 2);
 }
 
 int
 loadLevel3(BaseApp* app) {
+  return loadLevelMaster(app, 3);
+}
 
+int
+loadCharacterMaster(BaseApp* app, const fs::path& pathToCharacter) {
   assert(nullptr != app);
   auto gameApp = reinterpret_cast<EditorApp*>(app);
-  gameApp->createPath(s_pathToLevel3);
+  gameApp->createPath( pathToCharacter );
   return 0;
+}
+
+int
+loadCharacter1(BaseApp* app) {
+  return loadCharacterMaster(app, s_pathToLevel1);
 }
 
 
