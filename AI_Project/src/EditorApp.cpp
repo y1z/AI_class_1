@@ -78,6 +78,8 @@ loadLevel2(BaseApp* app);
 int
 loadLevel3(BaseApp* app);
 
+int
+loadCharacter1(BaseApp* app);
 
 EditorApp::EditorApp()
   : BaseApp() {}
@@ -215,6 +217,8 @@ EditorApp::init() {
 
     GameManager::StartUp(nullptr);
 
+    std::srand(std::random_device{}());
+
     m_window = make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
                                              sf::String(" app"),
                                              sf::Style::Default);
@@ -224,16 +228,10 @@ EditorApp::init() {
 
     m_stateMachine = make_unique<UIStateMachine>();
 
-    m_spritesAtlases.reserve(3);
+    m_spritesAtlases.reserve(4);
 
-    {
-      m_testText = make_unique<UIText>();
-      UITextDescriptor desc;
-      desc.pathToFont = s_pathToFrontPixels;
-      desc.textString = "";
-      desc.textFillColor = sf::Color::Blue;
-      m_testText->init(desc);
-    }
+    m_userRacer = make_unique<Racer>(Boid());
+
 
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasMarioSprite);
@@ -405,7 +403,7 @@ EditorApp::handleDraw() {
   //m_spriteAtlas->draw(*m_window);
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
-  m_testText->draw(m_window.get());
+  //m_testText->draw(m_window.get());
   m_window->display();
 
   return RESULT_APP_STAGES::E::kNO_ERROR;
@@ -557,6 +555,7 @@ EditorApp::createRacer() {
 
     gameMan.addRacerToGame(followBoid);
   }
+
 
   return true;
 }

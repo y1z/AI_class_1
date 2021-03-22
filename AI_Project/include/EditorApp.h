@@ -87,6 +87,9 @@ class EditorApp final : public BaseApp
   UISceneDesc
   createLevelSelect()const;
 
+  /**
+   * Creates the scene that contains credits.
+   */
   UISceneDesc
   createCreditScene()const;
 
@@ -127,8 +130,6 @@ public:
   void
   setUpNewPath();
 
-
-
 private:
   /**
    * @brief creates the racers a.k.a the agents of the game.
@@ -140,7 +141,8 @@ private:
  private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
   MouseData m_mouseData; /**< Contains all relevant data of the mouse.*/
-  std::unique_ptr<Racer> m_mainRacer;
+  /** The racer the user selected. */
+  std::unique_ptr<Racer> m_userRacer;
   std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered. */
   /** Contains all the sprites atlases for each character. */
   std::vector< SpriteAtlas > m_spritesAtlases;
