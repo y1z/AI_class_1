@@ -400,10 +400,8 @@ EditorApp::handleDraw() {
   m_window->clear();
 
   auto& gm = GameManager::getInstance();
-  //m_spriteAtlas->draw(*m_window);
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
-  //m_testText->draw(m_window.get());
   m_window->display();
 
   return RESULT_APP_STAGES::E::kNO_ERROR;

@@ -148,6 +148,5 @@ private:
   std::vector< SpriteAtlas > m_spritesAtlases;
   std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used. */
   std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI. */
-  std::unique_ptr<UIText> m_testText; /**< used for displaying text. */
 };
 
