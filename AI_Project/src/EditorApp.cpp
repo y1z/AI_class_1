@@ -41,10 +41,23 @@ constexpr static const char*
 s_pathToSaveSpriteAtlus = "resources/sprite_sheet/mirrored_image_sprite.png";
 
 constexpr static const char*
-s_pathToFront = "resources/fonts/Gamepixies-8MO6n.ttf";
+s_pathToFrontPixels = "resources/fonts/Gamepixies-8MO6n.ttf";
 
 constexpr static const char*
-s_pathToCreadits = "resources/credits/credits.txt";
+s_pathToFrontDisco = "resources/fonts/DiscoBlingRegular-MjGJ.ttf";
+
+constexpr static const char*
+s_pathToCredits = "resources/credits/credits.txt";
+
+constexpr static int32
+s_startMenuID = 0;
+
+constexpr static int32
+s_levelSelectID = 1;
+
+constexpr static int32
+s_creditID = 2;
+
 
 
 fs::path
@@ -216,7 +229,7 @@ EditorApp::init() {
     {
       m_testText = make_unique<UIText>();
       UITextDescriptor desc;
-      desc.pathToFont = s_pathToFront;
+      desc.pathToFont = s_pathToFrontPixels;
       desc.textString = "";
       desc.textFillColor = sf::Color::Blue;
       m_testText->init(desc);
@@ -250,15 +263,18 @@ bool
 EditorApp::createUI() {
 
   std::vector<UISceneDesc> descriptors;
-  descriptors.reserve(3);
+  descriptors.reserve(4);
 
   auto const halfScreenWidth = static_cast<float>(m_screenWidth) * .5f;
   auto const halfScreenHeight = static_cast<float>(m_screenHeight) * .5f;
 
   const UISceneDesc mainMenu = createMainMenuScene();
   const UISceneDesc levelSelect = createLevelSelect();
+  const UISceneDesc creditScene = createCreditScene();
+
   descriptors.emplace_back(mainMenu);
   descriptors.emplace_back(levelSelect);
+  descriptors.emplace_back(creditScene);
 
   m_stateMachine->init(descriptors, this);
   return true;
@@ -287,14 +303,14 @@ EditorApp::createMainMenuScene() const {
                                                              Vec2(0.f, rectSize.y * 1.5f));
 
   UITextDescriptor disc;
-  disc.pathToFont = s_pathToFront;
+  disc.pathToFont = s_pathToFrontPixels;
   disc.textString = " Play\n Button";
   disc.textFillColor = sf::Color::Black;
   disc.textOuterColor = sf::Color::Blue;
   disc.textSize = 60;
   disc.textStyle = sf::Text::Bold;
 
-  menuScene.AddElement(playRect, 1, []() {}, disc);
+  menuScene.AddElement(playRect, s_levelSelectID, []() {}, disc);
 
   disc.textString = " Exit\n Button";
   menuScene.AddElement(exitRect, UIScene::NOMORE_SCENES_ID, closeApp, disc);
@@ -303,9 +319,9 @@ EditorApp::createMainMenuScene() const {
   menuScene.AddElement(createRect, UIScene::NOMORE_SCENES_ID, createTrack, disc);
 
   disc.textString = " Credits";
-  menuScene.AddElement(creditRect, 2, []() {}, disc);
+  menuScene.AddElement(creditRect, s_creditID, []() {}, disc);
 
-  menuScene.ID = 0;
+  menuScene.ID = s_startMenuID;
   return  menuScene;
 }
 
@@ -329,7 +345,7 @@ EditorApp::createLevelSelect() const {
                                                              Vec2(0.0f, rectSize.y * 1.5f));
 
   UITextDescriptor disc;
-  disc.pathToFont = s_pathToFront;
+  disc.pathToFont = s_pathToFrontPixels;
   disc.textString = " LEVEL 1 ";
   disc.textFillColor = sf::Color::Black;
   disc.textOuterColor = sf::Color::Blue;
@@ -342,7 +358,7 @@ EditorApp::createLevelSelect() const {
 
   disc.textString = " LEVEL 3 ";
   levelSelect.AddElement(level3Rect, UIScene::NOMORE_SCENES_ID, loadLevel3, disc);
-  levelSelect.ID = 1;
+  levelSelect.ID = s_levelSelectID;
 
   return levelSelect;
 }
@@ -350,8 +366,35 @@ EditorApp::createLevelSelect() const {
 UISceneDesc
 EditorApp::createCreditScene() const {
   UISceneDesc creditScene;
-  UISceneDesc::TextElement element;
-creditScene.texts.push_back()
+  {
+    UISceneDesc::TextElement element;
+
+    element.index = UISceneDesc::TextElement::INVALID_INDEX;
+    UITextDescriptor textDisc;
+    textDisc.pathToFont = s_pathToFrontDisco;
+    textDisc.textFillColor = sf::Color::White;
+    textDisc.textSize = 65u;
+    std::string path = fs::path(m_initialPath).append(s_pathToCredits).generic_string();
+    textDisc.textString = util::loadFileToString(path);
+
+    UIText newTextObject;
+    newTextObject.init(textDisc);
+
+    element.text.takeResources(std::move(newTextObject));
+    creditScene.texts.emplace_back(element);
+  }
+  creditScene.ID = s_creditID;
+  const sf::Vector2f position(m_screenWidth - 300, m_screenHeight);
+
+  const UIRectangleDesc exitRect(800, 400, position, "", sf::Color::Red);
+
+  UITextDescriptor textDisc;
+  textDisc.pathToFont = s_pathToFrontDisco;
+  textDisc.textFillColor = sf::Color::White;
+  textDisc.textSize = 62u;
+  textDisc.textString = "<=======\nGo back";
+
+  creditScene.AddElement(UIRectangle(exitRect), s_startMenuID, []() {}, textDisc);
 
   return creditScene;
 }
