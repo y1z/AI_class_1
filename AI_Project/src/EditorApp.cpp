@@ -265,9 +265,6 @@ EditorApp::createUI() {
   std::vector<UISceneDesc> descriptors;
   descriptors.reserve(4);
 
-  auto const halfScreenWidth = static_cast<float>(m_screenWidth) * .5f;
-  auto const halfScreenHeight = static_cast<float>(m_screenHeight) * .5f;
-
   const UISceneDesc mainMenu = createMainMenuScene();
   const UISceneDesc levelSelect = createLevelSelect();
   const UISceneDesc creditScene = createCreditScene();
