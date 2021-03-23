@@ -8,6 +8,7 @@
 #undef min
 #include "util.h"
 #include "GlobalValues.h"
+//#include "UIText.h"
 
 namespace fs = std::filesystem;
 
@@ -82,7 +83,7 @@ int
 loadLevel3(BaseApp* app);
 
 int
-loadCharacterMaster(BaseApp* app, const fs::path& pathToCharacter);
+loadCharacterMaster(BaseApp* app,const int32 selectedSpriteAtlas);
 
 int
 loadCharacter1(BaseApp* app);
@@ -139,8 +140,6 @@ EditorApp::createLoop() {
       currentTime = 0.0f;
     }
 
-
-
     handleDraw();
 
     m_timer.EndTiming();
@@ -162,7 +161,7 @@ EditorApp::mainLoop() {
   //setRacerSprites(container.size() - 1,
   //                )
 
-  const float waitingTime = 0.18f;
+  const float waitingTime = 0.20f;
   float currentTime = 0.0f;
   while (m_window->isOpen()) {
 
@@ -232,6 +231,10 @@ EditorApp::init() {
 
     m_userRacer = make_unique<Racer>(Boid());
 
+    m_userCirle = make_unique<sf::CircleShape>(50.0f);
+    m_userCirle->setOutlineColor(sf::Color::Cyan);
+    m_userCirle->setFillColor(sf::Color::Cyan);
+    m_userCirle->setPosition(m_screenWidth / 2, m_screenHeight / 2);
 
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasMarioSprite);
@@ -400,9 +403,13 @@ EditorApp::handleDraw() {
   m_window->clear();
 
   auto& gm = GameManager::getInstance();
+  auto& containter = gm.getAgentContainerRef();
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
   m_window->display();
+  const auto position = containter[containter.size() - 1].getBoidData().m_position;
+  m_userCirle->setPosition(position.x, position.y);
+  m_window->draw(*m_userCirle);
 
   return RESULT_APP_STAGES::E::kNO_ERROR;
 }
@@ -540,7 +547,7 @@ EditorApp::setUpNewPath() {
 
 void
 EditorApp::setRacerSprites(const uint64 selectedRacer,
-                             const uint64 selectedSpriteAtlas) {
+                           const uint64 selectedSpriteAtlas) {
   assert(selectedSpriteAtlas <= m_spritesAtlases.size() - 1);
 
   auto& gameMan = GameManager::getInstance();
@@ -697,16 +704,20 @@ loadLevel3(BaseApp* app) {
 }
 
 int
-loadCharacterMaster(BaseApp* app, const fs::path& pathToCharacter) {
-  assert(nullptr != app);
+loadCharacterMaster(BaseApp* app,
+                    const int32 selectedSpriteAtlas) {
+  auto& container = GameManager::getInstance().getAgentContainerRef();
   auto gameApp = reinterpret_cast<EditorApp*>(app);
-  gameApp->createPath( pathToCharacter );
+  gameApp->setRacerSprites(container.size() - 1,
+                           selectedSpriteAtlas);
+
   return 0;
 }
 
+
 int
 loadCharacter1(BaseApp* app) {
-  return loadCharacterMaster(app, s_pathToLevel1);
+  return loadCharacterMaster(app, 0);
 }
 
 

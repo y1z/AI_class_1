@@ -5,7 +5,6 @@
 #include "SpriteAtlas.h"
 #include "GameMap.h"
 #include "UIStateMachine.h"
-#include "UIText.h"
 #include "MouseData.h"
 
 
@@ -141,7 +140,7 @@ public:
    */
   void
   setRacerSprites(const uint64 selectedRacer,
-                    const uint64 selectedSpriteAtlas);
+                  const uint64 selectedSpriteAtlas);
 
   /**
    * @brief Gives every Racer a random sprite
@@ -159,13 +158,18 @@ private:
 
  private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
+  /** Contains all the sprites atlases for each character. */
+  std::deque< SpriteAtlas > m_spritesAtlases;
+
   MouseData m_mouseData; /**< Contains all relevant data of the mouse.*/
   /** The racer the user selected. */
   std::unique_ptr<Racer> m_userRacer;
   std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered. */
-  /** Contains all the sprites atlases for each character. */
-  std::deque< SpriteAtlas > m_spritesAtlases;
   std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used. */
   std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI. */
+  /**
+   * Used for highlighting the user Boid
+   */
+  std::unique_ptr<sf::CircleShape> m_userCirle;
 };
 
