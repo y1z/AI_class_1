@@ -78,7 +78,7 @@ private:
 private:
   size_t m_currentFrame;
 public:
-  SpriteAtlas* m_atlasPtr;
+  SpriteAtlas* m_atlasPtr = nullptr;
   Boid m_boid;
   LapCount m_lapCount;
 };
