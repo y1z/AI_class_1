@@ -195,7 +195,7 @@ namespace util {
 
     if (createMirroredSequence) {
 
-      currentRectangle = sf::IntRect(topLeft.x, topLeft.y, -widthAndHeight.x, widthAndHeight.y);
+      currentRectangle = sf::IntRect(topLeft.x, topLeft.y, widthAndHeight.x, widthAndHeight.y);
 
       for (uint32 i = 0u; i < totalRects; ++i) {
         result.emplace_back(currentRectangle);
