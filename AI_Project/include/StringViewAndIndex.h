@@ -10,17 +10,25 @@ class StringViewAndIndex
 public:
   StringViewAndIndex() = default;
   constexpr StringViewAndIndex(std::string_view view,
-                               const int64_t index,
-                               const bool calculateHash);
+                               const int64_t index);
 
-  constexpr size_t
-  hash()
-  {
-    return std::hash<std::string_view>{}(m_string);
+
+  constexpr bool
+  operator<(const StringViewAndIndex& other)const {
+    return m_index < other.m_index;
+  }
+
+  constexpr bool
+  operator>(const StringViewAndIndex& other)const {
+    return !this->operator<(other);
+  }
+
+  constexpr bool
+  operator==(const StringViewAndIndex& other)const {
+    return m_index == other.m_index;
   }
 
   std::string_view m_string;
   int64_t m_index;
-  size_t m_hash = 0;
 };
 
