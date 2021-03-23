@@ -65,6 +65,9 @@ s_pathToPeachPortrait = "resources/portraits/peach_portrait.png";
 constexpr static const char*
 s_pathToBowserPortrait = "resources/portraits/bowser_portrait.png";
 
+constexpr static const char*
+s_pathToYoshiPortrait = "resources/portraits/yoshi_portrait.png";
+
 constexpr static int32
 s_startMenuID = 0;
 
@@ -229,9 +232,6 @@ EditorApp::init() {
                                              sf::String(" app"),
                                              sf::Style::Default);
 
-    m_spriteSheetAndPortraits.push_back({ });
-
-
     m_gameMap = make_unique<GameMap>();
 
     m_stateMachine = make_unique<UIStateMachine>();
@@ -241,7 +241,7 @@ EditorApp::init() {
     m_userCirle = make_unique<sf::CircleShape>(50.0f);
     m_userCirle->setOutlineColor(sf::Color::Cyan);
     m_userCirle->setFillColor(sf::Color::Cyan);
-    m_userCirle->setPosition(m_screenWidth / 2, m_screenHeight / 2);
+    m_userCirle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
 
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasMarioSprite);
@@ -410,7 +410,7 @@ EditorApp::createCreditScene() const {
 UISceneDesc
 EditorApp::createCharacterSelectScene() const {
   UISceneDesc characterSelectScene;
-  //UIRectangleDesc retangle(200, 200, sf::Vector2f(m_screenWidth / 2, 200), );
+ // UIRectangleDesc retangle(200, 200, sf::Vector2f(m_screenWidth / 2, 200), );
 
 
   return characterSelectScene;

@@ -165,12 +165,6 @@ private:
   /** Contains all the sprites atlases for each character. */
   std::deque< SpriteAtlas > m_spritesAtlases;
 
-  /**
-   * Contains all the paths to sprites-sheets and portraits
-   * that are related.
-   */
-  std::vector<std::pair<const char*, const char*>> m_spriteSheetAndPortraits;
-
   MouseData m_mouseData; /**< Contains all relevant data of the mouse.*/
   /** The racer the user selected. */
   std::unique_ptr<Racer> m_userRacer;
