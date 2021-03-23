@@ -27,6 +27,9 @@ constexpr static const char*
 s_pathToAtlasBowserSprite = "resources/sprite_sheet/sprite_sheet_bowser.png";
 
 constexpr static const char*
+s_pathToAtlasYoshiSprite = "resources/sprite_sheet/sprite_sheet_yoshi.png";
+
+constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
 
 constexpr static const char*
@@ -50,6 +53,18 @@ s_pathToFrontDisco = "resources/fonts/DiscoBlingRegular-MjGJ.ttf";
 constexpr static const char*
 s_pathToCredits = "resources/credits/credits.txt";
 
+constexpr static const char*
+s_pathToMarioPortrait = "resources/portraits/mario_portrait.png";
+
+constexpr static const char*
+s_pathToKongPortrait = "resources/portraits/kong_portrait.png";
+
+constexpr static const char*
+s_pathToPeachPortrait = "resources/portraits/peach_portrait.png";
+
+constexpr static const char*
+s_pathToBowserPortrait = "resources/portraits/bowser_portrait.png";
+
 constexpr static int32
 s_startMenuID = 0;
 
@@ -58,6 +73,9 @@ s_levelSelectID = 1;
 
 constexpr static int32
 s_creditID = 2;
+
+constexpr static int32
+s_characterSelectID = 3;
 
 
 
@@ -158,11 +176,6 @@ EditorApp::mainLoop() {
 
   setRandomRacerSprites();
 
-  //setRacerSprites(container.size() - 1,
-  //                )
-
-  const float waitingTime = 0.20f;
-  float currentTime = 0.0f;
   while (m_window->isOpen()) {
 
     m_timer.StartTiming();
@@ -170,18 +183,10 @@ EditorApp::mainLoop() {
 
     handleInput();
 
-    if (currentTime > waitingTime) {
-      for (auto& elem : container) {
-        elem.advanceFrames(1);
-      }
-      currentTime = 0.0f;
-    }
-
     handleDraw();
 
     m_timer.EndTiming();
     m_deltaTime = m_timer.GetResultSecondsFloat();
-    currentTime += m_deltaTime;
   }
 
   return 0;
@@ -224,6 +229,8 @@ EditorApp::init() {
                                              sf::String(" app"),
                                              sf::Style::Default);
 
+    m_spriteSheetAndPortraits.push_back({ });
+
 
     m_gameMap = make_unique<GameMap>();
 
@@ -240,9 +247,12 @@ EditorApp::init() {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasMarioSprite);
       const fs::path pathToAtlas1 = fs::path(m_initialPath).append(s_pathToAtlasBowserSprite);
       const fs::path pathToAtlas2 = fs::path(m_initialPath).append(s_pathToAtlasPeachSprite);
+      const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathToAtlasYoshiSprite);
+
       if (!createAtlas(pathToAtlas) ||
           !createAtlas(pathToAtlas1) ||
-          !createAtlas(pathToAtlas2)) {
+          !createAtlas(pathToAtlas2) ||
+          !createAtlas(pathToAtlas3)) {
         return -1;
       }
     }
@@ -397,6 +407,17 @@ EditorApp::createCreditScene() const {
   return creditScene;
 }
 
+UISceneDesc
+EditorApp::createCharacterSelectScene() const {
+  UISceneDesc characterSelectScene;
+  //UIRectangleDesc retangle(200, 200, sf::Vector2f(m_screenWidth / 2, 200), );
+
+
+  return characterSelectScene;
+}
+
+
+
 
 RESULT_APP_STAGES::E
 EditorApp::handleDraw() {
@@ -448,19 +469,9 @@ EditorApp::handleInput() {
         m_gameMap->saveMap(path.generic_string());
       }
       break;
-
-      //case sf::Keyboard::P:
-      //{
-      //  auto path = fs::path(m_initialPath).append(s_pathToSaveSpriteAtlus);
-      //  if (m_spriteAtlas->m_atlasTexture->copyToImage().saveToFile(path.generic_string())) {
-      //    std::cout << "saving sprite image to [" << s_pathToSaveSpriteAtlus << "]\n";
-      //  }
-      //}
-
-      break;
       case sf::Keyboard::L:
       {
-        const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
+        const auto path = openFilePath(this);
         m_gameMap->loadMap(path);
         setUpNewPath();
       }
@@ -560,14 +571,17 @@ EditorApp::setRacerSprites(const uint64 selectedRacer,
 }
 
 void
-EditorApp::setRandomRacerSprites()
+EditorApp::setRandomRacerSprites(const bool force)
 {
   auto& container = GameManager::getInstance().getAgentContainerRef();
   const uint64 limit = m_spritesAtlases.size() - 1u;
   std::uniform_int_distribution dist(static_cast<uint64>(0), limit);
   std::ranlux48 randEngine(std::random_device{}());
+
   for (auto& elem : container) {
-    elem.m_atlasPtr = &m_spritesAtlases[dist(randEngine)];
+    if (nullptr == elem.m_atlasPtr || true == force) {
+      elem.m_atlasPtr = &m_spritesAtlases[dist(randEngine)];
+    }
   }
 }
 
@@ -645,14 +659,12 @@ openFilePath(BaseApp* app) {
 }
 
 
-
 int
 createTrack(BaseApp* app) {
   assert(nullptr != app);
   auto gameApp = reinterpret_cast<EditorApp*>(app);
   return gameApp->createLoop();
 }
-
 
 
 int
@@ -719,6 +731,4 @@ int
 loadCharacter1(BaseApp* app) {
   return loadCharacterMaster(app, 0);
 }
-
-
 

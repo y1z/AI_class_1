@@ -98,6 +98,10 @@ class EditorApp final : public BaseApp
   UISceneDesc
   createCreditScene()const;
 
+
+  UISceneDesc
+  createCharacterSelectScene()const;
+
   /**
    * handles drawing all relevant entity's .
    */
@@ -143,10 +147,10 @@ public:
                   const uint64 selectedSpriteAtlas);
 
   /**
-   * @brief Gives every Racer a random sprite
+   * @brief Gives every Racer a random sprite IF they are not already using one.
    */
   void
-  setRandomRacerSprites();
+  setRandomRacerSprites(const bool force = false);
 
 private:
   /**
@@ -160,6 +164,12 @@ private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
   /** Contains all the sprites atlases for each character. */
   std::deque< SpriteAtlas > m_spritesAtlases;
+
+  /**
+   * Contains all the paths to sprites-sheets and portraits
+   * that are related.
+   */
+  std::vector<std::pair<const char*, const char*>> m_spriteSheetAndPortraits;
 
   MouseData m_mouseData; /**< Contains all relevant data of the mouse.*/
   /** The racer the user selected. */
