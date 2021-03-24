@@ -249,7 +249,7 @@ EditorApp::init() {
 
     m_userCirle = make_unique<sf::CircleShape>(50.0f);
     m_userCirle->setOutlineColor(sf::Color::Cyan);
-    m_userCirle->setFillColor(sf::Color::Cyan);
+    m_userCirle->setFillColor(sf::Color::Transparent);
     m_userCirle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
 
     {

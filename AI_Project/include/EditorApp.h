@@ -175,6 +175,6 @@ private:
   /**
    * Used for highlighting the user Boid
    */
-  std::unique_ptr<sf::CircleShape> m_userCirle;
+  std::unique_ptr<sf::CircleShape> m_userCircle;
 };
 
