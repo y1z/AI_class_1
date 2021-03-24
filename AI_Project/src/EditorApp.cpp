@@ -101,10 +101,10 @@ int
 loadLevel3(BaseApp* app);
 
 int
-loadCharacterMaster(BaseApp* app,const int32 selectedSpriteAtlas);
+loadCharacterMaster(BaseApp* app, const int32 selectedSpriteAtlas);
 
 int
-loadCharacter1(BaseApp* app);
+loadCharacterMario(BaseApp* app);
 
 EditorApp::EditorApp()
   : BaseApp() {}
@@ -247,15 +247,15 @@ EditorApp::init() {
       const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathsToYoshiSprites.m_spriteSheet);
       const fs::path pathToAtlas4 = fs::path(m_initialPath).append(s_pathsToKongSprites.m_spriteSheet);
 
-      if (!createAtlas(pathToAtlas) ||
-          !createAtlas(pathToAtlas1) ||
-          !createAtlas(pathToAtlas2) ||
-          !createAtlas(pathToAtlas3) ||
-          !createAtlas(pathToAtlas4))
+      if (!createAtlas(pathToAtlas, s_pathsToMarioSprites.m_index)   ||
+          !createAtlas(pathToAtlas1, s_pathsToBowserSprites.m_index) ||
+          !createAtlas(pathToAtlas2, s_pathsToPeachSprites.m_index)  ||
+          !createAtlas(pathToAtlas3, s_pathsToYoshiSprites.m_index)  ||
+          !createAtlas(pathToAtlas4, s_pathsToKongSprites.m_index))
       {
         return -1;
       }
-
+      std::sort(begin(m_spritesAtlases), end(m_spritesAtlases));
     }
     createUI();
 
@@ -417,6 +417,22 @@ EditorApp::createCharacterSelectScene() const {
                                         sf::Vector2f(m_screenWidth / 2, 200),
                                         s_pathsToMarioSprites.m_portriat);
 
+    const UIRectangleDesc peachRetangle(200,
+                                        200,
+                                        sf::Vector2f(m_screenWidth / 2, 500),
+                                        s_pathsToPeachSprites.m_portriat);
+
+
+    const UIRectangleDesc kongRetangle(200,
+                                       200,
+                                       sf::Vector2f(m_screenWidth / 2, 700),
+                                       s_pathsToKongSprites.m_portriat);
+
+    const UIRectangleDesc yoshiRetangle(200,
+                                        200,
+                                        sf::Vector2f(m_screenWidth / 2, 700),
+                                        s_pathsToYoshiSprites.m_portriat);
+
   }
   characterSelectScene.ID = s_characterSelectID;
   return characterSelectScene;
@@ -503,7 +519,8 @@ EditorApp::handleRacers() {
 }
 
 bool
-EditorApp::createAtlas(const std::filesystem::path& pathToAtlas){
+EditorApp::createAtlas(const std::filesystem::path& pathToAtlas,
+                       const uint64 index) {
 
   const std::vector<sf::IntRect> rectSequence =
     util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
@@ -513,7 +530,7 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas){
                                         gvar::halfPi - gvar::pi,
                                         12);
 
-  const SpriteAtlasDesc desc(pathToAtlas, rectSequence, rotations);
+  const SpriteAtlasDesc desc(pathToAtlas, rectSequence, rotations, index);
 
   SpriteAtlas newAtlas;
 
@@ -734,7 +751,7 @@ loadCharacterMaster(BaseApp* app,
 
 
 int
-loadCharacter1(BaseApp* app) {
-  return loadCharacterMaster(app, 0);
+loadCharacterMario(BaseApp* app) {
+  return loadCharacterMaster(app, s_pathsToMarioSprites.m_index);
 }
 

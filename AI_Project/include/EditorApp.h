@@ -124,7 +124,8 @@ class EditorApp final : public BaseApp
    * @brief creates a sprite atlas for the characters of the game.
    */
   bool
-  createAtlas(const std::filesystem::path& pathToAtlas);
+  createAtlas(const std::filesystem::path& pathToAtlas,
+              const uint64 index);
 
 public:
   /**
