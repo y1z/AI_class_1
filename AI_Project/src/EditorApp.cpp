@@ -8,26 +8,43 @@
 #undef min
 #include "util.h"
 #include "GlobalValues.h"
+#include "SpriteSheetAndPortriat.h"
 //#include "UIText.h"
 
 namespace fs = std::filesystem;
 
 using std::make_unique;
 
+
 /**
  * NonClass related constants.
  */
-constexpr static const char*
-s_pathToAtlasMarioSprite = "resources/sprite_sheet/sprite_sheet_mario2.png";
+constexpr static SpriteSheetAndPortriat
+s_pathsToMarioSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_sheet_mario2.png",
+                                               "resources/portraits/mario_portrait.png",
+                                               0);
 
-constexpr static const char*
-s_pathToAtlasPeachSprite = "resources/sprite_sheet/sprite_sheet_peach.png";
+constexpr static SpriteSheetAndPortriat
+s_pathsToPeachSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_sheet_peach.png",
+                                               "resources/portraits/peach_portrait.png",
+                                               1);
 
-constexpr static const char*
-s_pathToAtlasBowserSprite = "resources/sprite_sheet/sprite_sheet_bowser.png";
+constexpr static SpriteSheetAndPortriat
+s_pathsToBowserSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_sheet_bowser.png",
+                                                "resources/portraits/bowser_portrait.png",
+                                                2);
 
-constexpr static const char*
-s_pathToAtlasYoshiSprite = "resources/sprite_sheet/sprite_sheet_yoshi.png";
+constexpr static SpriteSheetAndPortriat
+s_pathsToYoshiSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_sheet_yoshi.png",
+                                               "resources/portraits/yoshi_portrait.png",
+                                               3);
+
+constexpr static SpriteSheetAndPortriat
+s_pathsToKongSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_sheet_kong.png",
+                                              "resources/portraits/kong_portrait.png",
+                                              4);
+
+
 
 constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
@@ -42,9 +59,6 @@ constexpr static const char*
 s_pathToLevel3 = "resources/saves/level_3.txt";
 
 constexpr static const char*
-s_pathToSaveSpriteAtlus = "resources/sprite_sheet/mirrored_image_sprite.png";
-
-constexpr static const char*
 s_pathToFrontPixels = "resources/fonts/Gamepixies-8MO6n.ttf";
 
 constexpr static const char*
@@ -52,21 +66,6 @@ s_pathToFrontDisco = "resources/fonts/DiscoBlingRegular-MjGJ.ttf";
 
 constexpr static const char*
 s_pathToCredits = "resources/credits/credits.txt";
-
-constexpr static const char*
-s_pathToMarioPortrait = "resources/portraits/mario_portrait.png";
-
-constexpr static const char*
-s_pathToKongPortrait = "resources/portraits/kong_portrait.png";
-
-constexpr static const char*
-s_pathToPeachPortrait = "resources/portraits/peach_portrait.png";
-
-constexpr static const char*
-s_pathToBowserPortrait = "resources/portraits/bowser_portrait.png";
-
-constexpr static const char*
-s_pathToYoshiPortrait = "resources/portraits/yoshi_portrait.png";
 
 constexpr static int32
 s_startMenuID = 0;
@@ -79,8 +78,6 @@ s_creditID = 2;
 
 constexpr static int32
 s_characterSelectID = 3;
-
-
 
 fs::path
 openFilePath(BaseApp* app);
@@ -244,17 +241,21 @@ EditorApp::init() {
     m_userCirle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
 
     {
-      const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathToAtlasMarioSprite);
-      const fs::path pathToAtlas1 = fs::path(m_initialPath).append(s_pathToAtlasBowserSprite);
-      const fs::path pathToAtlas2 = fs::path(m_initialPath).append(s_pathToAtlasPeachSprite);
-      const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathToAtlasYoshiSprite);
+      const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathsToMarioSprites.m_spriteSheet);
+      const fs::path pathToAtlas1 = fs::path(m_initialPath).append(s_pathsToBowserSprites.m_spriteSheet);
+      const fs::path pathToAtlas2 = fs::path(m_initialPath).append(s_pathsToPeachSprites.m_spriteSheet);
+      const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathsToYoshiSprites.m_spriteSheet);
+      const fs::path pathToAtlas4 = fs::path(m_initialPath).append(s_pathsToKongSprites.m_spriteSheet);
 
       if (!createAtlas(pathToAtlas) ||
           !createAtlas(pathToAtlas1) ||
           !createAtlas(pathToAtlas2) ||
-          !createAtlas(pathToAtlas3)) {
+          !createAtlas(pathToAtlas3) ||
+          !createAtlas(pathToAtlas4))
+      {
         return -1;
       }
+
     }
     createUI();
 
@@ -410,9 +411,14 @@ EditorApp::createCreditScene() const {
 UISceneDesc
 EditorApp::createCharacterSelectScene() const {
   UISceneDesc characterSelectScene;
- // UIRectangleDesc retangle(200, 200, sf::Vector2f(m_screenWidth / 2, 200), );
+  {
+    const UIRectangleDesc marioRetangle(200,
+                                        200,
+                                        sf::Vector2f(m_screenWidth / 2, 200),
+                                        s_pathsToMarioSprites.m_portriat);
 
-
+  }
+  characterSelectScene.ID = s_characterSelectID;
   return characterSelectScene;
 }
 
