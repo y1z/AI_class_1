@@ -247,10 +247,10 @@ EditorApp::init() {
 
     m_userRacer = make_unique<Racer>(Boid());
 
-    m_userCirle = make_unique<sf::CircleShape>(50.0f);
-    m_userCirle->setOutlineColor(sf::Color::Cyan);
-    m_userCirle->setFillColor(sf::Color::Transparent);
-    m_userCirle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
+    m_userCircle = make_unique<sf::CircleShape>(50.0f);
+    m_userCircle->setOutlineColor(sf::Color::Cyan);
+    m_userCircle->setFillColor(sf::Color::Transparent);
+    m_userCircle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
 
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathsToMarioSprites.m_spriteSheet);
@@ -482,7 +482,7 @@ EditorApp::handleDraw() {
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
   const auto position = containter.back().getBoidData().m_position;
-  m_window->draw(*m_userCirle);
+  m_window->draw(*m_userCircle);
 
   m_window->display();
 
