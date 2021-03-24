@@ -99,30 +99,6 @@ SpriteAtlas::draw(sf::RenderTarget& target) const {
 
 }
 
-constexpr bool
-SpriteAtlas::less(const SpriteAtlas& other)const {
-  return m_index < other.m_index;
-}
-
-constexpr bool
-SpriteAtlas::equals(const SpriteAtlas& other) const {
-  return m_index == other.m_index;
-}
-
-constexpr bool
-SpriteAtlas::operator<(const SpriteAtlas& other) const {
-  return less(other);
-}
-
-constexpr bool
-SpriteAtlas::operator>(const SpriteAtlas& other) const {
-  return !less(other);
-}
-
-constexpr bool
-SpriteAtlas::operator==(const SpriteAtlas& other) const {
-  return equals(other);
-}
 
 bool
 SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
@@ -137,8 +113,7 @@ SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
     m_atlasTexture->loadFromImage(*m_pixels);
 
     const size_t totalElements = atlasDesc.m_dimensionsOfEachSprite.size();
-    for(size_t i = 0u; i < totalElements ;++i)
-    {
+    for (size_t i = 0u; i < totalElements; ++i) {
       AtlasSegment segment;
       const auto& segmentDim = atlasDesc.m_dimensionsOfEachSprite[i];
       const auto& rotationSeg = atlasDesc.m_rotationOfEachSprite[i];

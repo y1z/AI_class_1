@@ -79,32 +79,41 @@ class SpriteAtlas
    * @returns true when the other object has a LESSER index than the caller.
    */
   constexpr bool
-  less(const SpriteAtlas& other)const;
+  less(const SpriteAtlas& other)const {
+    return m_index < other.m_index;
+  }
 
   /**
    * @returns true when the other object the same index of the caller.
    */
   constexpr bool
-  equals(const SpriteAtlas& other)const;
+  equals(const SpriteAtlas& other)const {
+    return m_index == other.m_index;
+  }
+
+  /**
+   * Calls  SpriteAtlas::less()
+   * @copydocs SpriteAtlas::less()
+   */
+  constexpr bool
+  operator<(const SpriteAtlas& other)const {
+    return less(other);
+  }
 
   constexpr bool
-  operator<(const SpriteAtlas& other)const;
+  operator>(const SpriteAtlas& other)const {
+    return !less(other);
+  }
 
   constexpr bool
-  operator>(const SpriteAtlas& other)const;
-
-  constexpr bool
-  operator==(const SpriteAtlas& other)const;
+  operator==(const SpriteAtlas& other)const {
+    return equals(other);
+  }
 
  private:
 
   bool
   internalInit(const SpriteAtlasDesc& atlasDesc);
- public:
-  /** @brief contains the texture for the atlas */
-  std::shared_ptr<sf::Texture> m_atlasTexture = std::make_shared<sf::Texture>();
-  /** @brief contains the individual pixels of the image. */
-  std::shared_ptr<sf::Image> m_pixels = std::make_shared<sf::Image>();
 
  private:
   std::string m_pathToSprite;
@@ -113,6 +122,13 @@ class SpriteAtlas
   containerType m_segments;
 
   uint64 m_index;
+ public:
+  /** @brief contains the texture for the atlas */
+  std::shared_ptr<sf::Texture> m_atlasTexture = std::make_shared<sf::Texture>();
+  /** @brief contains the individual pixels of the image. */
+  std::shared_ptr<sf::Image> m_pixels = std::make_shared<sf::Image>();
+
+
 };
 
 
@@ -127,11 +143,13 @@ struct SpriteAtlasDesc
 
   SpriteAtlasDesc(const std::filesystem::path& path,
                   const std::vector<sf::IntRect>& dimensionOfEachSprite,
-                  const std::vector<RotationSegment>& rotationOfEachSprite = {})
+                  const std::vector<RotationSegment>& rotationOfEachSprite = {},
+                  const uint64 index = 0)
     :
     m_pathToFile(path),
     m_dimensionsOfEachSprite(dimensionOfEachSprite),
-    m_rotationOfEachSprite(rotationOfEachSprite)
+    m_rotationOfEachSprite(rotationOfEachSprite),
+    m_index(index)
   {};
 
 
