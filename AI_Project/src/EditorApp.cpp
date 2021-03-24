@@ -106,6 +106,18 @@ loadCharacterMaster(BaseApp* app, const int32 selectedSpriteAtlas);
 int
 loadCharacterMario(BaseApp* app);
 
+int
+loadCharacterPeach(BaseApp* app);
+
+int
+loadCharacterBowser(BaseApp* app);
+
+int
+loadCharacterYoshi(BaseApp* app);
+
+int
+loadCharacterKong(BaseApp* app);
+
 EditorApp::EditorApp()
   : BaseApp() {}
 
@@ -280,10 +292,12 @@ EditorApp::createUI() {
   const UISceneDesc mainMenu = createMainMenuScene();
   const UISceneDesc levelSelect = createLevelSelect();
   const UISceneDesc creditScene = createCreditScene();
+  const UISceneDesc characterSelectScene = createCharacterSelectScene();
 
   descriptors.emplace_back(mainMenu);
   descriptors.emplace_back(levelSelect);
   descriptors.emplace_back(creditScene);
+  descriptors.emplace_back(characterSelectScene);
 
   m_stateMachine->init(descriptors, this);
   return true;
@@ -360,13 +374,16 @@ EditorApp::createLevelSelect() const {
   disc.textOuterColor = sf::Color::Blue;
   disc.textStyle = sf::Text::Bold;
   disc.textSize = 60;
-  levelSelect.AddElement(level1Rect, UIScene::NOMORE_SCENES_ID, loadLevel1, disc);
+
+  const auto nextSceneID = s_characterSelectID;
+
+  levelSelect.AddElement(level1Rect, nextSceneID, loadLevel1, disc);
 
   disc.textString = " LEVEL 2 ";
-  levelSelect.AddElement(level2Rect, UIScene::NOMORE_SCENES_ID, loadLevel2, disc);
+  levelSelect.AddElement(level2Rect, nextSceneID, loadLevel2, disc);
 
   disc.textString = " LEVEL 3 ";
-  levelSelect.AddElement(level3Rect, UIScene::NOMORE_SCENES_ID, loadLevel3, disc);
+  levelSelect.AddElement(level3Rect, nextSceneID, loadLevel3, disc);
   levelSelect.ID = s_levelSelectID;
 
   return levelSelect;
@@ -414,18 +431,18 @@ EditorApp::createCharacterSelectScene() const {
   {
     const UIRectangleDesc marioRetangle(200,
                                         200,
-                                        sf::Vector2f(m_screenWidth / 2, 200),
+                                        sf::Vector2f(m_screenWidth / 2, 100),
                                         s_pathsToMarioSprites.m_portriat);
 
     const UIRectangleDesc peachRetangle(200,
                                         200,
-                                        sf::Vector2f(m_screenWidth / 2, 500),
+                                        sf::Vector2f(m_screenWidth / 2, 300),
                                         s_pathsToPeachSprites.m_portriat);
 
 
     const UIRectangleDesc kongRetangle(200,
                                        200,
-                                       sf::Vector2f(m_screenWidth / 2, 700),
+                                       sf::Vector2f(m_screenWidth / 2, 500),
                                        s_pathsToKongSprites.m_portriat);
 
     const UIRectangleDesc yoshiRetangle(200,
@@ -433,6 +450,21 @@ EditorApp::createCharacterSelectScene() const {
                                         sf::Vector2f(m_screenWidth / 2, 700),
                                         s_pathsToYoshiSprites.m_portriat);
 
+    characterSelectScene.AddElement(UIRectangle(marioRetangle),
+                                    UIScene::NOMORE_SCENES_ID,
+                                    loadCharacterMario);
+
+    characterSelectScene.AddElement(UIRectangle(peachRetangle),
+                                    UIScene::NOMORE_SCENES_ID,
+                                    loadCharacterPeach);
+
+    characterSelectScene.AddElement(UIRectangle(kongRetangle),
+                                    UIScene::NOMORE_SCENES_ID,
+                                    loadCharacterKong);
+
+    characterSelectScene.AddElement(UIRectangle(yoshiRetangle),
+                                    UIScene::NOMORE_SCENES_ID,
+                                    loadCharacterYoshi);
   }
   characterSelectScene.ID = s_characterSelectID;
   return characterSelectScene;
@@ -449,10 +481,10 @@ EditorApp::handleDraw() {
   auto& containter = gm.getAgentContainerRef();
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
-  m_window->display();
-  const auto position = containter[containter.size() - 1].getBoidData().m_position;
-  m_userCirle->setPosition(position.x, position.y);
+  const auto position = containter.back().getBoidData().m_position;
   m_window->draw(*m_userCirle);
+
+  m_window->display();
 
   return RESULT_APP_STAGES::E::kNO_ERROR;
 }
@@ -754,4 +786,25 @@ int
 loadCharacterMario(BaseApp* app) {
   return loadCharacterMaster(app, s_pathsToMarioSprites.m_index);
 }
+
+int
+loadCharacterPeach(BaseApp* app) {
+  return loadCharacterMaster(app, s_pathsToPeachSprites.m_index);
+}
+
+int
+loadCharacterBowser(BaseApp* app) {
+  return loadCharacterMaster(app, s_pathsToBowserSprites.m_index);
+}
+
+int
+loadCharacterYoshi(BaseApp* app) {
+  return loadCharacterMaster(app, s_pathsToYoshiSprites.m_index);
+}
+
+int
+loadCharacterKong(BaseApp* app) {
+  return loadCharacterMaster(app, s_pathsToKongSprites.m_index);
+}
+
 
