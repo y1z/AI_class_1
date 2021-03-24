@@ -46,6 +46,21 @@ SpriteAtlas::getColorOfPixel(const unsigned x,
   return  m_pixels->getPixel(x, y);
 }
 
+const std::string_view
+SpriteAtlas::getPathToSpriteView() const {
+  return std::string_view(m_pathToSprite);
+}
+
+const std::string&
+SpriteAtlas::getPathToSprite() const {
+  return m_pathToSprite;
+}
+
+uint64
+SpriteAtlas::getIndex() const {
+  return m_index;
+}
+
 void
 SpriteAtlas::moveSprite(const Vec2& offset,
                         const size_t index) {
@@ -84,12 +99,38 @@ SpriteAtlas::draw(sf::RenderTarget& target) const {
 
 }
 
+constexpr bool
+SpriteAtlas::less(const SpriteAtlas& other)const {
+  return m_index < other.m_index;
+}
+
+constexpr bool
+SpriteAtlas::equals(const SpriteAtlas& other) const {
+  return m_index == other.m_index;
+}
+
+constexpr bool
+SpriteAtlas::operator<(const SpriteAtlas& other) const {
+  return less(other);
+}
+
+constexpr bool
+SpriteAtlas::operator>(const SpriteAtlas& other) const {
+  return !less(other);
+}
+
+constexpr bool
+SpriteAtlas::operator==(const SpriteAtlas& other) const {
+  return equals(other);
+}
+
 bool
 SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
 
   sf::FileInputStream fileStream;
 
-  if (fileStream.open(atlasDesc.m_pathToFile.generic_string())) {
+  m_pathToSprite = atlasDesc.m_pathToFile.generic_string();
+  if (fileStream.open(m_pathToSprite)) {
     m_pixels->loadFromStream(fileStream);
     *m_pixels = util::makeSplitImageWithMirroredHalf(*m_pixels);
 

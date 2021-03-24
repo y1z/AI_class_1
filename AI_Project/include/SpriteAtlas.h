@@ -38,6 +38,18 @@ class SpriteAtlas
   getColorOfPixel(const unsigned x,
                   const unsigned y = 0u)const;
 
+  /** @returns The path to the sprite */
+  [[nodiscard]]const std::string_view
+  getPathToSpriteView()const;
+
+  /** @returns The path to the sprite */
+  const std::string&
+  getPathToSprite()const;
+
+  /** @returns The index of the sprite*/
+  uint64
+  getIndex()const;
+
   /** @brief move a individual sprite. */
   void
   moveSprite(const Vec2& offset,
@@ -63,6 +75,27 @@ class SpriteAtlas
   void
   draw(sf::RenderTarget& target) const;
 
+  /**
+   * @returns true when the other object has a LESSER index than the caller.
+   */
+  constexpr bool
+  less(const SpriteAtlas& other)const;
+
+  /**
+   * @returns true when the other object the same index of the caller.
+   */
+  constexpr bool
+  equals(const SpriteAtlas& other)const;
+
+  constexpr bool
+  operator<(const SpriteAtlas& other)const;
+
+  constexpr bool
+  operator>(const SpriteAtlas& other)const;
+
+  constexpr bool
+  operator==(const SpriteAtlas& other)const;
+
  private:
 
   bool
@@ -74,8 +107,12 @@ class SpriteAtlas
   std::shared_ptr<sf::Image> m_pixels = std::make_shared<sf::Image>();
 
  private:
+  std::string m_pathToSprite;
+
   /** @brief contains the texture for the atlas */
   containerType m_segments;
+
+  uint64 m_index;
 };
 
 
@@ -90,7 +127,7 @@ struct SpriteAtlasDesc
 
   SpriteAtlasDesc(const std::filesystem::path& path,
                   const std::vector<sf::IntRect>& dimensionOfEachSprite,
-                  const std::vector<RotationSegment>& rotationOfEachSprite={})
+                  const std::vector<RotationSegment>& rotationOfEachSprite = {})
     :
     m_pathToFile(path),
     m_dimensionsOfEachSprite(dimensionOfEachSprite),
@@ -116,4 +153,5 @@ struct SpriteAtlasDesc
   std::filesystem::path m_pathToFile;
   std::vector<sf::IntRect>  m_dimensionsOfEachSprite;
   std::vector<RotationSegment> m_rotationOfEachSprite;
+  uint64 m_index = 0;
 };
