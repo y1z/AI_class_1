@@ -25,7 +25,7 @@ UIStateWaiting::onUpdate(UIStateData& sceneData) {
                                 elem.isInsideRect(util::vec2ToVector2f(data.m_mousePosition)) &&
                                 requiredMouseAccion == data.m_mouseAccion;
     if (canAcceptInput) {
-      sceneData.lastSceneID = sceneIndex;
+      sceneData.lastSceneIndex = sceneIndex;
 
       executeCallBack(i, scene);
       sceneIndex = scene.associatedScenes.at(i);
