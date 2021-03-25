@@ -64,6 +64,11 @@ Racer::getCurrentLapCheckPoint() const
   return m_lapCount.m_currentCheckPoints;
 }
 
+size_t
+Racer::getCurrentFrame() const {
+  return m_currentFrame;
+}
+
 void
 Racer::setFrame(const int32 selectedFrame) {
   assert(selectedFrame < this->m_atlasPtr->getAtlasSegmentCount());

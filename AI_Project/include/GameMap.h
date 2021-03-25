@@ -107,9 +107,15 @@ private:
 
 public:
 
-  mapPathContainer m_positionData; /**< Contains the data for the shape of the map.*/
+  /**
+   * Contains the data for the shape of the map.
+   */
+  mapPathContainer m_positionData;
 private:
 
-  visualsContainer m_visuals; /**< Contains the data for drawing the Map*/
+  /**
+   * Contains the data for drawing the Map
+   */
+  visualsContainer m_visuals;
 };
 

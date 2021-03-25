@@ -1,20 +1,33 @@
 #pragma once
 #include "baseState.h"
 
-class FollowCourseState : public BaseState 
+/**
+ * Controls the boid when they are supposed to follow the course
+ */
+class FollowCourseState : public BaseState
 {
 public:
   FollowCourseState() = default;
   ~FollowCourseState() = default;
 
-  void 
-  OnEnter(Boid& boid)override; 
+  /**
+   * @see BaseState::OnEnter();
+   */
+  void
+  OnEnter(Boid& boid)override;
 
-  StateType 
+  /**
+   * Makes the boid follow the course util other boid get too close then
+   * the boid becomes aggressive .
+   */
+  StateType
   OnUpdate(float deltaTime,Boid& boid)override;
 
-  void 
+  /**
+   * @see BaseState::OnExit();
+   */
+  void
   OnExit(Boid& boid) override;
-  
+
 };
 

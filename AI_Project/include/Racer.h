@@ -45,6 +45,10 @@ public:
   uint32
   getCurrentLapCheckPoint()const;
 
+  /** @retruns The current frame. */
+  size_t
+  getCurrentFrame()const;
+
   void
   setFrame(const int32 selectedFrame);
 

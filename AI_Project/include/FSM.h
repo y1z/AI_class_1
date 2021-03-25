@@ -7,7 +7,7 @@
 /**
 * @brief contains a series of state each boid can execute
 */
-class FSM 
+class FSM
 {
 public:
   using enumIndex = std::underlying_type_t< StateType>;
@@ -15,10 +15,10 @@ public:
   FSM();
   ~FSM();
 
-  
+
 public:
 
-  int 
+  int
   run(const float deltaTime);
 
 private:

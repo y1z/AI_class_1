@@ -247,9 +247,10 @@ EditorApp::init() {
 
     m_userRacer = make_unique<Racer>(Boid());
 
-    m_userCircle = make_unique<sf::CircleShape>(50.0f);
+    m_userCircle = make_unique<sf::CircleShape>(30.0f);
     m_userCircle->setOutlineColor(sf::Color::Cyan);
     m_userCircle->setFillColor(sf::Color::Transparent);
+    m_userCircle->setOutlineThickness(3.0f);
     m_userCircle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
 
     {
@@ -481,8 +482,16 @@ EditorApp::handleDraw() {
   auto& containter = gm.getAgentContainerRef();
   m_gameMap->draw(*m_window);
   gm.drawRacers(*m_window);
-  const auto position = containter.back().getBoidData().m_position;
-  m_window->draw(*m_userCircle);
+  {
+    const auto boidData = containter.back().getBoidData();
+    const auto origin = boidData.m_shape.getOrigin();
+    const auto bounds = boidData.m_shape.getGlobalBounds();
+    const sf::Vector2f position(bounds.left - bounds.width, bounds.top - bounds.height);
+    //m_userCircle->setOrigin(origin.x, origin.y);
+    m_userCircle->setPosition(position.x, position.y);
+    m_window->draw(*m_userCircle);
+
+  }
 
   m_window->display();
 

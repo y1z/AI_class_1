@@ -5,7 +5,7 @@
 void
  IdleState::OnEnter(Boid& boid)
 {
-  boid.m_data.m_followPathMagnitude = 0.0f; 
+  boid.m_data.m_followPathMagnitude = 0.0f;
 }
 
 StateType
@@ -24,7 +24,7 @@ IdleState::OnUpdate(float deltaTime, class Boid &boid)
     }
   }
 
-  
+
  return StateType::Idle;
 }
 

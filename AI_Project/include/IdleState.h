@@ -1,21 +1,31 @@
 #pragma once
 #include "baseState.h"
 
-class IdleState : public BaseState 
+/**
+ * Represents what happens to a boid on the idle state.
+ */
+class IdleState : public BaseState
 {
 public:
   IdleState() = default;
   ~IdleState() = default;
 
-  void 
+  /**
+   * @see BaseState::OnEnter()
+   */
+  void
   OnEnter(Boid& boid) override;
 
-
-  StateType 
+  /**
+   * @see BaseState::OnUpdate()
+   */
+  StateType
   OnUpdate(float deltaTime,Boid& boid)override;
 
-
-  void 
+  /**
+   * @see BaseState::OnExit();
+   */
+  void
   OnExit(Boid& boid) override;
 };
 

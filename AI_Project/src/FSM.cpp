@@ -26,7 +26,7 @@ FSM::~FSM()
 
 }
 
-int 
+int
 FSM::run(const float deltaTime)
 {
   GameManager& gm = GameManager::getInstance();

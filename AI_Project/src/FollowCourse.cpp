@@ -1,7 +1,7 @@
 #include "FollowCourse.h"
 #include "GameManager.h"
 
-void 
+void
 FollowCourseState::OnEnter(Boid& boid)
 {
   if( boid.m_data.m_pathNodes.empty() )
@@ -12,7 +12,7 @@ FollowCourseState::OnEnter(Boid& boid)
   boid.m_data.m_cycleFollowPath = true;
 }
 
-StateType 
+StateType
 FollowCourseState::OnUpdate(float deltaTime, Boid& boid)
 {
   GameManager& gm = GameManager::getInstance();
@@ -36,7 +36,7 @@ FollowCourseState::OnUpdate(float deltaTime, Boid& boid)
   return StateType::FollowCourse;
 }
 
-void 
+void
 FollowCourseState::OnExit(Boid& boid)
 {
   boid.m_data.m_aggressiveTime = 0.0f;

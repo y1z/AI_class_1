@@ -163,18 +163,31 @@ private:
 
  private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
-  /** Contains all the sprites atlases for each character. */
+  /**
+   * Contains all the sprites atlases for each character.
+   */
   std::deque< SpriteAtlas > m_spritesAtlases;
 
-  MouseData m_mouseData; /**< Contains all relevant data of the mouse.*/
+  /**
+  * Contains all relevant data of the mouse.
+  */
+  MouseData m_mouseData;
+
   /** The racer the user selected. */
   std::unique_ptr<Racer> m_userRacer;
-  std::unique_ptr<sf::RenderWindow> m_window;/**< Whats being rendered. */
-  std::unique_ptr<GameMap> m_gameMap;/**< Contains the map used. */
-  std::unique_ptr<UIStateMachine> m_stateMachine; /**< Controls the UI. */
+
+  /** Whats being rendered. */
+  std::unique_ptr<sf::RenderWindow> m_window;
+
+  /** Contains the map used. */
+  std::unique_ptr<GameMap> m_gameMap;
+
+  /** Controls the UI. */
+  std::unique_ptr<UIStateMachine> m_stateMachine;
   /**
    * Used for highlighting the user Boid
    */
   std::unique_ptr<sf::CircleShape> m_userCircle;
+
 };
 
