@@ -17,7 +17,10 @@
 struct UISceneDesc
 {
 
-  using AppFuncReturnFilePath = std::function<std::filesystem::path(BaseApp*) >;
+  /**
+   * Typedefs
+   */
+  using AppFuncReturnFilePath = std::function<std::filesystem::path(BaseApp*)>;
   using AppFuncReturnInt = std::function<int(BaseApp*)>;
 
   /** The types of function that the struct can accept.*/
