@@ -45,6 +45,9 @@ s_pathsToKongSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_she
                                               4);
 
 
+constexpr static const char*
+s_pathToMusic = "resources/music/WBA Free Track - Skeletal Leaders.ogg";
+
 
 constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
@@ -188,6 +191,8 @@ EditorApp::mainLoop() {
 
   setRandomRacerSprites();
 
+  m_music->play();
+  m_music->setLoop(true);
   while (m_window->isOpen()) {
 
     m_timer.StartTiming();
@@ -252,6 +257,15 @@ EditorApp::init() {
     m_userCircle->setFillColor(sf::Color::Transparent);
     m_userCircle->setOutlineThickness(3.0f);
     m_userCircle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
+
+    {
+      m_music = make_unique<sf::Music>();
+      m_music->setVolume(40.0f);
+      const auto musicPath = fs::path(m_initialPath).append(s_pathToMusic);
+      if (!m_music->openFromFile(musicPath.generic_string())) {
+        return -1;
+      }
+    }
 
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathsToMarioSprites.m_spriteSheet);
@@ -400,7 +414,7 @@ EditorApp::createCreditScene() const {
     UITextDescriptor textDisc;
     textDisc.pathToFont = s_pathToFrontDisco;
     textDisc.textFillColor = sf::Color::White;
-    textDisc.textSize = 65u;
+    textDisc.textSize = 60u;
     std::string path = fs::path(m_initialPath).append(s_pathToCredits).generic_string();
     textDisc.textString = util::loadFileToString(path);
 

@@ -6,6 +6,7 @@
 #include "GameMap.h"
 #include "UIStateMachine.h"
 #include "MouseData.h"
+#include <SFML/Audio/Music.hpp> // for sf::Music
 
 
 namespace RESULT_APP_STAGES {
@@ -184,10 +185,16 @@ private:
 
   /** Controls the UI. */
   std::unique_ptr<UIStateMachine> m_stateMachine;
+
   /**
    * Used for highlighting the user Boid
    */
   std::unique_ptr<sf::CircleShape> m_userCircle;
+
+  /**
+   * Used for playing music
+   */
+  std::unique_ptr<sf::Music> m_music;
 
 };
 
