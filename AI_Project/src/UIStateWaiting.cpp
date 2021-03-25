@@ -9,10 +9,10 @@ constexpr static float s_inputDelay = static_cast<float>(1) / 5.0f;
 
 UI_STATE_NAME::E
 UIStateWaiting::onUpdate(UIStateData& sceneData) {
-  assert(nullptr != ptr_scenes);
+  assert(nullptr != m_pScenes);
 
-  std::vector<UIRectangle>& UISceneElements = ptr_scenes->at(sceneIndex).m_desc.rectangles;
-  UISceneDesc& scene = ptr_scenes->at(sceneIndex).m_desc;
+  std::vector<UIRectangle>& UISceneElements = m_pScenes->at(m_sceneIndex).m_desc.rectangles;
+  UISceneDesc& scene = m_pScenes->at(m_sceneIndex).m_desc;
   m_timeSinceInput += sceneData.deltaTime;
 
   const MouseData& data = sceneData.mouseData;
@@ -25,10 +25,10 @@ UIStateWaiting::onUpdate(UIStateData& sceneData) {
                                 elem.isInsideRect(util::vec2ToVector2f(data.m_mousePosition)) &&
                                 requiredMouseAccion == data.m_mouseAccion;
     if (canAcceptInput) {
-      sceneData.lastSceneIndex = sceneIndex;
+      sceneData.lastSceneIndex = m_sceneIndex;
 
       executeCallBack(i, scene);
-      sceneIndex = scene.associatedScenes.at(i);
+      m_sceneIndex = scene.associatedScenes.at(i);
       m_timeSinceInput = 0.0f;
 
       return UI_STATE_NAME::kCHANGING;
@@ -51,11 +51,11 @@ UIStateWaiting::executeCallBack(int32 callbackIndex, const UISceneDesc& scene) {
   }
 
   if (const auto call = std::get_if < UISceneDesc::AppFuncReturnFilePath >(&callBack)) {
-    (*call)(editor);
+    (*call)(m_pBaseApp);
     return std::nullopt;
   }
   if (const auto call = std::get_if<UISceneDesc::AppFuncReturnInt>(&callBack)) {
-    return (*call)(editor);
+    return (*call)(m_pBaseApp);
   }
   if (const auto call = std::get_if<std::function<int(void)>>(&callBack)) {
     return (*call)();

@@ -65,19 +65,33 @@ struct UIState
   onUpdate(UIStateData& mousePos) = 0;
 
   /**
-   * Controls what happens when the state.
+   * Controls what happens when the state is exited from.
    */
   virtual UI_STATE_NAME::E
   onExit(UIStateData& mousePos) = 0;
 
   /**
-   * Controls what the state does every update.
+   * @returns
+   *  The current type of state
    */
   virtual UI_STATE_NAME::E
   getCurrentState()const = 0;
 
-  std::vector<UIScene>* ptr_scenes;
-  BaseApp* editor = nullptr;
-  int32_t sceneIndex = 0;
+  /**
+   * A pointer to the state.
+   */
+  std::vector<UIScene>* m_pScenes;
+
+
+  /**
+   * A pointer to the state.
+   */
+  BaseApp* m_pBaseApp = nullptr;
+
+
+  /**
+   * The current scene Index
+   */
+  int32_t m_sceneIndex = 0;
 };
 

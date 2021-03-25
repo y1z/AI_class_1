@@ -23,11 +23,11 @@ UIStateMachine::init(const std::vector<UISceneDesc>& descriptor,
   m_states[UI_STATE_NAME::kWAITING] = make_unique<UIStateWaiting>();
   m_states[UI_STATE_NAME::kCHANGING] = make_unique<UIStateChanging>();
 
-  m_states[UI_STATE_NAME::kWAITING]->ptr_scenes = &m_scenes;
-  m_states[UI_STATE_NAME::kCHANGING]->ptr_scenes = &m_scenes;
+  m_states[UI_STATE_NAME::kWAITING]->m_pScenes = &m_scenes;
+  m_states[UI_STATE_NAME::kCHANGING]->m_pScenes = &m_scenes;
 
-  m_states[UI_STATE_NAME::kWAITING]->editor = currentApp;
-  m_states[UI_STATE_NAME::kCHANGING]->editor = currentApp;
+  m_states[UI_STATE_NAME::kWAITING]->m_pBaseApp = currentApp;
+  m_states[UI_STATE_NAME::kCHANGING]->m_pBaseApp = currentApp;
 
   m_currentApp = currentApp;
 
@@ -36,7 +36,7 @@ UIStateMachine::init(const std::vector<UISceneDesc>& descriptor,
   m_currentApp = currentApp;
 
   for (auto& elem : m_states) {
-    elem->ptr_scenes = &m_scenes;
+    elem->m_pScenes = &m_scenes;
   }
 
   return true;
@@ -48,10 +48,10 @@ UIStateMachine::update(const MouseData& data,
                        const float deltaTime) {
   UIStateData currentData;
   currentData.mouseData = data;
-  currentData.sceneIndex = m_currentScene->sceneIndex;
+  currentData.sceneIndex = m_currentScene->m_sceneIndex;
   currentData.deltaTime = deltaTime;
 
-  m_scenes[m_currentScene->sceneIndex].update();
+  m_scenes[m_currentScene->m_sceneIndex].update();
 
   const auto updatedState = m_currentScene->onUpdate(currentData);
 
@@ -66,7 +66,7 @@ UIStateMachine::update(const MouseData& data,
 
 void
 UIStateMachine::render(sf::RenderWindow* window) {
-  const auto currentIndex = m_currentScene->sceneIndex;
+  const auto currentIndex = m_currentScene->m_sceneIndex;
   if (UIScene::NOMORE_SCENES_ID != currentIndex) {
     m_scenes[currentIndex].draw(window);
   }
@@ -74,7 +74,7 @@ UIStateMachine::render(sf::RenderWindow* window) {
 
 bool
 UIStateMachine::isStateMachineActive() const {
-  return !(UIScene::NOMORE_SCENES_ID == m_currentScene->sceneIndex);
+  return !(UIScene::NOMORE_SCENES_ID == m_currentScene->m_sceneIndex);
 }
 
 
