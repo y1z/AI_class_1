@@ -296,6 +296,18 @@ EditorApp::init() {
     m_userCircle->setFillColor(sf::Color::Transparent);
     m_userCircle->setOutlineThickness(3.0f);
     m_userCircle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
+    {
+      m_gameText = make_unique<UIText>();
+      UITextDescriptor desc;
+      desc.pathToFont = s_pathToFrontPixels;
+      desc.textSize = 40u;
+      desc.textFillColor = sf::Color::White;
+      desc.outlineTextSize = 1.5f;
+      desc.textStyle = sf::Text::Style::Regular;
+      desc.textString = "Ready";
+      desc.textPosition = sf::Vector2f(0.0f, 0.0f);
+      m_gameText->init(desc);
+    }
 
     {
       m_music = make_unique<sf::Music>();
@@ -539,11 +551,12 @@ EditorApp::handleDraw() {
     const auto boidData = containter.back().getBoidData();
     const auto origin = boidData.m_shape.getOrigin();
     const auto bounds = boidData.m_shape.getGlobalBounds();
-    const sf::Vector2f position(bounds.left - bounds.width, bounds.top - bounds.height);
+    const sf::Vector2f position(bounds.left - (bounds.width / 2),
+                                bounds.top - (bounds.height / 2));
     //m_userCircle->setOrigin(origin.x, origin.y);
     m_userCircle->setPosition(position.x, position.y);
     m_window->draw(*m_userCircle);
-
+    m_gameText->draw(m_window.get());
   }
 
   m_window->display();
@@ -683,7 +696,13 @@ EditorApp::setRacerSprites(const uint64 selectedRacer,
   auto& container = gameMan.getAgentContainerRef();
   const uint64 limit = container.size() - 1;
   if (selectedRacer <= limit) {
-    container[selectedRacer].m_atlasPtr = &m_spritesAtlases[selectedSpriteAtlas];
+    const auto findSpriteAtlas = [selectedSpriteAtlas](const SpriteAtlas& atlas) {
+      return atlas.getIndex() == selectedSpriteAtlas;
+    };
+
+    auto iter = std::find_if(begin(m_spritesAtlases), end(m_spritesAtlases), findSpriteAtlas);
+    assert(iter != end(m_spritesAtlases));
+    container[selectedRacer].m_atlasPtr = &(*iter);
   }
 
 }
