@@ -100,27 +100,44 @@ class SpriteAtlas
     return less(other);
   }
 
+  /**
+   * Calls  SpriteAtlas::less()
+   * @copydocs SpriteAtlas::less()
+   */
   constexpr bool
   operator>(const SpriteAtlas& other)const {
     return !less(other);
   }
 
+
+  /**
+   * Calls  SpriteAtlas::equals()
+   * @copydocs SpriteAtlas::equals()
+   */
   constexpr bool
   operator==(const SpriteAtlas& other)const {
     return equals(other);
   }
 
  private:
-
+  /**
+   * Where most of work needed for initialization is done.
+   */
   bool
   internalInit(const SpriteAtlasDesc& atlasDesc);
 
  private:
+  /**
+   * @brief Is the path to the currently load front..
+   */
   std::string m_pathToSprite;
 
   /** @brief contains the texture for the atlas */
   containerType m_segments;
 
+  /**
+   * A value used for organizing the sprite atlases
+   */
   uint64 m_index;
  public:
   /** @brief contains the texture for the atlas */
