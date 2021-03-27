@@ -206,5 +206,10 @@ private:
    */
   std::unique_ptr<sf::Music> m_music;
 
+  /**
+   * Used for all text during the game.
+   */
+  std::unique_ptr<UIText> m_gameText;
+
 };
 
