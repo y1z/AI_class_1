@@ -64,6 +64,7 @@ UIText::init(const UITextDescriptor& descriptor) {
       m_text->setPosition(descriptor.textPosition);
       m_textString = descriptor.textString;
       m_text->setString(m_textString);
+      m_text->setOutlineThickness(descriptor.outlineTextSize);
       m_alignment = descriptor.alignment;
       this->setTextStyle(descriptor.textStyle);
     }

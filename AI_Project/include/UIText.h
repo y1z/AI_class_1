@@ -181,6 +181,7 @@ struct UITextDescriptor
   sf::Color textFillColor = sf::Color(255u, 255u, 255u, 255u);
   sf::Color textOuterColor = sf::Color(255u, 255u, 255u, 255u);
   unsigned int textSize = 30u;
+  float outlineTextSize = 0.0f;
   sf::Text::Style textStyle = sf::Text::Style::Regular;
   TEXT_ALIGNMENT::E alignment = TEXT_ALIGNMENT::E::DEFAULT;
 };
