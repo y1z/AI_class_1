@@ -112,6 +112,8 @@ SpriteAtlas::internalInit(const SpriteAtlasDesc& atlasDesc) {
 
     m_atlasTexture->loadFromImage(*m_pixels);
 
+    m_index = atlasDesc.m_index;
+
     const size_t totalElements = atlasDesc.m_dimensionsOfEachSprite.size();
     for (size_t i = 0u; i < totalElements; ++i) {
       AtlasSegment segment;
