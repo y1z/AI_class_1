@@ -82,8 +82,47 @@ s_creditID = 2;
 constexpr static int32
 s_characterSelectID = 3;
 
+struct FileSettings
+{
+  FileSettings()
+    :m_openFileSettings(),
+    m_fileName(MAX_PATH, '\0'),
+    m_currentDirectory(MAX_PATH, '\0') {}
+
+  ~FileSettings() = default;
+
+  void
+  setUp() {
+    m_openFileSettings.lStructSize = sizeof(m_openFileSettings);
+    m_openFileSettings.nMaxFile = (m_fileName.size() - 1);
+
+    m_openFileSettings.lpstrFile = m_fileName.data();
+    m_openFileSettings.lpstrFile[0] = '\0';
+
+    m_openFileSettings.hwndOwner = nullptr;
+    m_openFileSettings.lpstrFilter = fileTypes;
+    m_openFileSettings.nFilterIndex = 1;
+       // save the current directory so we don't change it later
+    GetCurrentDirectoryA((m_currentDirectory.size() * sizeof(char)) - 1,
+                         m_currentDirectory.data());
+  }
+
+  static constexpr const char* fileTypes = "All files\0*.*\0 \0*.txt\0";
+
+  OPENFILENAMEA m_openFileSettings;
+  std::string m_fileName;
+  std::string m_currentDirectory;
+  std::string m_fileExtentions;
+};
+
+FileSettings
+fileSettingCreate();
+
 fs::path
 openFilePath(BaseApp* app);
+
+fs::path
+saveFilePath(BaseApp* app);
 
 int
 createTrack(BaseApp* app);
@@ -542,8 +581,9 @@ EditorApp::handleInput() {
       switch (event.key.code) {
       case sf::Keyboard::S:
       {
-        const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
-        m_gameMap->saveMap(path.generic_string());
+        //const auto path = fs::path(m_initialPath).append(s_pathToSaveFileDefault);
+        //m_gameMap->saveMap(path.generic_string());
+        saveFilePath(this);
       }
       break;
       case sf::Keyboard::L:
@@ -663,6 +703,11 @@ EditorApp::setRandomRacerSprites(const bool force)
   }
 }
 
+bool
+EditorApp::saveCurrentMap(const std::string_view path) const {
+  return m_gameMap->saveMap(path);
+}
+
 
 bool
 EditorApp::createRacer() {
@@ -694,46 +739,54 @@ EditorApp::createRacer() {
   return true;
 }
 
-fs::path
-openFilePath(BaseApp* app) {
+FileSettings
+fileSettingCreate() {
+  FileSettings fileSettings;
 
-  assert(app != nullptr);
-  auto editorApp = dynamic_cast<EditorApp*> (app);
   /**
    * All text before the first null character is the name we give to the type
    * of files we are looking for what comes after that is the name of the extension
    */
   static constexpr const char* fileTypes = "All files\0*.*\0 \0*.txt\0";
 
-  OPENFILENAMEA File;
-  char FileName[MAX_PATH];
-  char currentPathDir[MAX_PATH];
+  fileSettings.m_openFileSettings.lStructSize = sizeof(fileSettings.m_openFileSettings);
+  fileSettings.m_openFileSettings.hwndOwner = nullptr;
 
-  std::memset(&File, 0, sizeof(File));
-  std::memset(&FileName, '\0', sizeof(FileName));
-  std::memset(&currentPathDir, '\0', sizeof(currentPathDir));
+  fileSettings.setUp();
+  return fileSettings;
+}
 
-  // save the current directory so we don't change it later
-  GetCurrentDirectoryA(sizeof(currentPathDir) - 1, currentPathDir);
+fs::path
+openFilePath(BaseApp* app) {
 
-  File.lStructSize = sizeof(File);
-  File.hwndOwner = nullptr;
+  assert(app != nullptr);
+  auto editorApp = dynamic_cast<EditorApp*> (app);
 
-  File.lpstrFile = FileName;
-  File.lpstrFile[0] = '\0';
+  auto fileSetting = fileSettingCreate();
+  fileSetting.setUp();
+  GetOpenFileNameA(&fileSetting.m_openFileSettings);
 
-  File.nMaxFile = sizeof(FileName);
-  File.lpstrFilter = fileTypes;
-  // controls which of the file type is chosen by default.
-  File.nFilterIndex = 1;
+  const fs::path result = fileSetting.m_fileName;
+  editorApp->createPath(fs::path(result));
 
-  GetOpenFileNameA(&File);
+  SetCurrentDirectoryA(fileSetting.m_currentDirectory.data());
+  return result;
+}
 
-  editorApp->createPath(fs::path(FileName));
+fs::path
+saveFilePath(BaseApp* app) {
+  assert(app != nullptr);
+  auto editorApp = dynamic_cast<EditorApp*> (app);
 
-  SetCurrentDirectoryA(currentPathDir);
-  return  fs::path(FileName);
+  auto fileSetting = fileSettingCreate();
+  fileSetting.setUp();
+  GetSaveFileNameA(&fileSetting.m_openFileSettings);
 
+  const fs::path result = fileSetting.m_fileName;
+  editorApp->saveCurrentMap(fileSetting.m_fileName);
+
+  SetCurrentDirectoryA(fileSetting.m_currentDirectory.data());
+  return result;
 }
 
 

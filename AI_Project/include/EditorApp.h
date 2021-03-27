@@ -17,11 +17,15 @@ namespace RESULT_APP_STAGES {
 };
 }
 
+
+
 /**
  * Is an editor for manipulating AI agents (Boids)
  */
 class EditorApp final : public BaseApp
 {
+ public:
+
 
  public:
   EditorApp();
@@ -153,6 +157,12 @@ public:
    */
   void
   setRandomRacerSprites(const bool force = false);
+
+  /**
+   * @brief Save the current map
+   */
+  bool
+  saveCurrentMap(const std::string_view path)const;
 
 private:
   /**
