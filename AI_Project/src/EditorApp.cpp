@@ -107,7 +107,7 @@ struct FileSettings
                          m_currentDirectory.data());
   }
 
-  static constexpr const char* fileTypes = "All files\0*.*\0 \0*.txt\0";
+  static constexpr const char* fileTypes = "text files \0*.txt\0 All files\0*.*\0";
 
   OPENFILENAMEA m_openFileSettings;
   std::string m_fileName;
@@ -781,6 +781,11 @@ saveFilePath(BaseApp* app) {
   auto fileSetting = fileSettingCreate();
   fileSetting.setUp();
   GetSaveFileNameA(&fileSetting.m_openFileSettings);
+
+  if (std::string::npos == fileSetting.m_fileName.rfind(".txt")) {
+    const auto firstNull = fileSetting.m_fileName.find('\0');
+    fileSetting.m_fileName.insert(firstNull, ".txt");
+  }
 
   const fs::path result = fileSetting.m_fileName;
   editorApp->saveCurrentMap(fileSetting.m_fileName);
