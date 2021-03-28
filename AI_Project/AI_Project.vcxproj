@@ -192,6 +192,7 @@
     <ClCompile Include="src\StateMachineTestApp.cpp" />
     <ClCompile Include="src\StateScoreCheck.cpp" />
     <ClCompile Include="src\SpriteSheetAndPortriat.cpp" />
+    <ClCompile Include="src\StringSequence.cpp" />
     <ClCompile Include="src\TestBoidApp.cpp" />
     <ClCompile Include="src\Timer.cpp" />
     <ClCompile Include="src\UiManager.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="include\StateScoreBase.h" />
     <ClInclude Include="include\StateScoreCheck.h" />
     <ClInclude Include="include\SpriteSheetAndPortriat.h" />
+    <ClInclude Include="include\StringSequence.h" />
     <ClInclude Include="include\TestBoidApp.h" />
     <ClInclude Include="include\test_vec2.h" />
     <ClInclude Include="include\Timer.h" />
