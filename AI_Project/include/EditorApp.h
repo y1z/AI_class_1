@@ -168,8 +168,11 @@ class EditorApp final : public BaseApp
   bool
   createRacer();
 
-
+  /**
+   * Used for keeping track of the original path the application started with.
+   */
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
+
   /**
    * Contains all the sprites atlases for each character.
    */

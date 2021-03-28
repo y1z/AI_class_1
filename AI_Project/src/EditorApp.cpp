@@ -82,14 +82,14 @@ s_creditID = 2;
 constexpr static int32
 s_characterSelectID = 3;
 
-struct FileSettings
+struct DataOpenFile
 {
-  FileSettings()
+  DataOpenFile()
     :m_openFileSettings(),
     m_fileName(MAX_PATH, '\0'),
     m_currentDirectory(MAX_PATH, '\0') {}
 
-  ~FileSettings() = default;
+  ~DataOpenFile() = default;
 
   void
   setUp() {
@@ -114,7 +114,7 @@ struct FileSettings
   std::string m_currentDirectory;
 };
 
-FileSettings
+DataOpenFile
 fileSettingCreate();
 
 fs::path
@@ -758,9 +758,9 @@ EditorApp::createRacer() {
 }
 
 
-FileSettings
+DataOpenFile
 fileSettingCreate() {
-  FileSettings fileSettings;
+  DataOpenFile fileSettings;
 
   /**
    * All text before the first null character is the name we give to the type
