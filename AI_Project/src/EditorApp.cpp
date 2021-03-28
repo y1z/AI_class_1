@@ -115,7 +115,7 @@ struct DataOpenFile
 };
 
 DataOpenFile
-fileSettingCreate();
+createDataOpenFile();
 
 fs::path
 openFilePath(BaseApp* app);
@@ -759,7 +759,7 @@ EditorApp::createRacer() {
 
 
 DataOpenFile
-fileSettingCreate() {
+createDataOpenFile() {
   DataOpenFile fileSettings;
 
   /**
@@ -781,7 +781,7 @@ openFilePath(BaseApp* app) {
   assert(app != nullptr);
   auto editorApp = dynamic_cast<EditorApp*> (app);
 
-  auto fileSetting = fileSettingCreate();
+  auto fileSetting = createDataOpenFile();
   fileSetting.setUp();
   GetOpenFileNameA(&fileSetting.m_openFileSettings);
 
@@ -797,7 +797,7 @@ saveFilePath(BaseApp* app) {
   assert(app != nullptr);
   auto editorApp = dynamic_cast<EditorApp*> (app);
 
-  auto fileSetting = fileSettingCreate();
+  auto fileSetting = createDataOpenFile();
   fileSetting.setUp();
   GetSaveFileNameA(&fileSetting.m_openFileSettings);
 
