@@ -25,9 +25,6 @@ namespace RESULT_APP_STAGES {
 class EditorApp final : public BaseApp
 {
  public:
-
-
- public:
   EditorApp();
   EditorApp(const EditorApp& other) = delete;
   EditorApp(EditorApp&& other) noexcept = delete;
@@ -132,7 +129,7 @@ class EditorApp final : public BaseApp
   createAtlas(const std::filesystem::path& pathToAtlas,
               const uint64 index);
 
-public:
+ public:
   /**
    * @brief creates the path the agents of the are going to follow.
    */
@@ -164,7 +161,7 @@ public:
   bool
   saveCurrentMap(const std::string_view path)const;
 
-private:
+ private:
   /**
    * @brief creates the racers a.k.a the agents of the game.
    */
@@ -172,7 +169,6 @@ private:
   createRacer();
 
 
- private:
   const std::filesystem::path m_initialPath = std::filesystem::current_path();
   /**
    * Contains all the sprites atlases for each character.
@@ -210,6 +206,5 @@ private:
    * Used for all text during the game.
    */
   std::unique_ptr<UIText> m_gameText;
-
 };
 
