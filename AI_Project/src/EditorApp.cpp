@@ -112,7 +112,6 @@ struct FileSettings
   OPENFILENAMEA m_openFileSettings;
   std::string m_fileName;
   std::string m_currentDirectory;
-  std::string m_fileExtentions;
 };
 
 FileSettings
@@ -757,6 +756,7 @@ EditorApp::createRacer() {
 
   return true;
 }
+
 
 FileSettings
 fileSettingCreate() {
