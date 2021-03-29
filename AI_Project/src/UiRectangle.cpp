@@ -143,4 +143,3 @@ UIRectangle::isInsideRect(const sf::Vector2f& pos)const {
   return bound.intersects(temp);
 }
 
-

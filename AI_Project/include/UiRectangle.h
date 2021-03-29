@@ -95,9 +95,9 @@ struct UIRectangleDesc
 {
   UIRectangleDesc()
     :pathToSprite({}),
-    position(sf::Vector2f(0.0f, 0.0f)),
-    width(100),
-    height(100)
+     position(sf::Vector2f(0.0f, 0.0f)),
+     width(100),
+     height(100)
   {}
 
   UIRectangleDesc(const int32 _width,
@@ -106,10 +106,10 @@ struct UIRectangleDesc
                   const std::string_view _path = "",
                   const sf::Color _color = sf::Color::White)
     :pathToSprite(_path),
-    position(_position),
-    color(_color),
-    width(_width),
-    height(_height)
+     position(_position),
+     color(_color),
+     width(_width),
+     height(_height)
   {}
 
   UIRectangleDesc(const UIRectangleDesc&) = default;
