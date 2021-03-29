@@ -59,7 +59,7 @@ class EditorApp final : public BaseApp
 
  protected:
   /**
-   *
+   * The intro sequence to the level
    */
   int
   introSequence();

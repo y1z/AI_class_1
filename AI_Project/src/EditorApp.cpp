@@ -9,6 +9,7 @@
 #include "util.h"
 #include "GlobalValues.h"
 #include "SpriteSheetAndPortriat.h"
+#include "WindowConversion.h"
 
 namespace fs = std::filesystem;
 
@@ -249,7 +250,12 @@ EditorApp::introSequence() {
     timeSenceSequenceAdvancement += m_deltaTime;
   }
 
-  m_gameText->setString(std::string_view(" 1 / 5 "));
+  m_gameText->setString("1  /  5");
+  m_gameText->setCharacterSize(66u);
+  const auto topRightPoint =
+    WindowConversion::getPositionFromPercentage({ m_screenWidth, m_screenWidth },
+                                                { 0.80f, 0.05f });
+  m_gameText->setPosition(static_cast<sf::Vector2f>(topRightPoint));
 
   return 0;
 }
@@ -328,7 +334,12 @@ EditorApp::init() {
     m_userCircle->setOutlineColor(sf::Color::Cyan);
     m_userCircle->setFillColor(sf::Color::Transparent);
     m_userCircle->setOutlineThickness(3.0f);
-    m_userCircle->setPosition(m_screenWidth / 2.0f, m_screenHeight / 2.0f);
+
+    const auto middleScreen =
+      WindowConversion::getPositionFromPercentage({ m_screenWidth, m_screenHeight },
+                                                  { .50f,.50f });
+
+    m_userCircle->setPosition(middleScreen.x, middleScreen.y);
     {
       m_gameText = make_unique<UIText>();
       UITextDescriptor desc;
