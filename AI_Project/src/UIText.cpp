@@ -119,6 +119,11 @@ UIText::setCharacterSize(unsigned int newSize) {
 }
 
 void
+UIText::setString(std::string_view newString) {
+  m_textString = newString.data();
+}
+
+void
 UIText::setTextStyle(sf::Text::Style newStyle) {
   m_textStyle = newStyle;
 }

@@ -101,6 +101,12 @@ public:
   setCharacterSize(unsigned int newSize);
 
   /**
+   * Set the string used by the UIText object.
+   */
+  void
+  setString(std::string_view newString);
+
+  /**
    * Set if the text is regular, italicized or bold.
    */
   void
