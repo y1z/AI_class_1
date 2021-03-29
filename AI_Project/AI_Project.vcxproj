@@ -170,7 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\WindowConversion.cpp" />
+    <ClCompile Include="src\WindowConversion.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\FrameData.cpp" />
     <ClCompile Include="src\GameMap.cpp" />
