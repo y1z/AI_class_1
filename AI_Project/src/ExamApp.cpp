@@ -35,17 +35,20 @@ int
 ExamApp::init(unsigned int width,
               unsigned int height) {
   GameManager::StartUp(nullptr);
-  m_screenWidth = width;
-  m_screenHeight = height;
+  m_screen.comp.width = width;
+  m_screen.comp.height = height;
 
   std::random_device rd{};
   std::srand(rd());
 
 
   try {
-    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
-                                                  sf::String("final app"),
-                                                  sf::Style::Default);
+    {
+      const sf::VideoMode videoMode(m_screen.comp.width, m_screen.comp.height);
+      m_window = std::make_unique<sf::RenderWindow>(videoMode,
+                                                    sf::String("final app"),
+                                                    sf::Style::Default);
+    }
 
     m_atlasPtr = std::make_unique<SpriteAtlas>();
 
@@ -98,8 +101,8 @@ ExamApp::createPath()const {
 
   GameManager& gameMan = GameManager::getInstance();
 
-  const unsigned int one10thOfWidth = m_screenWidth / 10;
-  const unsigned int one10thOfHeight = m_screenHeight / 10;
+  const unsigned int one10thOfWidth = m_screen.comp.width / 10;
+  const unsigned int one10thOfHeight = m_screen.comp.height / 10;
 
   for (unsigned int i = 1u; i < 10u; ++i) {
     const FollowPathNode node(Vec2(one10thOfWidth * i, one10thOfHeight * i),
@@ -107,7 +110,7 @@ ExamApp::createPath()const {
 
     gameMan.addNodeToGlobalPath(node);
   }
-  const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5,
+  const FollowPathNode endPoint(Vec2((m_screen.comp.width/ 10) * 5,
                                 0),
                                 80.0f);
 
@@ -156,7 +159,7 @@ ExamApp::createRacersPortraits() {
     (
       100,
       100,
-      sf::Vector2f(m_screenWidth - 100, 110 * (i + 1)),
+      sf::Vector2f(this->m_screen.comp.width - 100, 110 * (i + 1)),
       characterNames[i]
     );
     m_manager.addRectangle(characterDescriptor);

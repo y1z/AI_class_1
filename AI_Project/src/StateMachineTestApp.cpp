@@ -15,10 +15,13 @@ StateMachineTestApp::run(unsigned int screenWith,
 int
 StateMachineTestApp::init()
 {
-  const unsigned int halfScreenWidth = m_screenWidth / 2;
-  const unsigned int halfScreenHeight = m_screenHeight / 2;
 
-  m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
+  const unsigned int screenWidth = m_screen.comp.width;
+  const unsigned int screenHeight = m_screen.comp.height;
+
+  const unsigned int halfScreenWidth = screenWidth / 2;
+  const unsigned int halfScreenHeight = screenHeight / 2;
+  m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(screenWidth, screenHeight),
                                                 "State machine test",
                                                 sf::Style::Default);
 
@@ -83,7 +86,7 @@ StateMachineTestApp::handleInput()
   }
 }
 
-void 
+void
 StateMachineTestApp::handleRender()
 {
   GameManager& gm = GameManager::getInstance();

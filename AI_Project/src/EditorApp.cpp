@@ -165,8 +165,8 @@ EditorApp::EditorApp()
 int
 EditorApp::run(unsigned int screenWidth,
                unsigned int screenHeight) {
-  m_screenWidth = screenWidth;
-  m_screenHeight = screenHeight;
+  m_screen.comp.width = screenWidth;
+  m_screen.comp.height = screenHeight;
 
   if (-1 == init()) {
     return -1;
@@ -231,9 +231,12 @@ EditorApp::introSequence() {
   float deltaTimeSum = 0.0f;
   float timeSenceSequenceAdvancement = 0.0f;
 
+  const auto screenWidth = m_screen.comp.width;
+  const auto screenHeight = m_screen.comp.height;
+
   m_gameText->setCharacterSize(66u * 3);
   m_gameText->m_textString = m_stringSequence->getCurrentString();
-  m_gameText->setPosition({ m_screenWidth / 3.0f, m_screenHeight / 3.0f });
+  m_gameText->setPosition({ screenWidth / 3.0f, screenHeight / 3.0f });
 
   while (introSequenceLength > deltaTimeSum) {
     m_timer.StartTiming();
@@ -253,7 +256,7 @@ EditorApp::introSequence() {
   m_gameText->setString("1  /  5");
   m_gameText->setCharacterSize(66u);
   const auto topRightPoint =
-    WindowConversion::getPositionFromPercentage({ m_screenWidth, m_screenWidth },
+    WindowConversion::getPositionFromPercentage({ screenWidth, screenWidth },
                                                 { 0.80f, 0.05f });
   m_gameText->setPosition(static_cast<sf::Vector2f>(topRightPoint));
 
@@ -313,14 +316,16 @@ EditorApp::menuLoop() {
 
 int
 EditorApp::init() {
-
   try {
+
+    const auto screenWidth = getScreenWidth();
+    const auto screenHeight = getScreenHeight();
 
     GameManager::StartUp(nullptr);
 
     std::srand(std::random_device{}());
 
-    m_window = make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
+    m_window = make_unique<sf::RenderWindow>(sf::VideoMode(screenWidth, screenHeight),
                                              sf::String(" app"),
                                              sf::Style::Default);
 
@@ -336,7 +341,7 @@ EditorApp::init() {
     m_userCircle->setOutlineThickness(3.0f);
 
     const auto middleScreen =
-      WindowConversion::getPositionFromPercentage({ m_screenWidth, m_screenHeight },
+      WindowConversion::getPositionFromPercentage({ screenWidth, screenHeight },
                                                   { .50f,.50f });
 
     m_userCircle->setPosition(middleScreen.x, middleScreen.y);
@@ -419,7 +424,7 @@ EditorApp::createUI() {
 UISceneDesc
 EditorApp::createMainMenuScene() const {
   UISceneDesc menuScene;
-  const auto halfScreenWidth = static_cast<float>(m_screenWidth) / 2u;
+  const auto halfScreenWidth = static_cast<float>(m_screen.comp.width) / 2u;
   const UIRectangle playRect(UIRectangleDesc(300, 200,
                              sf::Vector2f(halfScreenWidth, 300),
                              "", sf::Color::Green));
@@ -464,7 +469,7 @@ EditorApp::createMainMenuScene() const {
 UISceneDesc
 EditorApp::createLevelSelect() const {
 
-  const auto halfScreenWidth = static_cast<float>(m_screenWidth) / 2u;
+  const auto halfScreenWidth = static_cast<float>(m_screen.comp.width) / 2u;
   UISceneDesc levelSelect;
   const UIRectangle level1Rect(UIRectangleDesc(300, 200,
                                sf::Vector2f(halfScreenWidth, 300),
@@ -523,7 +528,7 @@ EditorApp::createCreditScene() const {
     creditScene.texts.emplace_back(element);
   }
   creditScene.ID = s_creditID;
-  const sf::Vector2f position(m_screenWidth - 300, m_screenHeight);
+  const sf::Vector2f position(m_screen.comp.width - 300, m_screen.comp.height);
 
   const UIRectangleDesc exitRect(800, 400, position, "", sf::Color::Red);
 
@@ -542,10 +547,10 @@ UISceneDesc
 EditorApp::createCharacterSelectScene() const {
   UISceneDesc characterSelectScene;
   {
-    const auto oneThirdOfScreen = m_screenWidth / 3u;
+    const auto oneThirdOfScreen = m_screen.comp.width / 3u;
     const UIRectangleDesc marioRectangle(200,
                                          200,
-                                         sf::Vector2f(oneThirdOfScreen, m_screenHeight / 2.0f),
+                                         sf::Vector2f(oneThirdOfScreen, m_screen.comp.height / 2.0f),
                                          s_pathsToMarioSprites.m_portriat);
 
     const sf::Vector2f rectangleDelta = sf::Vector2f(marioRectangle.width * 1.5f, 0.f);
@@ -709,8 +714,10 @@ EditorApp::createPath(const std::filesystem::path& pathToFile) {
     m_gameMap->loadMap(pathToFile.generic_string());
   }
   else {
-    const unsigned int one10thOfWidth = m_screenWidth / 10;
-    const unsigned int one10thOfHeight = m_screenHeight / 10;
+    const auto screenWidth = getScreenWidth();
+    const auto screenHeight = getScreenHeight();
+    const unsigned int one10thOfWidth = screenWidth / 10;
+    const unsigned int one10thOfHeight = screenHeight / 10;
 
     std::vector<FollowPathNode> path;
     for (unsigned int i = 1u; i < 10u; ++i) {
@@ -719,7 +726,7 @@ EditorApp::createPath(const std::filesystem::path& pathToFile) {
 
       path.emplace_back(node);
     }
-    const FollowPathNode endPoint(Vec2((m_screenWidth / 10) * 5, 0),
+    const FollowPathNode endPoint(Vec2((screenWidth / 10) * 5, 0),
                                   80.0f);
     path.emplace_back(endPoint);
     m_gameMap->createMap(path);

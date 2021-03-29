@@ -11,8 +11,7 @@ public:// constructors
   BaseApp()
     :m_timer(Timer()),
     m_deltaTime(0.0f),
-    m_screenWidth(1280u),
-    m_screenHeight(720u)
+    m_screen({ 1280u, 720u })
   {}
 
   virtual ~BaseApp() = default;
@@ -33,9 +32,38 @@ protected:
   */
   virtual int mainLoop() = 0;
 
+  /**
+   * @returns
+   *  The width of the screen.
+   */
+  unsigned int
+  getScreenWidth()const {
+    return m_screen.comp.width;
+  }
+
+
+  /**
+   * @returns
+   *  The height of the screen.
+   */
+  unsigned int
+  getScreenHeight()const {
+    return m_screen.comp.height;
+  }
+
+  union screen
+  {
+    struct components
+    {
+      unsigned int width;
+      unsigned int height;
+    };
+    unsigned int size[2];
+    components comp;
+  };
+
 protected:
   Timer m_timer;
   float m_deltaTime;
-  unsigned int m_screenWidth;
-  unsigned int m_screenHeight;
+  screen m_screen;
 };

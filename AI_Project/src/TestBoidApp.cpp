@@ -36,11 +36,14 @@ TestBoidApp::init()
 
   m_deltaTime = 0.0f;
 
-  m_screenHeight = 1080;
-  m_screenWidth = 1920;
+  m_screen.comp.height = 1080;
+  m_screen.comp.width = 1920;
 
-  const unsigned int one10thOfWidth = m_screenWidth / 10;
-  const unsigned int one10thOfHeight = m_screenHeight / 10;
+  const auto screenWidth = m_screen.comp.width;
+  const auto screenHeight = m_screen.comp.height;
+
+  const unsigned int one10thOfWidth = screenWidth  / 10;
+  const unsigned int one10thOfHeight = screenHeight / 10;
   for( int i = 1; i < 10; ++i )
   {
     const FollowPathNode node(Vec2( one10thOfWidth * i , one10thOfHeight * i),
@@ -53,7 +56,7 @@ TestBoidApp::init()
 
   try
   {
-    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(m_screenWidth, m_screenHeight),
+    m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(screenWidth, screenHeight),
                                                   "Boid test",
                                                   sf::Style::Default);
 
