@@ -7,6 +7,7 @@
 #include "UIStateMachine.h"
 #include "MouseData.h"
 #include <SFML/Audio/Music.hpp> // for sf::Music
+#include "StringSequence.h"
 
 
 namespace RESULT_APP_STAGES {
@@ -57,6 +58,13 @@ class EditorApp final : public BaseApp
   createLoop();
 
  protected:
+  /**
+   *
+   */
+  int
+  introSequence();
+
+
   /**
    * The main process of the Game
    */
@@ -179,9 +187,10 @@ class EditorApp final : public BaseApp
   std::deque< SpriteAtlas > m_spritesAtlases;
 
   /**
-  * Contains all relevant data of the mouse.
-  */
+   * Contains all relevant data of the mouse.
+   */
   MouseData m_mouseData;
+
 
   /** The racer the user selected. */
   std::unique_ptr<Racer> m_userRacer;
@@ -209,5 +218,10 @@ class EditorApp final : public BaseApp
    * Used for all text during the game.
    */
   std::unique_ptr<UIText> m_gameText;
+
+  /**
+   * Contains a sequence of strings to be used in the game.
+   */
+  std::unique_ptr< StringSequence > m_stringSequence;
 };
 

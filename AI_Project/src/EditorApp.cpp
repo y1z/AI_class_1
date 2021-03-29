@@ -223,11 +223,45 @@ EditorApp::createLoop() {
 }
 
 int
+EditorApp::introSequence() {
+
+  const float introSequenceLength = 3.0f;
+  const float changeDelta = introSequenceLength / m_stringSequence->getSequenceSize();
+  float deltaTimeSum = 0.0f;
+  float timeSenceSequenceAdvancement = 0.0f;
+
+  m_gameText->setCharacterSize(66u * 3);
+  m_gameText->m_textString = m_stringSequence->getCurrentString();
+  m_gameText->setPosition({ m_screenWidth / 3.0f, m_screenHeight / 3.0f });
+
+  while (introSequenceLength > deltaTimeSum) {
+    m_timer.StartTiming();
+    handleDraw();
+
+    if (timeSenceSequenceAdvancement >= changeDelta) {
+      m_gameText->setString(m_stringSequence->getNextString());
+      timeSenceSequenceAdvancement = 0.0f;
+    }
+
+    m_timer.EndTiming();
+    m_deltaTime = m_timer.GetResultSecondsFloat();
+    deltaTimeSum += m_deltaTime;
+    timeSenceSequenceAdvancement += m_deltaTime;
+  }
+
+  m_gameText->setString(std::string_view(" 1 / 5 "));
+
+  return 0;
+}
+
+int
 EditorApp::mainLoop() {
   auto& gameMan = GameManager::getInstance();
   gameMan.setupGroup();
 
   setRandomRacerSprites();
+
+  introSequence();
 
   m_music->play();
   m_music->setLoop(true);
@@ -317,6 +351,8 @@ EditorApp::init() {
         return -1;
       }
     }
+
+    m_stringSequence = make_unique<StringSequence>(StringSequence({ "Ready","Set","Go!!!!!!" }));
 
     {
       const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathsToMarioSprites.m_spriteSheet);
@@ -874,7 +910,7 @@ loadLevel3(BaseApp* app) {
 
 int
 loadCharacterMaster(BaseApp* app,
-                    const int32 selectedSpriteAtlas) {
+                    const int64 selectedSpriteAtlas) {
   auto& container = GameManager::getInstance().getAgentContainerRef();
   auto gameApp = reinterpret_cast<EditorApp*>(app);
   gameApp->setRacerSprites(container.size() - 1,
