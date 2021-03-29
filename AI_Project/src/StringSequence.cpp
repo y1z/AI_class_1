@@ -6,14 +6,14 @@ StringSequence::StringSequence()
   : m_index(0u)
 {}
 
-StringSequence::StringSequence(const std::initializer_list<std::string> initList)
+StringSequence::StringSequence(const std::initializer_list<std::string>& initList)
   : StringSequence()
 {
   init(initList);
 }
 
 void
-StringSequence::init(const std::initializer_list<std::string> initList) {
+StringSequence::init(const std::initializer_list<std::string>& initList) {
   if (!m_sequence.empty()) {
     m_sequence.clear();
   }

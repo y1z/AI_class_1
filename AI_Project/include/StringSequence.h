@@ -9,13 +9,13 @@ class StringSequence
 {
  public:
   StringSequence();
-  StringSequence(const std::initializer_list<std::string> initList);
+  StringSequence(const std::initializer_list<std::string>& initList);
 
   /**
    * Initializes the sequence.
    */
   void
-  init(const std::initializer_list<std::string> initList);
+  init(const std::initializer_list<std::string>& initList);
 
   /**
    * @return
