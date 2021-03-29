@@ -45,30 +45,64 @@ public:
   bool
   init(const UITextDescriptor& descriptor);
 
+  /**
+   * @returns
+   *  The position of the text.
+   */
   sf::Vector2f
   getPosition()const;
 
+
+  /**
+   * @returns
+   *  The color used by the filling of the text.
+   */
   sf::Color
   getFillColor()const;
 
+
+  /**
+   * @returns
+   *  The color used by the outline of the text.
+   */
   sf::Color
   getOuterColor()const;
 
+  /**
+   * @returns
+   *  The size of the individual characters.
+   */
   unsigned int
   getCharacterSize()const;
 
+  /**
+   * Controls the position of the text.
+   */
   void
   setPosition(const sf::Vector2f& position);
 
+  /**
+   * The color that fills the text.
+   */
   void
   setFillColor(const sf::Color color);
 
+  /**
+   * Set the color used for the outline of the text.
+   */
   void
   setOuterColor(const sf::Color color);
 
+
+  /**
+   * Set the size of the individual characters.
+   */
   void
   setCharacterSize(unsigned int newSize);
 
+  /**
+   * Set if the text is regular, italicized or bold.
+   */
   void
   setTextStyle(sf::Text::Style newStyle);
 
