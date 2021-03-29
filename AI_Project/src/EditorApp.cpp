@@ -9,7 +9,6 @@
 #include "util.h"
 #include "GlobalValues.h"
 #include "SpriteSheetAndPortriat.h"
-//#include "UIText.h"
 
 namespace fs = std::filesystem;
 
@@ -102,7 +101,7 @@ struct DataOpenFile
     m_openFileSettings.hwndOwner = nullptr;
     m_openFileSettings.lpstrFilter = fileTypes;
     m_openFileSettings.nFilterIndex = 1;
-       // save the current directory so we don't change it later
+    // save the current directory so we don't change it later
     GetCurrentDirectoryA((m_currentDirectory.size() * sizeof(char)) - 1,
                          m_currentDirectory.data());
   }
@@ -188,8 +187,6 @@ EditorApp::closeWindow() {
 int
 EditorApp::createLoop() {
 
-  const float minimumTime = 0.18f;
-  float currentTime = 0.0f;
   m_gameMap->clear();
   {
     auto& gm = GameManager::getInstance();
@@ -198,6 +195,10 @@ EditorApp::createLoop() {
         elem.getBoid().m_data.m_position = Vec2(-1337.0f, -221321321.0f);
       }
   }
+
+
+  const float minimumTime = 0.18f;
+  float currentTime = 0.0f;
   while (m_window->isOpen()) {
 
     m_timer.StartTiming();
@@ -225,7 +226,6 @@ int
 EditorApp::mainLoop() {
   auto& gameMan = GameManager::getInstance();
   gameMan.setupGroup();
-  auto& container = gameMan.getAgentContainerRef();
 
   setRandomRacerSprites();
 
@@ -313,6 +313,7 @@ EditorApp::init() {
       m_music->setVolume(40.0f);
       const auto musicPath = fs::path(m_initialPath).append(s_pathToMusic);
       if (!m_music->openFromFile(musicPath.generic_string())) {
+        throw new std::runtime_error("can NOT load music");
         return -1;
       }
     }
@@ -494,40 +495,43 @@ UISceneDesc
 EditorApp::createCharacterSelectScene() const {
   UISceneDesc characterSelectScene;
   {
-    const UIRectangleDesc marioRetangle(200,
+    const auto oneThirdOfScreen = m_screenWidth / 3u;
+    const UIRectangleDesc marioRectangle(200,
+                                         200,
+                                         sf::Vector2f(oneThirdOfScreen, m_screenHeight / 2.0f),
+                                         s_pathsToMarioSprites.m_portriat);
+
+    const sf::Vector2f rectangleDelta = sf::Vector2f(marioRectangle.width * 1.5f, 0.f);
+
+    const UIRectangleDesc peachRectangle(200,
+                                         200,
+                                         marioRectangle.position + rectangleDelta,
+                                         s_pathsToPeachSprites.m_portriat);
+
+
+    const UIRectangleDesc kongRectangle(200,
                                         200,
-                                        sf::Vector2f(m_screenWidth / 2, 100),
-                                        s_pathsToMarioSprites.m_portriat);
+                                        peachRectangle.position + rectangleDelta,
+                                        s_pathsToKongSprites.m_portriat);
 
-    const UIRectangleDesc peachRetangle(200,
-                                        200,
-                                        sf::Vector2f(m_screenWidth / 2, 300),
-                                        s_pathsToPeachSprites.m_portriat);
+    const UIRectangleDesc yoshiRectangle(200,
+                                         200,
+                                         kongRectangle.position + rectangleDelta,
+                                         s_pathsToYoshiSprites.m_portriat);
 
-
-    const UIRectangleDesc kongRetangle(200,
-                                       200,
-                                       sf::Vector2f(m_screenWidth / 2, 500),
-                                       s_pathsToKongSprites.m_portriat);
-
-    const UIRectangleDesc yoshiRetangle(200,
-                                        200,
-                                        sf::Vector2f(m_screenWidth / 2, 700),
-                                        s_pathsToYoshiSprites.m_portriat);
-
-    characterSelectScene.AddElement(UIRectangle(marioRetangle),
+    characterSelectScene.AddElement(UIRectangle(marioRectangle),
                                     UIScene::NOMORE_SCENES_ID,
                                     loadCharacterMario);
 
-    characterSelectScene.AddElement(UIRectangle(peachRetangle),
+    characterSelectScene.AddElement(UIRectangle(peachRectangle),
                                     UIScene::NOMORE_SCENES_ID,
                                     loadCharacterPeach);
 
-    characterSelectScene.AddElement(UIRectangle(kongRetangle),
+    characterSelectScene.AddElement(UIRectangle(kongRectangle),
                                     UIScene::NOMORE_SCENES_ID,
                                     loadCharacterKong);
 
-    characterSelectScene.AddElement(UIRectangle(yoshiRetangle),
+    characterSelectScene.AddElement(UIRectangle(yoshiRectangle),
                                     UIScene::NOMORE_SCENES_ID,
                                     loadCharacterYoshi);
   }
@@ -548,11 +552,9 @@ EditorApp::handleDraw() {
   gm.drawRacers(*m_window);
   {
     const auto boidData = containter.back().getBoidData();
-    const auto origin = boidData.m_shape.getOrigin();
     const auto bounds = boidData.m_shape.getGlobalBounds();
     const sf::Vector2f position(bounds.left - (bounds.width / 2),
                                 bounds.top - (bounds.height / 2));
-    //m_userCircle->setOrigin(origin.x, origin.y);
     m_userCircle->setPosition(position.x, position.y);
     m_window->draw(*m_userCircle);
     m_gameText->draw(m_window.get());
