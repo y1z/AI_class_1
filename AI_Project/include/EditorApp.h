@@ -1,12 +1,13 @@
 #pragma once
+#include "BaseApp.h"
 #include <memory> // std::unique_ptr
 #include <filesystem> // std::filesystem::path
-#include "BaseApp.h"
+#include <SFML/Audio/Music.hpp> // for sf::Music
+
 #include "SpriteAtlas.h"
 #include "GameMap.h"
 #include "UIStateMachine.h"
 #include "MouseData.h"
-#include <SFML/Audio/Music.hpp> // for sf::Music
 #include "StringSequence.h"
 
 
