@@ -6,14 +6,14 @@ StringSequence::StringSequence()
   : m_index(0u)
 {}
 
-StringSequence::StringSequence(const std::initializer_list<std::string>& initList)
+StringSequence::StringSequence(const std::initializer_list<std::string> initList)
   : StringSequence()
 {
   init(initList);
 }
 
 void
-StringSequence::init(const std::initializer_list<std::string>& initList) {
+StringSequence::init(const std::initializer_list<std::string> initList) {
   if (!m_sequence.empty()) {
     m_sequence.clear();
   }
@@ -26,10 +26,26 @@ StringSequence::getCurrentString() const {
   return m_sequence[m_index];
 }
 
+std::string
+StringSequence::getCurrentStringCopy() const {
+  const std::string result(m_sequence[m_index]);
+  return result;
+}
+
 const std::string&
 StringSequence::getNextString() {
   advanceSequence();
   return getCurrentString();
+}
+
+std::string
+StringSequence::getNextStringCopy() {
+  return std::string(getNextString());
+}
+
+uint64_t
+StringSequence::getSequenceSize() const {
+  return m_sequence.size();
 }
 
 uint64_t
