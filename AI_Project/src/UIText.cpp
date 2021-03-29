@@ -121,6 +121,7 @@ UIText::setCharacterSize(unsigned int newSize) {
 void
 UIText::setString(std::string_view newString) {
   m_textString = newString.data();
+  m_text->setString(m_textString);
 }
 
 void
