@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\WindowConversion.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\FrameData.cpp" />
     <ClCompile Include="src\GameMap.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="include\UIStateWaiting.h" />
     <ClInclude Include="include\UIText.h" />
     <ClInclude Include="include\Vec2.h" />
+    <ClInclude Include="include\WindowConversion.h" />
     <ClInclude Include="util\BaseApp.h" />
     <ClInclude Include="util\baseState.h" />
     <ClInclude Include="util\GlobalValues.h" />
