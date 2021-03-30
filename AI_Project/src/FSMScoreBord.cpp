@@ -34,7 +34,7 @@ FSMScoreBord::init(UiManager& UI)
     ++i;
   }
 
-  m_currentLapCount.m_currentCheckPoints = gm.getPathContainerRef().size();
+  m_currentLapCount.m_checkPointsRequiredForFullLap = gm.getPathContainerRef().size();
 
 }
 
