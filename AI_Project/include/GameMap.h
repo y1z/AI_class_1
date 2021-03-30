@@ -121,6 +121,9 @@ private:
    */
   visualsContainer m_visuals;
 
-  LapCount m_lapCount;
+  /**
+   * Keeps track of the requirements for finishing a track.
+   */
+  LapCount m_requirements;
 };
 

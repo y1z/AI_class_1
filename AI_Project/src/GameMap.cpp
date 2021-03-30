@@ -37,12 +37,8 @@ GameMap::loadMap(const std::filesystem::path& pathToMap) {
       createMap(std::move(newPath));
     }
 
-
-
     return true;
   }
-
-
 
   return false;
 }
@@ -99,7 +95,7 @@ GameMap::addNode(const FollowPathNode& newNode) {
   templateCircle.setPosition(newNode.m_position.x, newNode.m_position.y);
 
   auto temp = std::make_unique<sf::CircleShape>(templateCircle);
-  m_lapCount.m_totalCheckPoint += 1u;
+  m_requirements.m_totalCheckPoint += 1u;
   m_visuals.emplace_back(std::move(temp));
 }
 
