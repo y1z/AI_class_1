@@ -46,6 +46,9 @@ public:
   void
   createMap(std::vector<FollowPathNode>&& mapData);
 
+  /**
+   * Adds a node to the game map.
+   */
   void
   addNode(const FollowPathNode& newNode);
 
@@ -117,5 +120,7 @@ private:
    * Contains the data for drawing the Map
    */
   visualsContainer m_visuals;
+
+  LapCount m_lapCount;
 };
 
