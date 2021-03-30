@@ -85,14 +85,16 @@ struct FollowPath
 
 struct LapCount
 {
-  bool operator <(const LapCount& other) const
+  constexpr bool
+  operator <(const LapCount& other) const
   {
     const bool IsALapAhead = m_fullLap < other.m_fullLap;
     const bool IsACheckpointAhead = (m_totalCheckPoint < other.m_totalCheckPoint);
     return IsALapAhead || IsACheckpointAhead;
   }
 
-  bool operator ==(const LapCount& other) const
+  constexpr bool
+  operator ==(const LapCount& other) const
   {
     const bool sameLaps = (m_fullLap == other.m_fullLap);
     const bool sameCheckPoints = m_totalCheckPoint == other.m_totalCheckPoint;
@@ -100,11 +102,17 @@ struct LapCount
     return  sameLaps && sameCheckPoints;
   }
 
-  bool operator >(const LapCount& other) const
+  constexpr bool
+  operator !=(const LapCount& other) const
   {
-    const bool isALapBehind = (m_fullLap > other.m_fullLap);
-    const bool isACheckpointBehind = m_totalCheckPoint > other.m_totalCheckPoint;
-    return isALapBehind || isACheckpointBehind;
+    return !this->operator==(other);
+  }
+
+
+  constexpr bool
+  operator >(const LapCount& other) const
+  {
+    return !this->operator<(other);
   }
 
 
