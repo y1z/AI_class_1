@@ -85,6 +85,25 @@ struct FollowPath
 
 struct LapCount
 {
+  LapCount() = default;
+  LapCount(const LapCount&) = default;
+  LapCount(LapCount&&) noexcept = default;
+  LapCount(const uint32 fullLap,
+           const uint32 totalCheckPoints,
+           const uint32 currentCheckPoints)
+    : m_fullLap(fullLap),
+      m_totalCheckPoint(totalCheckPoints),
+      m_currentCheckPoints(currentCheckPoints)
+  {}
+  ~LapCount() = default;
+
+  LapCount&
+  operator=(const LapCount&) = default;
+
+
+  LapCount&
+  operator=(LapCount&&) noexcept = default;
+
   constexpr bool
   operator <(const LapCount& other) const
   {
