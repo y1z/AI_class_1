@@ -296,6 +296,60 @@ namespace util {
   }
 
 
+
+  /**
+   * @returns
+   *  A string-view that contains the numbers 0..9
+   */
+  constexpr static std::string_view
+  stringViewWithNumbers() {
+    return "0123456789";
+  }
+
+  /**
+   * @returns true when the character passed into the function is a number
+   */
+  constexpr static bool
+  isNumber(const char character) {
+    constexpr auto numbers = stringViewWithNumbers();
+    for (size_t i = 0u; i < numbers.size(); ++i) {
+      if (numbers[i] == character) { return true; }
+    }
+
+    return false;
+  }
+
+  /**
+   * @returns
+   *  A view into the number of the string
+   */
+  static std::string_view
+  findFirstNumberInString(const std::string_view stringWithNumbers) {
+    constexpr auto numbers = stringViewWithNumbers();
+    const size_t firstNumberPos = stringWithNumbers.find(numbers);
+
+    if (firstNumberPos != std::string_view::npos) {
+
+      const size_t stringLen = stringWithNumbers.length();
+      size_t  lastNumberPos = firstNumberPos;
+      for (; lastNumberPos < stringLen; ++lastNumberPos) {
+        bool isCharNumber = false;
+
+        if (isCharNumber)
+          continue;
+        else {
+
+        }
+
+      }
+
+      const auto* pointerToFistNumber = &stringWithNumbers[firstNumberPos];
+
+    }
+
+    return "error";
+  }
+
 }
 
 
