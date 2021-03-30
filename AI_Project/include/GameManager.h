@@ -35,14 +35,6 @@ public: // operators
   operator=(GameManager&&) = delete;
 
 public:// functions
-
-  /**
-   * Initializes all the necessary data for created a race.
-   */
-  bool
-  init(const LapCount lapRequirements,
-       const std::optional< containerType >& agentContainer = std::nullopt,
-       const std::optional< FollowPath >& pathToFollow = std::nullopt);
   /**
   * @brief For de-initializing the game-manager.
   */
