@@ -319,32 +319,66 @@ namespace util {
     return false;
   }
 
+
+  /**
+   * @returns true if the index has a number
+   */
+  static bool
+  isNumber(const sf::String& string,
+           uint64 index) {
+    static const sf::String numbers(stringViewWithNumbers().data());
+    for (size_t i = 0u; i < numbers.getSize(); ++i) {
+      if (numbers[i] == string[index]) { return true; }
+    }
+
+    return false;
+  }
+
+  /**
+   * Finds the index of a character that represents a number.
+   */
+  static uint64
+  findNumber(const sf::String& string,
+             const uint64 start = 0u) {
+
+    for (uint64 i = start; i < string.getSize(); ++i) {
+
+      if (isNumber(string, i)) {
+        return i;
+      }
+    }
+
+    return std::numeric_limits<uint64>::max();
+  }
   /**
    * @returns
-   *  A view into the number of the string
+   *  A view into the number of the string.
+   *
+   * @param[in] stringWitNumbers
+   * A string
    */
   static std::string_view
   findFirstNumberInString(const std::string_view stringWithNumbers) {
     constexpr auto numbers = stringViewWithNumbers();
     const size_t firstNumberPos = stringWithNumbers.find(numbers);
 
-    if (firstNumberPos != std::string_view::npos) {
-
+    if (std::string_view::npos != firstNumberPos) {
       const size_t stringLen = stringWithNumbers.length();
-      size_t  lastNumberPos = firstNumberPos;
-      for (; lastNumberPos < stringLen; ++lastNumberPos) {
-        bool isCharNumber = false;
+      size_t lastNumberPos = firstNumberPos;
 
+      for (; lastNumberPos < stringLen; ++lastNumberPos) {
+        const bool isCharNumber = isNumber(stringWithNumbers[lastNumberPos]);
         if (isCharNumber)
           continue;
         else {
-
+          break;
         }
 
       }
 
-      const auto* pointerToFistNumber = &stringWithNumbers[firstNumberPos];
+      const auto pointerToFistNumber = &stringWithNumbers[firstNumberPos];
 
+      return std::string_view(pointerToFistNumber, lastNumberPos - firstNumberPos);
     }
 
     return "error";
