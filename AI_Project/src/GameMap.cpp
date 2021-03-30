@@ -5,13 +5,20 @@
 #include <fstream>
 
 namespace fs = std::filesystem;
+using std::make_unique;
 
 GameMap::GameMap()
-  :m_positionData({}),
-  m_visuals({}),
-  m_requirements(LapCount(5, 0, 0))
+  : m_positionData({}),
+    //m_visuals(make_unique<sf::Shape>()),
+    m_requirements(LapCount(5, 0, 0))
 
 {}
+
+GameMap::~GameMap()
+{
+  m_positionData.clear();
+  m_visuals.clear();
+}
 
 bool
 GameMap::loadMap(const std::filesystem::path& pathToMap) {
@@ -115,6 +122,16 @@ GameMap::clear() {
 LapCount
 GameMap::getLapRequiements() const {
   return m_requirements;
+}
+
+const GameMap::mapPathContainer&
+GameMap::getPathContainer()const {
+  return m_positionData;
+}
+
+const GameMap::visualsContainer&
+GameMap::getVisualContainer()const {
+  return m_visuals;
 }
 
 GameMap::mapPathContainer::iterator

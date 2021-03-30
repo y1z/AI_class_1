@@ -13,6 +13,11 @@ public:
   using visualsContainer = std::vector<std::unique_ptr<sf::Shape>>;
 public:
   GameMap();
+  GameMap(GameMap&&) noexcept = default;
+  ~GameMap();
+
+  GameMap&
+  operator=(GameMap&&) noexcept = default;
 
   /**
    * @brief loads the map from a file.
@@ -66,6 +71,12 @@ public:
    */
   LapCount
   getLapRequiements()const;
+
+  const mapPathContainer&
+  getPathContainer()const;
+
+  const visualsContainer&
+  getVisualContainer()const;
 
 
   /**

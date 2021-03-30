@@ -1,9 +1,20 @@
 #include "GameManager.h"
 #include "util.h"
 #include "Racer.h"
+#include "GameMap.h"
 
 #include <cassert>
 
+
+bool
+GameManager::init(const GameMap& gameMap) {
+
+  auto requiements = gameMap.getLapRequiements();
+  const auto totalCheckpoints = gameMap.getPathContainer().size() * requiements .m_fullLap;
+  requiements.m_checkPointsRequiredForFullLap = gameMap.getPathContainer().size();
+  m_lapRequirements = requiements;
+  return true;
+}
 
 void
 GameManager::OnShutDown()
@@ -94,13 +105,18 @@ GameManager::addNodeToGlobalPath(const FollowPathNode& node) {
   m_path.m_vertexArray.append(sf::Vertex(util::vec2ToVector2f(node.m_position),
                               sf::Color::Red));
 
-  m_lapRequirements.m_currentCheckPoints += 1u;
+  m_lapRequirements.m_checkPointsRequiredForFullLap += 1u;
 }
 
 void
 GameManager::setLapTotal(const uint32 requiredLapCount)
 {
   m_lapRequirements.m_fullLap = requiredLapCount;
+}
+
+void
+GameManager::setLapCount(const LapCount required) {
+  m_lapRequirements = required;
 }
 
 bool

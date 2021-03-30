@@ -93,7 +93,7 @@ struct LapCount
            const uint32 currentCheckPoints)
     : m_fullLap(fullLap),
       m_totalCheckPoint(totalCheckPoints),
-      m_currentCheckPoints(currentCheckPoints)
+      m_checkPointsRequiredForFullLap(currentCheckPoints)
   {}
   ~LapCount() = default;
 
@@ -137,7 +137,7 @@ struct LapCount
 
   uint32 m_fullLap = 0u;
   uint32 m_totalCheckPoint = 0u;
-  uint32 m_currentCheckPoints = 0u;
+  uint32 m_checkPointsRequiredForFullLap = 0u;
 };
 
 

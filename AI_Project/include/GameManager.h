@@ -8,6 +8,7 @@
 #include <optional>
 
 class SpriteAtlas;
+class GameMap;
 
 /**
 * @brief keeps track of manages global data related with the game must be initialized(start up)
@@ -18,6 +19,8 @@ class GameManager final : public soModule<GameManager>
 public:
   using containerType = RacerContainer;
   using AgentType = Racer;
+
+  friend class GameMap;
 public: // constructors
 
   GameManager() = default;
@@ -35,6 +38,14 @@ public: // operators
   operator=(GameManager&&) = delete;
 
 public:// functions
+
+
+  /**
+   * An init method
+   */
+  bool
+  init(const GameMap& gameMap);
+
   /**
   * @brief For de-initializing the game-manager.
   */
@@ -88,6 +99,12 @@ public:// functions
    */
   void
   setLapTotal(const uint32 requiredLapCount);
+
+  /**
+   * Sets the condition for
+   */
+  void
+  setLapCount(const LapCount required);
 
   /**
   * @brief removes a boid from the game.

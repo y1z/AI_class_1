@@ -61,7 +61,7 @@ Racer::getCheckpointTotal() const
 uint32
 Racer::getCurrentLapCheckPoint() const
 {
-  return m_lapCount.m_currentCheckPoints;
+  return m_lapCount.m_checkPointsRequiredForFullLap;
 }
 
 size_t
@@ -133,15 +133,15 @@ Racer::destroy()
 void
 Racer::updateLapCount()
 {
-  m_lapCount.m_currentCheckPoints += 1u;
+  m_lapCount.m_checkPointsRequiredForFullLap += 1u;
   m_lapCount.m_totalCheckPoint += 1u;
   GameManager& gm = GameManager::getInstance();
   const LapCount lapRequirements = gm.getLapRequirements();
   const bool hasFinishedLap =
-    (m_lapCount.m_currentCheckPoints >= lapRequirements.m_currentCheckPoints);
+    (m_lapCount.m_checkPointsRequiredForFullLap >= lapRequirements.m_checkPointsRequiredForFullLap);
   if( hasFinishedLap )
   {
-    m_lapCount.m_currentCheckPoints = 0u;
+    m_lapCount.m_checkPointsRequiredForFullLap = 0u;
     m_lapCount.m_fullLap += 1u;
   }
 }
