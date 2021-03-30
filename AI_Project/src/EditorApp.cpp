@@ -10,6 +10,7 @@
 #include "GlobalValues.h"
 #include "SpriteSheetAndPortriat.h"
 #include "WindowConversion.h"
+#include <charconv>
 
 namespace fs = std::filesystem;
 
@@ -225,18 +226,17 @@ EditorApp::createLoop() {
 
 int
 EditorApp::introSequence() {
-
-  const float introSequenceLength = 3.0f;
-  const float changeDelta = introSequenceLength / m_stringSequence->getSequenceSize();
-  float deltaTimeSum = 0.0f;
-  float timeSenceSequenceAdvancement = 0.0f;
-
   const auto screenWidth = m_screen.comp.width;
   const auto screenHeight = m_screen.comp.height;
 
   m_gameText->setCharacterSize(66u * 3);
   m_gameText->m_textString = m_stringSequence->getCurrentString();
   m_gameText->setPosition({ screenWidth / 3.0f, screenHeight / 3.0f });
+
+  const float introSequenceLength = 3.0f;
+  const float changeDelta = introSequenceLength / m_stringSequence->getSequenceSize();
+  float deltaTimeSum = 0.0f;
+  float timeSenceSequenceAdvancement = 0.0f;
 
   while (introSequenceLength > deltaTimeSum) {
     m_timer.StartTiming();
@@ -278,6 +278,9 @@ EditorApp::mainLoop() {
 
     m_timer.StartTiming();
     handleRacers();
+
+    const RESULT_APP_STAGES::E isCounterWorking = handleCounter();
+    assert(RESULT_APP_STAGES::kNO_ERROR == isCounterWorking);
 
     handleInput();
 
@@ -323,6 +326,10 @@ EditorApp::init() {
 
     GameManager::StartUp(nullptr);
 
+    LapCount raceRequirements;
+    raceRequirements.m_fullLap = 5u;
+
+    GameManager::getInstance().init(raceRequirements);
     std::srand(std::random_device{}());
 
     m_window = make_unique<sf::RenderWindow>(sf::VideoMode(screenWidth, screenHeight),
@@ -364,7 +371,6 @@ EditorApp::init() {
       const auto musicPath = fs::path(m_initialPath).append(s_pathToMusic);
       if (!m_music->openFromFile(musicPath.generic_string())) {
         throw new std::runtime_error("can NOT load music");
-        return -1;
       }
     }
 
@@ -383,7 +389,7 @@ EditorApp::init() {
           !createAtlas(pathToAtlas3, s_pathsToYoshiSprites.m_index)  ||
           !createAtlas(pathToAtlas4, s_pathsToKongSprites.m_index))
       {
-        return -1;
+        throw new std::runtime_error("could not initialize atlas");
       }
       std::sort(begin(m_spritesAtlases), end(m_spritesAtlases));
     }
@@ -677,6 +683,50 @@ EditorApp::handleRacers() {
   }
 
   return RESULT_APP_STAGES::E::kERROR;
+}
+
+RESULT_APP_STAGES::E
+EditorApp::handleCounter() {
+
+  auto& gm = GameManager::getInstance();
+
+  const auto comp = [](const Racer& lhv, const Racer& rhv) {
+    return lhv.m_lapCount < rhv.m_lapCount;
+  };
+
+  const auto& container = gm.getAgentContainerRef();
+  const auto iter = std::max_element(begin(container), end(container), comp);
+
+  char buffer[20]{'\0'};
+  const size_t bufferSize = sizeof(buffer);
+
+  const auto numerator = std::to_chars(buffer, buffer + bufferSize, (*iter).m_lapCount.m_fullLap);
+
+  if (std::errc() != numerator.ec) {
+    return RESULT_APP_STAGES::kERROR;
+  }
+
+  {
+    std::cout << m_gameText->m_textString.toAnsiString() << '\n';
+    const size_t firstNumber = util::findNumber(m_gameText->m_textString);
+
+    m_gameText->m_textString.replace(firstNumber, std::strlen(buffer), buffer);
+
+    std::memset(buffer, '\0', bufferSize);
+
+    const LapCount requirements = gm.getLapRequirements();
+    const auto denumerator = std::to_chars(buffer, buffer + bufferSize, requirements.m_fullLap);
+
+    if (std::errc() != denumerator.ec) {
+      return RESULT_APP_STAGES::kERROR;
+    }
+    const size_t middle = m_gameText->m_textString.find('/', firstNumber);
+    const size_t lastNumber = util::findNumber(m_gameText->m_textString, middle);
+
+    m_gameText->m_textString.replace(lastNumber, std::strlen(buffer), buffer);
+
+  }
+  return RESULT_APP_STAGES::kNO_ERROR;
 }
 
 bool

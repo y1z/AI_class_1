@@ -132,6 +132,12 @@ class EditorApp final : public BaseApp
   handleRacers();
 
   /**
+   * Updates the logic for keeping track of the counters for the first place racer.
+   */
+  RESULT_APP_STAGES::E
+  handleCounter();
+
+  /**
    * @brief creates a sprite atlas for the characters of the game.
    */
   bool
@@ -224,5 +230,6 @@ class EditorApp final : public BaseApp
    * Contains a sequence of strings to be used in the game.
    */
   std::unique_ptr< StringSequence > m_stringSequence;
+
 };
 
