@@ -6,6 +6,13 @@
 
 namespace fs = std::filesystem;
 
+GameMap::GameMap()
+  :m_positionData({}),
+  m_visuals({}),
+  m_requirements(LapCount(5, 0, 0))
+
+{}
+
 bool
 GameMap::loadMap(const std::filesystem::path& pathToMap) {
   bool const isValidPath = !fs::is_directory(pathToMap);
@@ -103,6 +110,11 @@ void
 GameMap::clear() {
   m_positionData.clear();
   m_visuals.clear();
+}
+
+LapCount
+GameMap::getLapRequiements() const {
+  return m_requirements;
 }
 
 GameMap::mapPathContainer::iterator

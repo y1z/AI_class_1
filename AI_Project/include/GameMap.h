@@ -12,6 +12,7 @@ public:
   using mapPathContainer = std::vector<FollowPathNode>;
   using visualsContainer = std::vector<std::unique_ptr<sf::Shape>>;
 public:
+  GameMap();
 
   /**
    * @brief loads the map from a file.
@@ -58,6 +59,13 @@ public:
    */
   void
   clear();
+
+  /**
+   * @returns
+   *  The requirements for finishing the race.
+   */
+  LapCount
+  getLapRequiements()const;
 
 
   /**
