@@ -5,6 +5,29 @@
 #include <cassert>
 
 
+bool
+GameManager::init(const LapCount lapRequirements,
+                  const std::optional<containerType>& agentContainer,
+                  const std::optional<FollowPath>& pathToFollow) {
+
+  if (LapCount() == lapRequirements) {
+    return false;
+  }
+
+  m_lapRequirements = lapRequirements;
+
+  if (agentContainer.has_value()) {
+    m_groupAgents = *agentContainer;
+  }
+
+
+  if (pathToFollow.has_value()) {
+    m_path = *pathToFollow;
+  }
+
+  return true;
+}
+
 void
 GameManager::OnShutDown()
 {

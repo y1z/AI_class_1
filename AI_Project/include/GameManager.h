@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <deque>
+#include <optional>
 
 class SpriteAtlas;
 
@@ -35,6 +36,13 @@ public: // operators
 
 public:// functions
 
+  /**
+   * Initializes all the necessary data for created a race.
+   */
+  bool
+  init(const LapCount lapRequirements,
+       const std::optional< containerType >& agentContainer = std::nullopt,
+       const std::optional< FollowPath >& pathToFollow = std::nullopt);
   /**
   * @brief For de-initializing the game-manager.
   */
@@ -83,6 +91,9 @@ public:// functions
   addNodeToGlobalPath(const FollowPathNode& node);
 
 
+  /**
+   * set the amount of laps to finished the race.
+   */
   void
   setLapTotal(const uint32 requiredLapCount);
 
