@@ -111,7 +111,9 @@ class EditorApp final : public BaseApp
   UISceneDesc
   createCreditScene()const;
 
-
+  /**
+   * Creates the character select scene.
+   */
   UISceneDesc
   createCharacterSelectScene()const;
 
@@ -145,6 +147,13 @@ class EditorApp final : public BaseApp
   bool
   createAtlas(const std::filesystem::path& pathToAtlas,
               const uint64 index);
+
+  /**
+   * @returns
+   *  A reference to the racer in first place.
+   */
+  const Racer&
+  getRacerInFirstPlace()const;
 
  public:
   /**

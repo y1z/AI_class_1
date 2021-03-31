@@ -277,13 +277,18 @@ EditorApp::mainLoop() {
 
   m_music->play();
   m_music->setLoop(true);
+  uint32 currentLap = 0;
   while (m_window->isOpen()) {
-
     m_timer.StartTiming();
     handleRacers();
 
     const auto isCounterWorking = handleCounter();
     assert(RESULT_APP_STAGES::kNO_ERROR == isCounterWorking);
+
+    if (currentLap != getRacerInFirstPlace().m_lapCount.m_fullLap) {
+      m_soundPlayer->playSound();
+      ++currentLap;
+    }
 
     handleInput();
 
@@ -376,6 +381,7 @@ EditorApp::init() {
       m_soundPlayer = make_unique<SoundPlayer>();
       m_soundPlayer->setVolume(40.0f);
       const auto soundPath = fs::path(m_initialPath).append(s_pathToSound);
+
       if (!m_soundPlayer->loadSoundFile(soundPath)) {
         throw new std::runtime_error("can NOT load sound effects");
       }
@@ -693,19 +699,12 @@ EditorApp::handleRacers() {
 RESULT_APP_STAGES::E
 EditorApp::handleCounter() {
 
-  auto& gm = GameManager::getInstance();
-
-  const auto comp = [](const Racer& lhv, const Racer& rhv) {
-    return lhv.m_lapCount < rhv.m_lapCount;
-  };
-
-  const auto& container = gm.getAgentContainerRef();
-  const auto iter = std::max_element(begin(container), end(container), comp);
+  const auto& racerRef = getRacerInFirstPlace();
 
   char buffer[20]{'\0'};
   const size_t bufferSize = sizeof(buffer);
 
-  const auto numerator = std::to_chars(buffer, buffer + bufferSize, (*iter).m_lapCount.m_fullLap);
+  const auto numerator = std::to_chars(buffer, buffer + bufferSize, racerRef.m_lapCount.m_fullLap);
 
   if (std::errc() != numerator.ec) {
     return RESULT_APP_STAGES::kERROR;
@@ -761,6 +760,20 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas,
   }
 
   return isAtlasInitialized;
+}
+
+const Racer&
+EditorApp::getRacerInFirstPlace() const {
+
+  auto& gm = GameManager::getInstance();
+  const auto& container = gm.getAgentContainerRef();
+
+  const auto comp = [](const Racer& lhv, const Racer& rhv) {
+    return lhv.m_lapCount < rhv.m_lapCount;
+  };
+  const auto iter = std::max_element(begin(container), end(container), comp);
+
+  return (*iter);
 }
 
 void
