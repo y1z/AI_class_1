@@ -61,6 +61,16 @@ SpriteAtlas::getIndex() const {
   return m_index;
 }
 
+const AtlasSegment&
+SpriteAtlas::getSegmentWidthSimilerAngle(const float radiansAngle) const {
+
+  for (auto& segment : m_segments) {
+  }
+
+
+  return AtlasSegment();
+}
+
 void
 SpriteAtlas::moveSprite(const Vec2& offset,
                         const size_t index) {

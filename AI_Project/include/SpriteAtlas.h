@@ -50,6 +50,15 @@ class SpriteAtlas
   uint64
   getIndex()const;
 
+
+  /**
+   * @returns
+   *  A reference to the atlasSegment with the rotation that's closest to the
+   *  given angle.
+   */
+  const AtlasSegment&
+  getSegmentWidthSimilerAngle(const float radiansAngle)const;
+
   /** @brief move a individual sprite. */
   void
   moveSprite(const Vec2& offset,
