@@ -1,9 +1,16 @@
 #include "RotationSegment.h"
 #include <cmath>
+#include "util.h"
+
 
 float
 RotationSegment::getRotationDelta() const {
   return end - start;
+}
+
+bool
+RotationSegment::isInRange(const float radians) const {
+  return util::isInRange(std::min(end, start), std::max(end, start), radians);
 }
 
 RotationSegment&

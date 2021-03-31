@@ -18,6 +18,13 @@ struct RotationSegment {
 
   /**
    * @returns
+   *  true when the parameter passed in, is within the range of the RotationSegment.
+   */
+  bool
+  isInRange(const float radians)const;
+
+  /**
+   * @returns
    *  The rotation after being altered.
    */
   RotationSegment&
