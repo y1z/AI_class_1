@@ -16,6 +16,14 @@ struct RotationSegment {
   float
   getRotationDelta()const;
 
+
+  /**
+   * @returns
+   *  The delta between the variables 'start' and 'end'.
+   */
+  float
+  getDifferenceFrom(const float radians)const;
+
   /**
    * @returns
    *  true when the parameter passed in, is within the range of the RotationSegment.
