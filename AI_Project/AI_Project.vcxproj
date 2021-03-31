@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\SoundPlayer.cpp" />
     <ClCompile Include="src\WindowConversion.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\FrameData.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="include\GameMap.h" />
     <ClInclude Include="include\MouseData.h" />
     <ClInclude Include="include\RotationSegment.h" />
+    <ClInclude Include="include\SoundPlayer.h" />
     <ClInclude Include="include\SpriteAtlas.h" />
     <ClInclude Include="include\Edge2D.h" />
     <ClInclude Include="include\Racer.h" />
