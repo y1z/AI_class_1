@@ -188,7 +188,7 @@ struct BoidDescriptor
     m_mass(0.0005f),
     m_boidSize(30.0f),
     m_state(StateType::Idle),
-    m_nodesReached(0u),
+    m_hasReachedNode(0u),
     m_isWandering(false),
     m_isFollowingPath(false),
     m_cycleFollowPath(false),
@@ -392,7 +392,7 @@ struct BoidDescriptor
   /**
    * @brief count the amount of nodes reached.
    */
-  uint32 m_nodesReached;
+  bool m_hasReachedNode;
 
   /**
   * @brief keeps track if the boid is wandering.
