@@ -57,7 +57,7 @@ class SpriteAtlas
    *  given angle.
    */
   const AtlasSegment&
-  getSegmentWidthSimilerAngle(const float radiansAngle)const;
+  getSegmentClosestAngle(const float radiansAngle)const;
 
   /** @brief move a individual sprite. */
   void
