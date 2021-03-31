@@ -61,29 +61,35 @@ SpriteAtlas::getIndex() const {
   return m_index;
 }
 
-const AtlasSegment&
+std::pair<const AtlasSegment&, size_t>
 SpriteAtlas::getSegmentClosestAngle(const float radiansAngle) const {
 
-  for (const auto& segment : m_segments) {
-    if (segment.m_originalSpriteOritention.isInRange(radiansAngle)) {
-      return segment;
+  {
+    size_t index = 0u;
+    for (const auto& segment : m_segments) {
+      if (segment.m_originalSpriteOritention.isInRange(radiansAngle)) {
+        return { segment, index };
+      }
+      ++index;
     }
   }
 
-  float delta = std::numeric_limits<float>::max();
   size_t selectedSegment = 0u;
-  size_t currentSegment = 0u;
-  for (const auto& segment : m_segments) {
-    const auto angleFromDelta = segment.m_originalSpriteOritention.getDifferenceFrom(delta);
-    if (angleFromDelta <= delta) {
-      delta = angleFromDelta;
-      selectedSegment = currentSegment;
+  {
+    size_t currentSegment = 0u;
+    float delta = std::numeric_limits<float>::max();
+    for (const auto& segment : m_segments) {
+      const auto angleFromDelta = segment.m_originalSpriteOritention.getDifferenceFrom(delta);
+      if (angleFromDelta <= delta) {
+        delta = angleFromDelta;
+        selectedSegment = currentSegment;
+      }
+
+      ++currentSegment;
     }
 
-    ++currentSegment;
   }
-
-  return m_segments[selectedSegment];
+  return { m_segments[selectedSegment] ,selectedSegment };
 }
 
 void

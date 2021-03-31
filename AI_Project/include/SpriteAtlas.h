@@ -56,7 +56,7 @@ class SpriteAtlas
    *  A reference to the atlasSegment with the rotation that's closest to the
    *  given angle.
    */
-  const AtlasSegment&
+  std::pair<const AtlasSegment&, size_t>
   getSegmentClosestAngle(const float radiansAngle)const;
 
   /** @brief move a individual sprite. */
