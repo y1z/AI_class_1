@@ -3,12 +3,14 @@
 #include <memory> // std::unique_ptr
 #include <filesystem> // std::filesystem::path
 #include <SFML/Audio/Music.hpp> // for sf::Music
+#include <SFML/Audio/Sound.hpp> // for sf::Sound
 
 #include "SpriteAtlas.h"
 #include "GameMap.h"
 #include "UIStateMachine.h"
 #include "MouseData.h"
 #include "StringSequence.h"
+#include "SoundPlayer.h"
 
 
 namespace RESULT_APP_STAGES {
@@ -222,6 +224,11 @@ class EditorApp final : public BaseApp
   std::unique_ptr<sf::Music> m_music;
 
   /**
+   * Used for playing sounds
+   */
+  std::unique_ptr < SoundPlayer > m_soundPlayer;
+
+  /**
    * Used for all text during the game.
    */
   std::unique_ptr<UIText> m_gameText;
@@ -230,6 +237,7 @@ class EditorApp final : public BaseApp
    * Contains a sequence of strings to be used in the game.
    */
   std::unique_ptr< StringSequence > m_stringSequence;
+
 
 };
 

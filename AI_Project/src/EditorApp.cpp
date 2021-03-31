@@ -49,6 +49,9 @@ s_pathsToKongSprites = SpriteSheetAndPortriat("resources/sprite_sheet/sprite_she
 constexpr static const char*
 s_pathToMusic = "resources/music/WBA Free Track - Skeletal Leaders.ogg";
 
+constexpr static const char*
+s_pathToSound = "resources/music/Annoying Speaker Pulsing.ogg";
+
 
 constexpr static const char*
 s_pathToSaveFileDefault = "resources/saves/test.txt";
@@ -369,6 +372,14 @@ EditorApp::init() {
         throw new std::runtime_error("can NOT load music");
       }
     }
+    {
+      m_soundPlayer = make_unique<SoundPlayer>();
+      m_soundPlayer->setVolume(40.0f);
+      const auto soundPath = fs::path(m_initialPath).append(s_pathToSound);
+      if (!m_soundPlayer->loadSoundFile(soundPath)) {
+        throw new std::runtime_error("can NOT load sound effects");
+      }
+    }
 
     m_stringSequence = make_unique<StringSequence>(StringSequence({ "Ready","Set","Go!!!!!!" }));
 
@@ -592,8 +603,6 @@ EditorApp::createCharacterSelectScene() const {
   characterSelectScene.ID = s_characterSelectID;
   return characterSelectScene;
 }
-
-
 
 
 RESULT_APP_STAGES::E
@@ -863,15 +872,6 @@ EditorApp::createRacers() {
 DataOpenFile
 createDataOpenFile() {
   DataOpenFile fileSettings;
-
-  /**
-   * All text before the first null character is the name we give to the type
-   * of files we are looking for what comes after that is the name of the extension
-   */
-  static constexpr const char* fileTypes = "All files\0*.*\0 \0*.txt\0";
-
-  fileSettings.m_openFileSettings.lStructSize = sizeof(fileSettings.m_openFileSettings);
-  fileSettings.m_openFileSettings.hwndOwner = nullptr;
 
   fileSettings.setUp();
   return fileSettings;
