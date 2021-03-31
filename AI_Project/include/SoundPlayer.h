@@ -11,9 +11,9 @@ class SoundPlayer
 {
  public:
 
-   /**
-    * Set the volume of the sound.
-    */
+  /**
+   * Set the volume for the sound
+   */
   void
   setVolume(const float newVolume);
 

@@ -1,8 +1,6 @@
 #include "SoundPlayer.h"
 #include <iostream>
 
-namespace fs = std::filesystem;
-
 void
 SoundPlayer::setVolume(const float newVolume) {
   m_sound.setVolume(newVolume);
@@ -11,7 +9,6 @@ SoundPlayer::setVolume(const float newVolume) {
 bool
 SoundPlayer::loadSoundFile(const std::filesystem::path& soundFilePath) {
   const bool canLoadFile = m_buffer.loadFromFile(soundFilePath.generic_string());
-
   if (!canLoadFile) {
     std::wcerr << "cannot load from file" << soundFilePath << '\n';
   }
