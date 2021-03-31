@@ -1,4 +1,5 @@
 #include "Racer.h"
+#include "SpriteAtlas.h"
 #include "GameManager.h"
 #include <cassert>
 
@@ -107,11 +108,11 @@ Racer::update(float deltaTime)
 }
 
 void
-Racer::selectFrameBasedOnRotation() const {
+Racer::selectFrameBasedOnRotation() {
   assert(nullptr != m_atlasPtr && "Requires that the racer have a sprite");
-  const Vec2 direction = m_boid.getDir();
-  direction.getAngle();
-
+  const float angle = m_boid.getDir().getAngle();
+  const auto segment = m_atlasPtr->getSegmentClosestAngle(angle);
+  setFrame(segment.second);
 }
 
 void

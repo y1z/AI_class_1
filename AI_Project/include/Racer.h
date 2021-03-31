@@ -1,6 +1,7 @@
 #pragma once
 #include "Boid.h"
-#include "SpriteAtlas.h"
+
+class SpriteAtlas;
 
 /**
  * @file
@@ -71,7 +72,7 @@ public:
    * Changes the frames of the sprite depending on the sprite orientation
    */
   void
-  selectFrameBasedOnRotation()const;
+  selectFrameBasedOnRotation();
 
   /**
    * draws the racers
