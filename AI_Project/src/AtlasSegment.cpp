@@ -1,5 +1,4 @@
 #include "AtlasSegment.h"
-#include "Racer.h"
 #include "util.h"
 #include <SFML/System/FileInputStream.hpp>
 

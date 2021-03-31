@@ -1,9 +1,8 @@
 #pragma once
-#include "Types.h"
+#include "Racer.h"
 #include "RotationSegment.h"
 #include <memory>
 
-class Racer;
 
 /**
  * @file
