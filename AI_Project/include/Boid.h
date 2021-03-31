@@ -11,7 +11,7 @@ namespace sf {
 }
 
 /**@brief Describes an agent that uses steering behaviors.*/
-class Boid 
+class Boid
 {
 public:
   Boid() = default;
@@ -21,7 +21,7 @@ public:
   explicit Boid(const BoidDescriptor &descriptor);
   explicit Boid(BoidDescriptor &&descriptor);
 
-public: // operators 
+public: // operators
 
  Boid& operator=(const Boid& other) = default;
  Boid& operator=(Boid&& other) noexcept = default;
@@ -34,7 +34,7 @@ public: // member functions
   */
   void
   update(float deltaTime);
-  
+
   /**
   * @brief Initializes every variable used by the boid.
   * @bug no known bugs.
@@ -45,7 +45,7 @@ public: // member functions
   /**
   * @reutrns The direction of the boid.
   */
-  Vec2 
+  Vec2
   getDir()const;
 
   /**
@@ -85,13 +85,13 @@ public: // member functions
   * @bug no known bugs.
   * @note every overload of this function just redirects to this one.
   */
-  Vec2 
+  Vec2
   seek(const Vec2& currentPos,
        const Vec2& destination,
        const float  strength = 1.0f) const;
 
   /** Just a redirect to Boid::seek */
-  Vec2 
+  Vec2
   seek(const Boid& seekerBoid,
        const Boid& targetBoid,
        const float strength = 1.0f) const;
@@ -113,7 +113,7 @@ public: // member functions
   /**
   * @brief Seeks a target at full speed until it gets close enough ( determined by a
   * radius ) it slows down.
-  * @param[in] 
+  * @param[in]
   * @bug no known bugs.
   */
   Vec2
@@ -130,9 +130,9 @@ public: // member functions
          const float  radius = 100.0f)const;
 
   /**
-  * @brief 
+  * @brief
   * @bug
-  * @param[in] 
+  * @param[in]
   */
   Vec2
   pursue(const Vec2& currentPos,
@@ -142,7 +142,7 @@ public: // member functions
 
   /**
   * @brief Calculates a random position to seek.
-  * @param[in] 
+  * @param[in]
   * @bug no known bugs.
   */
   Vec2
@@ -239,7 +239,7 @@ public: // member functions
 
 public:
 
-  
+
   /**
   * @returns A descriptor for creating a boid that seeks.
   */
@@ -247,7 +247,7 @@ public:
   createSeekingBoidDescriptor(const Vec2& targetPosition,
                               const Vec2 boidPosition,
                               const float forceMagnitude = 1.0f);
-  
+
   /**
   * @returns A descriptor for creating a boid that flee.
   */

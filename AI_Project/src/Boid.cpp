@@ -331,14 +331,13 @@ Boid::followPath(const Boid& pathFollower,
   const FollowPathNode* nextNode = &path.at(indexTracker.getCurrentIndex());
 
   const float distance = (nextNode->m_position - pathFollower.m_data.m_position).length();
-
-  if( distance <= nextNode->m_radius )
+  m_data.m_hasReachedNode = (distance <= nextNode->m_radius);
+  if (m_data.m_hasReachedNode)
   {
     const auto currentIndex = indexTracker.getCurrentIndex();
     if( cyclePath )
     {
       indexTracker.setCurrentIndex((currentIndex + 1) % path.size());
-      m_data.m_nodesReached += 1u;
     }
     else if( currentIndex + 1 < path.size() - 1 )
     {
