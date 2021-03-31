@@ -107,6 +107,14 @@ Racer::update(float deltaTime)
 }
 
 void
+Racer::selectFrameBasedOnRotation() const {
+  assert(nullptr != m_atlasPtr && "Requires that the racer have a sprite");
+  const Vec2 direction = m_boid.getDir();
+  direction.getAngle();
+
+}
+
+void
 Racer::draw(sf::RenderTarget& target)
 {
   if( nullptr != m_atlasPtr )

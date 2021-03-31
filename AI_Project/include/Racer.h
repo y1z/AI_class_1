@@ -68,6 +68,12 @@ public:
   update(float deltaTime);
 
   /**
+   * Changes the frames of the sprite depending on the sprite orientation
+   */
+  void
+  selectFrameBasedOnRotation()const;
+
+  /**
    * draws the racers
    * @Note If the racer does NOT have a sprite, the racer will look like a sphere.
    */
