@@ -100,8 +100,7 @@ Racer::update(float deltaTime)
     //m_boid.getDir().getAngle();
     m_atlasPtr->setSpriteLocation(m_boid.m_data.m_position, m_currentFrame);
   }
-  const bool shouldUpdateLapCount = m_boid.m_data.m_nodesReached > 0u;
-  if( shouldUpdateLapCount )
+  if( m_boid.m_data.m_hasReachedNode )
   {
     this->updateLapCount();
   }

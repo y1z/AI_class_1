@@ -181,7 +181,7 @@ class EditorApp final : public BaseApp
    * @brief creates the racers a.k.a the agents of the game.
    */
   bool
-  createRacer();
+  createRacers();
 
   /**
    * Used for keeping track of the original path the application started with.

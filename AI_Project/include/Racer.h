@@ -49,6 +49,9 @@ public:
   size_t
   getCurrentFrame()const;
 
+  /**
+   * Lets the frame be manually selected.
+   */
   void
   setFrame(const int32 selectedFrame);
 

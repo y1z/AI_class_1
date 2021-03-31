@@ -279,7 +279,7 @@ EditorApp::mainLoop() {
     m_timer.StartTiming();
     handleRacers();
 
-    const RESULT_APP_STAGES::E isCounterWorking = handleCounter();
+    const auto isCounterWorking = handleCounter();
     assert(RESULT_APP_STAGES::kNO_ERROR == isCounterWorking);
 
     handleInput();
@@ -313,6 +313,7 @@ EditorApp::menuLoop() {
 
   setUpNewPath();
 
+  GameManager::getInstance().init(*m_gameMap);
   return 0;
 }
 
@@ -325,11 +326,6 @@ EditorApp::init() {
     const auto screenHeight = getScreenHeight();
 
     GameManager::StartUp(nullptr);
-
-    LapCount raceRequirements;
-    raceRequirements.m_fullLap = 5u;
-
-    GameManager::getInstance().init(raceRequirements);
     std::srand(std::random_device{}());
 
     m_window = make_unique<sf::RenderWindow>(sf::VideoMode(screenWidth, screenHeight),
@@ -397,7 +393,7 @@ EditorApp::init() {
 
     createPath();
 
-    createRacer();
+    createRacers();
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
@@ -714,7 +710,7 @@ EditorApp::handleCounter() {
 
     std::memset(buffer, '\0', bufferSize);
 
-    const LapCount requirements = gm.getLapRequirements();
+    const LapCount requirements = m_gameMap->getLapRequiements();
     const auto denumerator = std::to_chars(buffer, buffer + bufferSize, requirements.m_fullLap);
 
     if (std::errc() != denumerator.ec) {
@@ -724,7 +720,7 @@ EditorApp::handleCounter() {
     const size_t lastNumber = util::findNumber(m_gameText->m_textString, middle);
 
     m_gameText->m_textString.replace(lastNumber, std::strlen(buffer), buffer);
-
+    m_gameText->update();
   }
   return RESULT_APP_STAGES::kNO_ERROR;
 }
@@ -834,7 +830,7 @@ EditorApp::saveCurrentMap(const std::string_view path) const {
 
 
 bool
-EditorApp::createRacer() {
+EditorApp::createRacers() {
   GameManager& gameMan = GameManager::getInstance();
   for (int i = 0; i < 10; ++i) {
     BoidDescriptor followBoid = Boid::createFollowPathBoidDescriptor
