@@ -10,6 +10,7 @@
 class SoundPlayer
 {
  public:
+  SoundPlayer();
 
   /**
    * Set the volume for the sound

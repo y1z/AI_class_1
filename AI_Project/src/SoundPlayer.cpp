@@ -1,6 +1,14 @@
 #include "SoundPlayer.h"
 #include <iostream>
 
+SoundPlayer::SoundPlayer()
+{
+  m_sound.setBuffer(m_buffer);
+}
+
+
+
+
 void
 SoundPlayer::setVolume(const float newVolume) {
   m_sound.setVolume(newVolume);
