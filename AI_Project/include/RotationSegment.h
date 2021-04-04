@@ -20,7 +20,7 @@ struct RotationSegment
    * @returns
    *  The delta between the variables 'start' and 'end'.
    */
-  Vec2
+  float
   getRotationDelta()const;
 
 

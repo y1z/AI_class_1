@@ -2,9 +2,9 @@
 #include "util.h"
 
 
-Vec2
+float
 RotationSegment::getRotationDelta() const {
-  return end - start;
+  return end.getAngle() - start.getAngle();
 }
 
 float
