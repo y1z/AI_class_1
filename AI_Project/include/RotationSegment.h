@@ -9,13 +9,18 @@
 struct RotationSegment
 {
   RotationSegment(const float _start, const float _end)
-    :start(_start), end(_end) {}
+    :start(Vec2(1.0f, 0.0f).rotate(_start)),
+    end(Vec2(1.0f, 0.0f).rotate(_end)) {}
+
+  RotationSegment(const Vec2 _start, const Vec2 _end)
+    :start(_start.normalize()),
+    end(_end.normalize()) {}
 
   /**
    * @returns
    *  The delta between the variables 'start' and 'end'.
    */
-  float
+  Vec2
   getRotationDelta()const;
 
 
@@ -31,7 +36,7 @@ struct RotationSegment
    *  true when the parameter passed in, is within the range of the RotationSegment.
    */
   bool
-  isInRange(const float radians)const;
+  isInRange(const Vec2 direction)const;
 
   /**
    * @returns
@@ -41,20 +46,20 @@ struct RotationSegment
   rotateRadians(const float radians);
 
 
-  /**
-   * Adds 2 rotation segment together
-   */
-  RotationSegment
-  operator+ (const RotationSegment& otherSegment)const ;
+  ///**
+  // * Adds 2 rotation segment together
+  // */
+  //RotationSegment
+  //operator+ (const RotationSegment& otherSegment)const ;
 
-  /**
-   * Subtracts 2 rotation from each-other
-   */
-  RotationSegment
-  operator- (const RotationSegment& otherSegment)const;
+  ///**
+  // * Subtracts 2 rotation from each-other
+  // */
+  //RotationSegment
+  //operator- (const RotationSegment& otherSegment)const;
 
 
-  float start;
-  float end;
+  Vec2 start;
+  Vec2 end;
 };
 
