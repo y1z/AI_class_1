@@ -1,11 +1,13 @@
 #pragma once
+#include "Vec2.h"
 
 
 
 /**
  * Describe a partial rotation of a circle in radians
  */
-struct RotationSegment {
+struct RotationSegment
+{
   RotationSegment(const float _start, const float _end)
     :start(_start), end(_end) {}
 

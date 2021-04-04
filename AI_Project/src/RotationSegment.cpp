@@ -1,5 +1,4 @@
 #include "RotationSegment.h"
-#include <cmath>
 #include "util.h"
 
 
@@ -10,7 +9,7 @@ RotationSegment::getRotationDelta() const {
 
 float
 RotationSegment::getDifferenceFrom(const float radians) const {
-  return std::min(std::fabsf(radians - start), std::fabsf(radians - end));
+  return std::min(radians - start, radians - end);
 }
 
 bool
