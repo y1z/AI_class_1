@@ -29,16 +29,3 @@ RotationSegment::rotateRadians(const float radians) {
   return *this;
 }
 
-//RotationSegment
-//RotationSegment::operator+(const RotationSegment& otherSegment)const {
-//  const float otherSegmentDelta = otherSegment.getRotationDelta();
-//  return RotationSegment(otherSegment.start.a + otherSegmentDelta,
-//                         otherSegment.end + otherSegmentDelta);
-//}
-//
-//RotationSegment
-//RotationSegment::operator-(const RotationSegment& otherSegment) const {
-//  const float otherSegmentDelta = otherSegment.getRotationDelta();
-//  return RotationSegment(otherSegment.start - otherSegmentDelta,
-//                         otherSegment.end - otherSegmentDelta);
-//}

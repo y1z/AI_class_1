@@ -46,19 +46,6 @@ struct RotationSegment
   rotateRadians(const float radians);
 
 
-  ///**
-  // * Adds 2 rotation segment together
-  // */
-  //RotationSegment
-  //operator+ (const RotationSegment& otherSegment)const ;
-
-  ///**
-  // * Subtracts 2 rotation from each-other
-  // */
-  //RotationSegment
-  //operator- (const RotationSegment& otherSegment)const;
-
-
   Vec2 start;
   Vec2 end;
 };
