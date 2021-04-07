@@ -7,7 +7,7 @@
 #include "UIState.h"
 
 class BaseApp;
-class MouseData;
+struct MouseData;
 
 
 /**
