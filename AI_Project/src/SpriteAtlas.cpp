@@ -67,7 +67,7 @@ SpriteAtlas::getSegmentClosestAngle(const float radiansAngle) const {
   {
     size_t index = 0u;
     for (const auto& segment : m_segments) {
-      if (segment.m_originalSpriteOritention.isInRange(radiansAngle)) {
+      if (segment.m_originalSpriteOritention.isInRange(Vec2(1.0f, 0.0f).rotate(radiansAngle))) {
         return { segment, index };
       }
       ++index;
