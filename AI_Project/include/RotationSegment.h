@@ -23,13 +23,26 @@ struct RotationSegment
   float
   getRotationDelta()const;
 
-
   /**
    * @returns
-   *  The delta between the variables 'start' and 'end'.
+   *  The delta between the input and the closest of the
+   *  2 variables 'start' 'end'.
    */
   float
   getDifferenceFrom(const float radians)const;
+
+  /**
+   * @see getDifferenceFrom
+   */
+  float
+  getDifferenceFrom(const Vec2& direction)const;
+
+  /**
+   * @returns
+   *  The pair that contains the angle from 'start'(.first) and 'end'(.second)
+   */
+  std::pair<float, float>
+  getAnglesFromStartAndEnd()const;
 
   /**
    * @returns
@@ -44,6 +57,13 @@ struct RotationSegment
    */
   RotationSegment&
   rotateRadians(const float radians);
+
+  /**
+   * @returns
+   *  The rotation after being altered.
+   */
+  RotationSegment&
+  rotateToOppositeQuadrant();
 
 
   Vec2 start;

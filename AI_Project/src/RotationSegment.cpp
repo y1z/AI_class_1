@@ -1,5 +1,7 @@
 #include "RotationSegment.h"
 #include "util.h"
+#include "GlobalValues.h"
+
 
 
 float
@@ -9,7 +11,19 @@ RotationSegment::getRotationDelta() const {
 
 float
 RotationSegment::getDifferenceFrom(const float radians) const {
-  return std::min(radians - start.getAngle(), radians - end.getAngle());
+  const auto differenceFromStart = std::fabsf(radians - start.getAngle());
+  const auto differenceFromEnd = std::fabsf(radians - end.getAngle());
+  return std::min(differenceFromStart, differenceFromEnd);
+}
+
+float
+RotationSegment::getDifferenceFrom(const Vec2& direction) const {
+  return getDifferenceFrom(direction.normalize().getAngle());
+}
+
+std::pair<float, float>
+RotationSegment::getAnglesFromStartAndEnd() const {
+  return std::pair<float, float>(start.getAngle(), end.getAngle());
 }
 
 bool
@@ -27,5 +41,10 @@ RotationSegment::rotateRadians(const float radians) {
   start.rotateSelfBy(radians);
   end.rotateSelfBy(radians);
   return *this;
+}
+
+RotationSegment&
+RotationSegment::rotateToOppositeQuadrant() {
+  return rotateRadians(gvar::pi);
 }
 
