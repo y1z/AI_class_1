@@ -389,8 +389,8 @@ EditorApp::init() {
     m_stringSequence = make_unique<StringSequence>(StringSequence({ "Ready","Set","Go!!!!!!" }));
 
     {
-      throw std::runtime_error("could not initialize atlas");
       if (!createCharacterSprites()) {
+        throw std::runtime_error("could not initialize atlas");
       }
       std::sort(begin(m_spritesAtlases), end(m_spritesAtlases));
     }
@@ -436,10 +436,10 @@ EditorApp::createCharacterSprites() {
   const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathsToYoshiSprites.m_spriteSheet);
   const fs::path pathToAtlas4 = fs::path(m_initialPath).append(s_pathsToKongSprites.m_spriteSheet);
 
-  return (createAtlas(pathToAtlas, s_pathsToMarioSprites.m_index) ||
-          createAtlas(pathToAtlas1, s_pathsToBowserSprites.m_index) ||
-          createAtlas(pathToAtlas2, s_pathsToPeachSprites.m_index) ||
-          createAtlas(pathToAtlas3, s_pathsToYoshiSprites.m_index) ||
+  return (createAtlas(pathToAtlas, s_pathsToMarioSprites.m_index) &&
+          createAtlas(pathToAtlas1, s_pathsToBowserSprites.m_index) &&
+          createAtlas(pathToAtlas2, s_pathsToPeachSprites.m_index) &&
+          createAtlas(pathToAtlas3, s_pathsToYoshiSprites.m_index) &&
           createAtlas(pathToAtlas4, s_pathsToKongSprites.m_index));
 }
 
