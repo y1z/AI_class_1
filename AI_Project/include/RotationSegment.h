@@ -65,8 +65,26 @@ struct RotationSegment
   RotationSegment&
   rotateToOppositeQuadrant();
 
+  /**
+   * Rotates the 'end' variable by a x amount of radians
+   */
+  RotationSegment&
+  rotateEnd(const float radians);
 
+  /**
+   * Rotate the 'end' variable to the opposite quadrant aka 180 degrees or pi radians
+   */
+  RotationSegment&
+  rotateEndToOppositeQuadrant();
+
+  /**
+   * Where the rotation starts
+   */
   Vec2 start;
+
+  /**
+   * Where the rotation ends.
+   */
   Vec2 end;
 };
 

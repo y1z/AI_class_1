@@ -48,3 +48,15 @@ RotationSegment::rotateToOppositeQuadrant() {
   return rotateRadians(gvar::pi);
 }
 
+RotationSegment&
+RotationSegment::rotateEnd(const float radians) {
+  end.rotateSelfBy(radians);
+  return *this;
+}
+
+RotationSegment&
+RotationSegment::rotateEndToOppositeQuadrant() {
+  return rotateEnd(gvar::pi);
+}
+
+
