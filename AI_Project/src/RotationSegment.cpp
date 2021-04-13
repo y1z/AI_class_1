@@ -6,13 +6,13 @@
 
 float
 RotationSegment::getRotationDelta() const {
-  return end.getAngle() - start.getAngle();
+  return m_end.getAngle() - m_start.getAngle();
 }
 
 float
 RotationSegment::getDifferenceFrom(const float radians) const {
-  const auto differenceFromStart = std::fabsf(radians - start.getAngle());
-  const auto differenceFromEnd = std::fabsf(radians - end.getAngle());
+  const auto differenceFromStart = std::fabsf(radians - m_start.getAngle());
+  const auto differenceFromEnd = std::fabsf(radians - m_end.getAngle());
   return std::min(differenceFromStart, differenceFromEnd);
 }
 
@@ -23,14 +23,14 @@ RotationSegment::getDifferenceFrom(const Vec2& direction) const {
 
 std::pair<float, float>
 RotationSegment::getAnglesFromStartAndEnd() const {
-  return std::pair<float, float>(start.getAngle(), end.getAngle());
+  return std::pair<float, float>(m_start.getAngle(), m_end.getAngle());
 }
 
 bool
 RotationSegment::isInRange(const Vec2 direction) const {
   const auto angle = direction.getAngle();
-  const auto startAngle = start.getAngle();
-  const auto endAngle = end.getAngle();
+  const auto startAngle = m_start.getAngle();
+  const auto endAngle = m_end.getAngle();
   return util::isInRange(std::min(endAngle, startAngle),
                          std::max(endAngle, startAngle),
                          angle);
@@ -38,8 +38,8 @@ RotationSegment::isInRange(const Vec2 direction) const {
 
 RotationSegment&
 RotationSegment::rotateRadians(const float radians) {
-  start.rotateSelfBy(radians);
-  end.rotateSelfBy(radians);
+  m_start.rotateSelfBy(radians);
+  m_end.rotateSelfBy(radians);
   return *this;
 }
 
@@ -50,7 +50,7 @@ RotationSegment::rotateToOppositeQuadrant() {
 
 RotationSegment&
 RotationSegment::rotateEnd(const float radians) {
-  end.rotateSelfBy(radians);
+  m_end.rotateSelfBy(radians);
   return *this;
 }
 

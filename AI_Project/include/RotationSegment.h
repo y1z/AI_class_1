@@ -9,16 +9,16 @@
 struct RotationSegment
 {
   RotationSegment(const float _start, const float _end)
-    :start(Vec2(1.0f, 0.0f).rotate(_start)),
-    end(Vec2(1.0f, 0.0f).rotate(_end)) {}
+    :m_start(Vec2(1.0f, 0.0f).rotate(_start)),
+    m_end(Vec2(1.0f, 0.0f).rotate(_end)) {}
 
   RotationSegment(const Vec2 _start, const Vec2 _end)
-    :start(_start.normalize()),
-    end(_end.normalize()) {}
+    :m_start(_start.normalize()),
+    m_end(_end.normalize()) {}
 
   /**
    * @returns
-   *  The delta between the variables 'start' and 'end'.
+   *  The delta between the variables 'm_start' and 'm_end'.
    */
   float
   getRotationDelta()const;
@@ -26,7 +26,7 @@ struct RotationSegment
   /**
    * @returns
    *  The delta between the input and the closest of the
-   *  2 variables 'start' 'end'.
+   *  2 variables 'm_start' 'm_end'.
    */
   float
   getDifferenceFrom(const float radians)const;
@@ -39,7 +39,7 @@ struct RotationSegment
 
   /**
    * @returns
-   *  The pair that contains the angle from 'start'(.first) and 'end'(.second)
+   *  The pair that contains the angle from 'm_start'(.first) and 'm_end'(.second)
    */
   std::pair<float, float>
   getAnglesFromStartAndEnd()const;
@@ -66,13 +66,13 @@ struct RotationSegment
   rotateToOppositeQuadrant();
 
   /**
-   * Rotates the 'end' variable by a x amount of radians
+   * Rotates the 'm_end' variable by a x amount of radians
    */
   RotationSegment&
   rotateEnd(const float radians);
 
   /**
-   * Rotate the 'end' variable to the opposite quadrant aka 180 degrees or pi radians
+   * Rotate the 'm_end' variable to the opposite quadrant aka 180 degrees or pi radians
    */
   RotationSegment&
   rotateEndToOppositeQuadrant();
@@ -80,11 +80,11 @@ struct RotationSegment
   /**
    * Where the rotation starts
    */
-  Vec2 start;
+  Vec2 m_start;
 
   /**
    * Where the rotation ends.
    */
-  Vec2 end;
+  Vec2 m_end;
 };
 

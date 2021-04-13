@@ -220,23 +220,27 @@ namespace util {
    *  in the opposite orientation.
    */
   static std::vector<RotationSegment>
-  createRotationSegmentSequence(const float startingAngleRadians,
-                                const float endingAngleRadians,
+  createRotationSegmentSequence(const RotationSegment& startingAngleRadians,
+                                const RotationSegment& endingAngleRadians,
                                 const uint32 howManyRotationSegment,
                                 const bool createMirrorSequence = true)
   {
-    std::vector<RotationSegment> result;
     const uint32 reservedSegments = (createMirrorSequence) ?
                                     howManyRotationSegment * 2 :
                                     howManyRotationSegment;
+    std::vector<RotationSegment> result;
     result.reserve(reservedSegments);
 
-    auto const createSequence = [](const float start, const float end, const uint32 count) {
-      RotationSegment currentRotation(start, end);
+    auto const createSequence = [](const RotationSegment& m_start,
+                                   const RotationSegment& end,
+                                   const uint32 count) {
+      const float inverseTotal = 1.f / count;
+      const float delta = (end.getRotationDelta() * inverseTotal);
       std::vector<RotationSegment> sequence;
       sequence.reserve(count);
-      const float inverseTotal = 1.f / count;
-      const float delta = (end - start) * inverseTotal;
+      const auto startAngle = m_start.m_start.getAngle();
+      RotationSegment currentRotation(startAngle,
+                                      startAngle + delta);
       for (uint32 i = 0u; i < count; ++i) {
         sequence.emplace_back(currentRotation);
         currentRotation.rotateRadians(delta);
@@ -249,10 +253,12 @@ namespace util {
               howManyRotationSegment));
 
     if (createMirrorSequence) {
-      auto temp = createSequence(endingAngleRadians,
-                                 startingAngleRadians,
-                                 howManyRotationSegment);
-      std::move(temp.begin(), temp.end(), std::back_inserter(result));
+      const auto oppositeSide
+        = RotationSegment(endingAngleRadians).rotateToOppositeQuadrant();
+      const auto temp = createSequence(startingAngleRadians,
+                                       oppositeSide,
+                                       howManyRotationSegment);
+      std::move(temp.cbegin(), temp.cend(), std::back_inserter(result));
     }
 
     return result;
@@ -339,9 +345,9 @@ namespace util {
    */
   static uint64
   findNumber(const sf::String& string,
-             const uint64 start = 0u) {
+             const uint64 m_start = 0u) {
 
-    for (uint64 i = start; i < string.getSize(); ++i) {
+    for (uint64 i = m_start; i < string.getSize(); ++i) {
 
       if (isNumber(string, i)) {
         return i;
