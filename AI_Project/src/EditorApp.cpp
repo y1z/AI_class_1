@@ -7,7 +7,6 @@
 #undef max
 #undef min
 #include "util.h"
-#include "GlobalValues.h"
 #include "SpriteSheetAndPortriat.h"
 #include "WindowConversion.h"
 #include <charconv>
@@ -60,7 +59,7 @@ constexpr static const char*
 s_pathToLevel1 = "resources/saves/level_1.txt";
 
 constexpr static const char*
-s_pathToLevel2 = "resources/saves/level_2.txt";
+s_pathToLevel2 = "resources/saves/test_circle.txt";
 
 constexpr static const char*
 s_pathToLevel3 = "resources/saves/level_3.txt";
@@ -618,6 +617,11 @@ EditorApp::handleDraw() {
   auto& gm = GameManager::getInstance();
   auto& containter = gm.getAgentContainerRef();
   m_gameMap->draw(*m_window);
+
+  for (auto& elem : containter) {
+    elem.selectFrameBasedOnRotation();
+  }
+
   gm.drawRacers(*m_window);
   {
     const auto boidData = containter.back().getBoidData();
@@ -741,8 +745,8 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas,
     util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
 
   const std::vector<RotationSegment> rotations =
-    util::createRotationSegmentSequence(gvar::halfPi,
-                                        gvar::halfPi - gvar::pi,
+    util::createRotationSegmentSequence(RotationSegment(Vec2(0.0, 1.0f), Vec2(1.0f)),
+                                        RotationSegment(Vec2(0.0, 1.0f), Vec2(-1.0f, 0.0f)),
                                         12);
 
   const SpriteAtlasDesc desc(pathToAtlas, rectSequence, rotations, index);
