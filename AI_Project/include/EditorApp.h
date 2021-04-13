@@ -3,7 +3,6 @@
 #include <memory> // std::unique_ptr
 #include <filesystem> // std::filesystem::path
 #include <SFML/Audio/Music.hpp> // for sf::Music
-#include <SFML/Audio/Sound.hpp> // for sf::Sound
 
 #include "SpriteAtlas.h"
 #include "GameMap.h"
@@ -92,6 +91,12 @@ class EditorApp final : public BaseApp
    */
   bool
   createUI();
+
+  /**
+   * Creates all the character sprites.
+   */
+  bool
+  createCharacterSprites();
 
   /**
    * Creates the descriptor for the UIScene.

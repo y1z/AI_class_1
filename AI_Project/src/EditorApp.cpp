@@ -373,7 +373,7 @@ EditorApp::init() {
       m_music->setVolume(40.0f);
       const auto musicPath = fs::path(m_initialPath).append(s_pathToMusic);
       if (!m_music->openFromFile(musicPath.generic_string())) {
-        throw new std::runtime_error("can NOT load music");
+        throw std::runtime_error("can NOT load music");
       }
     }
     {
@@ -382,26 +382,15 @@ EditorApp::init() {
       const auto soundPath = fs::path(m_initialPath).append(s_pathToSound);
 
       if (!m_soundPlayer->loadSoundFile(soundPath)) {
-        throw new std::runtime_error("can NOT load sound effects");
+        throw std::runtime_error("can NOT load sound effects");
       }
     }
 
     m_stringSequence = make_unique<StringSequence>(StringSequence({ "Ready","Set","Go!!!!!!" }));
 
     {
-      const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathsToMarioSprites.m_spriteSheet);
-      const fs::path pathToAtlas1 = fs::path(m_initialPath).append(s_pathsToBowserSprites.m_spriteSheet);
-      const fs::path pathToAtlas2 = fs::path(m_initialPath).append(s_pathsToPeachSprites.m_spriteSheet);
-      const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathsToYoshiSprites.m_spriteSheet);
-      const fs::path pathToAtlas4 = fs::path(m_initialPath).append(s_pathsToKongSprites.m_spriteSheet);
-
-      if (!createAtlas(pathToAtlas, s_pathsToMarioSprites.m_index)   ||
-          !createAtlas(pathToAtlas1, s_pathsToBowserSprites.m_index) ||
-          !createAtlas(pathToAtlas2, s_pathsToPeachSprites.m_index)  ||
-          !createAtlas(pathToAtlas3, s_pathsToYoshiSprites.m_index)  ||
-          !createAtlas(pathToAtlas4, s_pathsToKongSprites.m_index))
-      {
-        throw new std::runtime_error("could not initialize atlas");
+      throw std::runtime_error("could not initialize atlas");
+      if (!createCharacterSprites()) {
       }
       std::sort(begin(m_spritesAtlases), end(m_spritesAtlases));
     }
@@ -437,6 +426,21 @@ EditorApp::createUI() {
 
   m_stateMachine->init(descriptors, this);
   return true;
+}
+
+bool
+EditorApp::createCharacterSprites() {
+  const fs::path pathToAtlas = fs::path(m_initialPath).append(s_pathsToMarioSprites.m_spriteSheet);
+  const fs::path pathToAtlas1 = fs::path(m_initialPath).append(s_pathsToBowserSprites.m_spriteSheet);
+  const fs::path pathToAtlas2 = fs::path(m_initialPath).append(s_pathsToPeachSprites.m_spriteSheet);
+  const fs::path pathToAtlas3 = fs::path(m_initialPath).append(s_pathsToYoshiSprites.m_spriteSheet);
+  const fs::path pathToAtlas4 = fs::path(m_initialPath).append(s_pathsToKongSprites.m_spriteSheet);
+
+  return (createAtlas(pathToAtlas, s_pathsToMarioSprites.m_index) ||
+          createAtlas(pathToAtlas1, s_pathsToBowserSprites.m_index) ||
+          createAtlas(pathToAtlas2, s_pathsToPeachSprites.m_index) ||
+          createAtlas(pathToAtlas3, s_pathsToYoshiSprites.m_index) ||
+          createAtlas(pathToAtlas4, s_pathsToKongSprites.m_index));
 }
 
 UISceneDesc
