@@ -254,7 +254,7 @@ namespace util {
 
     if (createMirrorSequence) {
       const auto oppositeSide
-        = RotationSegment(endingAngleRadians).rotateToOppositeQuadrant();
+        = RotationSegment(endingAngleRadians).rotateEndToOppositeQuadrant();
       const auto temp = createSequence(startingAngleRadians,
                                        oppositeSide,
                                        howManyRotationSegment);
