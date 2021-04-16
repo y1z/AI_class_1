@@ -21,6 +21,11 @@ RotationSegment::getDifferenceFrom(const Vec2& direction) const {
   return getDifferenceFrom(direction.normalize().getAngle());
 }
 
+float
+RotationSegment::getDifferenceFrom(const RotationSegment& rotation) const {
+  return rotation.m_end.getAngle() - m_start.getAngle();
+}
+
 std::pair<float, float>
 RotationSegment::getAnglesFromStartAndEnd() const {
   return std::pair<float, float>(m_start.getAngle(), m_end.getAngle());

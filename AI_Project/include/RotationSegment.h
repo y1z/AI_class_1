@@ -38,6 +38,12 @@ struct RotationSegment
   getDifferenceFrom(const Vec2& direction)const;
 
   /**
+   * @see getDifferenceFrom
+   */
+  float
+  getDifferenceFrom(const RotationSegment& rotation)const;
+
+  /**
    * @returns
    *  The pair that contains the angle from 'm_start'(.first) and 'm_end'(.second)
    */
