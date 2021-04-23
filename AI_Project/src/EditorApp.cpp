@@ -9,6 +9,7 @@
 #include "util.h"
 #include "SpriteSheetAndPortriat.h"
 #include "WindowConversion.h"
+#include "GlobalValues.h"
 #include <charconv>
 
 namespace fs = std::filesystem;
@@ -254,8 +255,10 @@ EditorApp::introSequence() {
     deltaTimeSum += m_deltaTime;
     timeSenceSequenceAdvancement += m_deltaTime;
   }
-
-  m_gameText->setString("1  /  5");
+  std::string placementString("1 /  ");
+  placementString.insert(placementString.size() - 1,
+                         std::to_string(m_lapLimit));
+  m_gameText->setString(placementString);
   m_gameText->setCharacterSize(66u);
   const auto topRightPoint =
     WindowConversion::getPositionFromPercentage({ screenWidth, screenWidth },
@@ -284,9 +287,13 @@ EditorApp::mainLoop() {
     const auto isCounterWorking = handleCounter();
     assert(RESULT_APP_STAGES::kNO_ERROR == isCounterWorking);
 
-    if (currentLap != getRacerInFirstPlace().m_lapCount.m_fullLap) {
+    const auto placeOfRacer = getRacerInFirstPlace().m_lapCount.m_fullLap;
+    if (currentLap != placeOfRacer) {
       m_soundPlayer->playSound();
       ++currentLap;
+      if (m_lapLimit <= currentLap) {
+        gameMan.endAllBoids();
+      }
     }
 
     handleInput();
@@ -340,6 +347,7 @@ EditorApp::init() {
                                              sf::Style::Default);
 
     m_gameMap = make_unique<GameMap>();
+    m_gameMap->setLapRequirements(m_lapLimit);
 
     m_stateMachine = make_unique<UIStateMachine>();
 
@@ -399,6 +407,9 @@ EditorApp::init() {
     createPath();
 
     createRacers();
+
+    auto& gameMan = GameManager::getInstance();
+
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
@@ -719,7 +730,7 @@ EditorApp::handleCounter() {
   }
 
   {
-    std::cout << m_gameText->m_textString.toAnsiString() << '\n';
+    // std::cout << m_gameText->m_textString.toAnsiString() << '\n';
     const size_t firstNumber = util::findNumber(m_gameText->m_textString);
 
     m_gameText->m_textString.replace(firstNumber, std::strlen(buffer), buffer);
@@ -748,10 +759,44 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas,
   const std::vector<sf::IntRect> rectSequence =
     util::createHorizontalIntRectSequence(sf::Vector2i(0, 30), sf::Vector2i(30, 30), 12);
 
+  //const std::vector<RotationSegment> rotations =
+  //  util::createRotationSegmentSequence(RotationSegment(Vec2(0.0, 1.0f), Vec2(1.0f)),
+  //                                      RotationSegment(Vec2(0.0, 1.0f), Vec2(-1.0f, 0.0f)),
+  //                                      12);
+
+  const float portionOfTwoPi = gvar::twoPi / 24.0f;
+  const Vec2 firstRotationStart(0.0f, -1.0f);
+  const Vec2 firstRotationEnd = firstRotationStart.rotate(portionOfTwoPi);
+
+  RotationSegment currentRotaion(firstRotationStart, firstRotationEnd);
+
   const std::vector<RotationSegment> rotations =
-    util::createRotationSegmentSequence(RotationSegment(Vec2(0.0, 1.0f), Vec2(1.0f)),
-                                        RotationSegment(Vec2(0.0, 1.0f), Vec2(-1.0f, 0.0f)),
-                                        12);
+  { currentRotaion,
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi),
+  };
 
   const SpriteAtlasDesc desc(pathToAtlas, rectSequence, rotations, index);
 
@@ -831,7 +876,7 @@ EditorApp::setRacerSprites(const uint64 selectedRacer,
       return atlas.getIndex() == selectedSpriteAtlas;
     };
 
-    auto iter = std::find_if(begin(m_spritesAtlases), end(m_spritesAtlases), findSpriteAtlas);
+    const auto iter = std::find_if(begin(m_spritesAtlases), end(m_spritesAtlases), findSpriteAtlas);
     assert(iter != end(m_spritesAtlases));
     container[selectedRacer].m_atlasPtr = &(*iter);
   }

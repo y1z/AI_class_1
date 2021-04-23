@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <deque>
-#include <optional>
+//#include <optional>
 
 class SpriteAtlas;
 class GameMap;
@@ -60,6 +60,9 @@ public:// functions
 
   void
   setupGroup();
+
+  void
+  endAllBoids();
 
   /**
   * @brief adds a racer to the game.

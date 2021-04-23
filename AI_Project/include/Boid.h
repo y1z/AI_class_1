@@ -282,6 +282,9 @@ public:
                                  const float forceMagnitude = 1.0f,
                                  const bool isCycle = true);
 
+  static BoidDescriptor
+  createNullStateBoid();
+
 public:
 
   /** Contains all the data the boid needs to work.*/

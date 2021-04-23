@@ -252,6 +252,10 @@ class EditorApp final : public BaseApp
    */
   std::unique_ptr< StringSequence > m_stringSequence;
 
+  /**
+   * Controls how many laps are done util the race ends.
+   */
+  uint16 m_lapLimit = 3;
 
 };
 

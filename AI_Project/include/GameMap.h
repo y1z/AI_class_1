@@ -65,6 +65,8 @@ public:
   void
   clear();
 
+  void
+  setLapRequirements(const uint32 newRequirements);
   /**
    * @returns
    *  The requirements for finishing the race.

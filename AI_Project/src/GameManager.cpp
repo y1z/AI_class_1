@@ -10,29 +10,26 @@ bool
 GameManager::init(const GameMap& gameMap) {
 
   auto requiements = gameMap.getLapRequiements();
-  const auto totalCheckpoints = gameMap.getPathContainer().size() * requiements .m_fullLap;
+  const auto totalCheckpoints = gameMap.getPathContainer().size() * requiements.m_fullLap;
   requiements.m_checkPointsRequiredForFullLap = gameMap.getPathContainer().size();
   m_lapRequirements = requiements;
   return true;
 }
 
 void
-GameManager::OnShutDown()
-{
+GameManager::OnShutDown() {
   m_groupAgents.clear();
   m_path.m_pathData.clear();
 }
 
 int
-GameManager::OnStartUp(void* _Desc)
-{
+GameManager::OnStartUp(void* _Desc) {
   m_path.m_vertexArray.setPrimitiveType(sf::PrimitiveType::LineStrip);
-#if !NDEBUG
+  #if !NDEBUG
   m_debugLines.setPrimitiveType(sf::PrimitiveType::LineStrip);
-#endif // !NDEBUG
+  #endif // !NDEBUG
 
-  if( nullptr != _Desc )
-  {
+  if (nullptr != _Desc) {
     auto descriptor = reinterpret_cast<GameManagerDescriptor*>(_Desc);
     assert(nullptr != descriptor);
 
@@ -54,11 +51,17 @@ GameManager::OnStartUp(void* _Desc)
 }
 
 void
-GameManager::setupGroup()
-{
-  for( auto& agents : m_groupAgents )
-  {
+GameManager::setupGroup() {
+  for (auto& agents : m_groupAgents) {
     agents.getBoid().m_data.m_groupOfRacers = &m_groupAgents;
+  }
+
+}
+
+void
+GameManager::endAllBoids() {
+  for (auto& elem : m_groupAgents) {
+    elem.m_boid.m_data = Boid::createNullStateBoid();
   }
 
 }

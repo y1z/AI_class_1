@@ -563,4 +563,12 @@ Boid::createFollowPathBoidDescriptor(const std::vector<FollowPathNode>& path,
   return result;
 }
 
+BoidDescriptor
+
+Boid::createNullStateBoid() {
+  BoidDescriptor result;
+  std::memset(&result, 0, sizeof(result));
+  return result;
+}
+
 

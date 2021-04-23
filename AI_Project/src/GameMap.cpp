@@ -119,6 +119,11 @@ GameMap::clear() {
   m_visuals.clear();
 }
 
+void
+GameMap::setLapRequirements(const uint32 newRequirements) {
+  m_requirements = LapCount(newRequirements, 0, 0);
+}
+
 LapCount
 GameMap::getLapRequiements() const {
   return m_requirements;
