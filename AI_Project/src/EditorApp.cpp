@@ -280,19 +280,33 @@ EditorApp::mainLoop() {
   m_music->play();
   m_music->setLoop(true);
   uint32 currentLap = 0;
+  bool isRaceFinished = false;
   while (m_window->isOpen()) {
     m_timer.StartTiming();
     handleRacers();
 
-    const auto isCounterWorking = handleCounter();
-    assert(RESULT_APP_STAGES::kNO_ERROR == isCounterWorking);
 
     const auto placeOfRacer = getRacerInFirstPlace().m_lapCount.m_fullLap;
     if (currentLap != placeOfRacer) {
-      m_soundPlayer->playSound();
-      ++currentLap;
       if (m_lapLimit <= currentLap) {
         gameMan.endAllBoids();
+        m_gameText->setPosition(sf::Vector2f(m_screen.comp.width / 2, m_screen.comp.height / 2));
+
+        m_gameText->setCharacterSize(80);
+        m_gameText->setString("Finished");
+        m_gameText->update();
+        isRaceFinished = true;
+      }
+      else {
+        m_soundPlayer->playSound();
+        ++currentLap;
+      }
+    }
+    else {
+      if (!isRaceFinished) {
+
+        const auto isCounterWorking = handleCounter();
+        assert(RESULT_APP_STAGES::kNO_ERROR == isCounterWorking);
       }
     }
 
@@ -765,14 +779,16 @@ EditorApp::createAtlas(const std::filesystem::path& pathToAtlas,
   //                                      12);
 
   const float portionOfTwoPi = gvar::twoPi / 24.0f;
-  const Vec2 firstRotationStart(0.0f, -1.0f);
+  Vec2 firstRotationStart(0.0f, -1.0f);
+  auto temp = -(portionOfTwoPi / 2);
+  firstRotationStart.rotateSelfBy(temp);
   const Vec2 firstRotationEnd = firstRotationStart.rotate(portionOfTwoPi);
 
   RotationSegment currentRotaion(firstRotationStart, firstRotationEnd);
 
   const std::vector<RotationSegment> rotations =
   { currentRotaion,
-    currentRotaion.rotateRadians(portionOfTwoPi),
+    currentRotaion.rotateRadians(portionOfTwoPi) = RotationSegment(firstRotationEnd ,firstRotationEnd.rotate(portionOfTwoPi)),
     currentRotaion.rotateRadians(portionOfTwoPi),
     currentRotaion.rotateRadians(portionOfTwoPi),
     currentRotaion.rotateRadians(portionOfTwoPi),
